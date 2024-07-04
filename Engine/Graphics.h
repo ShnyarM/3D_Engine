@@ -67,6 +67,7 @@ public:
 	}
 	void PutPixel( int x,int y,Color c )
 	{
+		if (x < 0 || y < 0 || x >= ScreenWidth || y >= ScreenHeight) return;
 		sysBuffer.PutPixel( x,y,c );
 	}
 	~Graphics();
@@ -86,6 +87,6 @@ private:
 	D3D11_MAPPED_SUBRESOURCE							mappedSysBufferTexture;
 	Surface												sysBuffer;
 public:
-	static constexpr unsigned int ScreenWidth = 800u;
-	static constexpr unsigned int ScreenHeight = 600u;
+	static constexpr unsigned int ScreenWidth = 640u;
+	static constexpr unsigned int ScreenHeight = 640u;
 };

@@ -38,11 +38,68 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
+	const float dt = 1.0f / 60.0f;
+	if (wnd.kbd.KeyIsPressed(38)) //up
+	{
+		theta_z += dTheta * dt;
+	}
+	if (wnd.kbd.KeyIsPressed(40)) //down
+	{
+		theta_z += dTheta * dt;
+	}
+	if (wnd.kbd.KeyIsPressed('W')) //right
+	{
+		theta_y += dTheta * dt;
+	}
+	if (wnd.kbd.KeyIsPressed('E')) //left
+	{
+		theta_z += dTheta * dt;
+	}
+
+	if (wnd.kbd.KeyIsPressed('D'))
+	{
+		cubeOffset.x += moveSpeed;
+	}
+	if (wnd.kbd.KeyIsPressed('A'))
+	{
+		cubeOffset.x -= moveSpeed;
+	}
+
+	if (wnd.kbd.KeyIsPressed('R'))
+	{
+		cubeOffset.z += moveSpeed;
+	}
+	if (wnd.kbd.KeyIsPressed('F'))
+	{
+		cubeOffset.z -= moveSpeed;
+	}
+
+	if (wnd.kbd.KeyIsPressed('Z'))
+	{
+		spaceTransformer.screenDistance += moveSpeed;
+	}
+	if (wnd.kbd.KeyIsPressed('H'))
+	{
+		spaceTransformer.screenDistance -= moveSpeed;
+	}
 }
 #include "Mat3.h"
 void Game::ComposeFrame()
 {
-	Vec3 v( 1.0f,1.0f,1.0f );
-	Mat3 m = Mat3::Scaling( 3.0f );
-	v *= m;
+	auto lines = cube.GetLines();
+	Mat3 rot = Mat3::RotationX(theta_x) * Mat3::RotationY(theta_y) * Mat3::RotationZ(theta_z);
+
+	for (auto& v : lines.vertices)
+	{
+
+		v *= rot;
+		v += cubeOffset;
+
+		spaceTransformer.Transform(v);
+	}
+
+	for (auto i = lines.indeces.cbegin(), end = lines.indeces.cend(); i != end; std::advance(i, 2))
+	{
+		gfx.DrawLine(lines.vertices[*i], lines.vertices[*std::next(i)], Colors::Green);
+	}
 }

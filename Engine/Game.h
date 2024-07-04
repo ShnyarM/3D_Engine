@@ -21,6 +21,8 @@
 #pragma once
 
 #include "Graphics.h"
+#include "WorldSpaceTransformer.h"
+#include "Cube.h"
 
 class Game
 {
@@ -41,4 +43,13 @@ private:
 	/********************************/
 	/*  User Variables              */
 	/********************************/
+	WorldSpaceTransformer spaceTransformer;
+	Cube cube{0.5f};
+	float dTheta = 0.4f;
+	float theta_x = 0.0f;
+	float theta_y = 0.0f;
+	float theta_z = 0.0f;
+
+	float moveSpeed = 0.01f;
+	Vec3 cubeOffset = { 0.0f, 0.0f, 2.0f };
 };
