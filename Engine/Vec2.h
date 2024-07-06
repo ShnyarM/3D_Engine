@@ -116,6 +116,10 @@ public:
 	{
 		return _Vec2( *this ) /= rhs;
 	}
+	_Vec2 InterpolateTo(const _Vec2& rhs, const float alpha) const
+	{
+		return *this + (rhs - *this) * alpha;
+	}
 	bool	operator==( const _Vec2 &rhs ) const
 	{
 		return x == rhs.x && y == rhs.y;

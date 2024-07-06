@@ -5,5 +5,5 @@
 struct IndexedLineList
 {
 	std::vector<Vec3> vertices;
-	std::vector<int> indeces;
+	std::vector<int> indices;
 };

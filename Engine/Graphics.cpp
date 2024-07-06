@@ -22,6 +22,7 @@
 #include "Graphics.h"
 #include "DXErr.h"
 #include "ChiliException.h"
+#include "TexVertex.h"
 #include <assert.h>
 #include <string>
 #include <array>
@@ -33,6 +34,7 @@ namespace FramebufferShaders
 {
 #include "FramebufferPS.shh"
 #include "FramebufferVS.shh"
+#include "TexVertex.h"
 }
 
 #pragma comment( lib,"d3d11.lib" )
@@ -286,7 +288,6 @@ void Graphics::BeginFrame()
 	sysBuffer.Clear( Colors::Red );
 }
 
-
 //////////////////////////////////////////////////
 //           Graphics Exception
 Graphics::Exception::Exception( HRESULT hr,const std::wstring& note,const wchar_t* file,unsigned int line )
@@ -380,4 +381,181 @@ void Graphics::DrawLine( float x1,float y1,float x2,float y2,Color c )
 			PutPixel( int( x2 ),int( y2 ),c );
 		}
 	}
+}
+
+void Graphics::DrawTriangle(const Vec2& v0, const Vec2& v1, const Vec2& v2, Color c)
+{
+	//use pointers wo we can sort them
+	const Vec2* pv0 = &v0;
+	const Vec2* pv1 = &v1;
+	const Vec2* pv2 = &v2;
+
+	//Sort so pv0 is at the top
+	if (pv1->y < pv0->y) std::swap(pv0, pv1);
+	if (pv2->y < pv1->y) std::swap(pv1, pv2);
+	if (pv1->y < pv0->y) std::swap(pv0, pv1);
+
+	//Check if flat top
+	if (pv0->y == pv1->y)
+	{
+		if (pv0->x > pv1->x) std::swap(pv0, pv1); //Sort so pv0 is left
+		DrawFlatTopTriangle(*pv0, *pv1, *pv2, c);
+		return;
+	}
+
+	//Check if flat bottom
+	if (pv1->y == pv2->y)
+	{
+		if (pv2->x < pv1->x) std::swap(pv1, pv2); //Sort so pv1 is left
+		DrawFlatBottomTriangle(*pv0, *pv1, *pv2, c);
+		return;
+	}
+
+	//Split into flat top and flat bottom triangle
+	float alpha = (pv1->y - pv0->y) / (pv2->y - pv0->y);
+	Vec2 vi = pv0->InterpolateTo(*pv2, alpha);
+
+	if (vi.x > pv1->x) //major right
+	{
+		DrawFlatBottomTriangle(*pv0, *pv1, vi, c);
+		DrawFlatTopTriangle(*pv1, vi, *pv2, c);
+	}
+	else //Major left
+	{
+		DrawFlatBottomTriangle(*pv0, vi, *pv1, c);
+		DrawFlatTopTriangle(vi, *pv1, *pv2, c);
+	}
+}
+
+void Graphics::DrawFlatTopTriangle(const Vec2& v0, const Vec2& v1, const Vec2& v2, Color c)
+{
+	//Calculate slopes
+	float m0 = (v0.x - v2.x) / (v0.y - v2.y);
+	float m1 = (v1.x - v2.x) / (v1.y - v2.y);
+
+	// calculate start and end scanlines
+	int startY = ceil(v0.y - 0.5f);
+	int endY = ceil(v2.y - 0.5f); // the scanline AFTER the last line drawn
+
+	for (int y = startY; y < endY; y++)
+	{
+		//Find left starting point
+		float deltaY = (y + 0.5f) - v0.y;
+		float deltaXLeft = m0 * deltaY;
+		int startX = ceil((v0.x + deltaXLeft) - 0.5f);
+
+		//Find right end point (not included)
+		float deltaXRight = m1 * deltaY;
+		int endX = ceil((v1.x + deltaXRight) - 0.5f);
+
+		for (int x = startX; x < endX; x++)
+		{
+			PutPixel(x, y, c);
+		}
+	}
+}
+
+void Graphics::DrawFlatBottomTriangle(const Vec2& v0, const Vec2& v1, const Vec2& v2, Color c)
+{
+	// calulcate slopes in screen space
+	float m0 = (v1.x - v0.x) / (v1.y - v0.y);
+	float m1 = (v2.x - v0.x) / (v2.y - v0.y);
+
+	//Find start and end point (end point not included)
+	int startY = ceil(v0.y - 0.5f);
+	int endY = ceil(v2.y - 0.5f);
+
+	for (int y = startY; y < endY; y++)
+	{
+		float deltaY = y + 0.5f - v0.y;
+		float deltaXLeft = m0 * deltaY;
+		int startX = ceil((v0.x + deltaXLeft) - 0.5f);
+
+		float deltaXRight = m1 * deltaY;
+		int endX = ceil((v0.x + deltaXRight) - 0.5f);
+
+		for (int x = startX; x < endX; x++)
+		{
+			PutPixel(x, y, c);
+		}
+	}
+}
+
+void Graphics::DrawTriangleTex(const TexVertex& v0, const TexVertex& v1, const TexVertex& v2, const Surface& surface)
+{
+	//use pointers wo we can sort them
+	const TexVertex* pv0 = &v0;
+	const TexVertex* pv1 = &v1;
+	const TexVertex* pv2 = &v2;
+
+	//Sort so pv0 is at the top
+	if (pv1->pos.y < pv0->pos.y) std::swap(pv0, pv1);
+	if (pv2->pos.y < pv1->pos.y) std::swap(pv1, pv2);
+	if (pv1->pos.y < pv0->pos.y) std::swap(pv0, pv1);
+
+	//Check if flat top
+	if (pv0->pos.y == pv1->pos.y)
+	{
+		if (pv0->pos.x > pv1->pos.x) std::swap(pv0, pv1); //Sort so pv0 is left
+		DrawFlatTopTriangleTex(*pv0, *pv1, *pv2, surface);
+		return;
+	}
+
+	//Check if flat bottom
+	if (pv1->pos.y == pv2->pos.y)
+	{
+		if (pv2->pos.x < pv1->pos.x) std::swap(pv1, pv2); //Sort so pv1 is left
+		DrawFlatBottomTriangleTex(*pv0, *pv1, *pv2, surface);
+		return;
+	}
+
+	//Split into flat top and flat bottom triangle
+	float alpha = (pv1->pos.y - pv0->pos.y) / (pv2->pos.y - pv0->pos.y);
+	TexVertex vi = pv0->InterpolateTo(*pv2, alpha);
+
+	if (vi.pos.x > pv1->pos.x) //major right
+	{
+		DrawFlatBottomTriangleTex(*pv0, *pv1, vi, surface);
+		DrawFlatTopTriangleTex(*pv1, vi, *pv2, surface);
+	}
+	else //Major left
+	{
+		DrawFlatBottomTriangleTex(*pv0, vi, *pv1, surface);
+		DrawFlatTopTriangleTex(vi, *pv1, *pv2, surface);
+	}
+}
+
+void Graphics::DrawFlatTopTriangleTex(const TexVertex& v0, const TexVertex& v1, const TexVertex& v2, const Surface& surface)
+{
+	//Calculate slopes
+	TexVertex tDelta0 = (v2 - v0) / (v2.pos.y - v0.pos.y);
+	TexVertex tDelta1 = (v2 - v1) / (v2.pos.y - v1.pos.y);
+
+	// calculate start and end scanlines
+	int startY = ceil(v0.pos.y - 0.5f);
+	int endY = ceil(v2.pos.y - 0.5f); // the scanline AFTER the last line drawn
+
+	//stores current position on the lines of the triangle (moves with increasing y)
+	TexVertex tCurrentY0 = v0 + tDelta0 * ((startY + 0.5f) - (v0.pos.y));
+	TexVertex tCurrentY1 = v1 + tDelta1 * ((startY + 0.5f) - (v1.pos.y));
+
+	/*for (int y = startY; y < endY; y++, tCurrentY0 += tDelta0, tCurrentY1 += tDelta1)
+	{
+		//Find start and end points
+		int startX = ceil(tCurrentY0.pos.x - 0.5f);
+		int endX = ceil(tCurrentY0.pos.x - 0.5f);
+
+		//Find right end point (not included)
+		float deltaXRight = m1 * deltaY;
+		int endX = ceil((v1.x + deltaXRight) - 0.5f);
+
+		for (int x = startX; x < endX; x++)
+		{
+			PutPixel(x, y, c);
+		}
+	}*/
+}
+
+void Graphics::DrawFlatBottomTriangleTex(const TexVertex& v0, const TexVertex& v1, const TexVertex& v2, const Surface& surface)
+{
 }

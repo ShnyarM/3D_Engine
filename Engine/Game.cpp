@@ -39,11 +39,7 @@ void Game::Go()
 void Game::UpdateModel()
 {
 	const float dt = 1.0f / 60.0f;
-	if (wnd.kbd.KeyIsPressed(38)) //up
-	{
-		theta_z += dTheta * dt;
-	}
-	if (wnd.kbd.KeyIsPressed(40)) //down
+	if (wnd.kbd.KeyIsPressed('Q')) //up
 	{
 		theta_z += dTheta * dt;
 	}
@@ -86,8 +82,64 @@ void Game::UpdateModel()
 #include "Mat3.h"
 void Game::ComposeFrame()
 {
-	auto lines = cube.GetLines();
+	/*const Color colors[12] = {
+		Colors::White,
+		Colors::Blue,
+		Colors::Cyan,
+		Colors::Gray,
+		Colors::Green,
+		Colors::Magenta,
+		Colors::LightGray,
+		Colors::Red,
+		Colors::Yellow,
+		Colors::White,
+		Colors::Blue,
+		Colors::Cyan
+	};*/
+
+	const Color colors[12] = {
+		Colors::White,
+		Colors::Blue,
+		Colors::Cyan,
+		Colors::Gray,
+		Colors::Green,
+		Colors::Magenta,
+	};
+
 	Mat3 rot = Mat3::RotationX(theta_x) * Mat3::RotationY(theta_y) * Mat3::RotationZ(theta_z);
+	auto triangles = cube.GetTriangles();
+
+	for (auto& v : triangles.vertices)
+	{
+		v *= rot;
+		v += cubeOffset;
+	}
+
+	for (size_t i = 0, end = triangles.indices.size()/3; i < end; i++)
+	{
+		const Vec3& v0 = triangles.vertices[triangles.indices[3*i]];
+		const Vec3& v1 = triangles.vertices[triangles.indices[3*i+1]];
+		const Vec3& v2 = triangles.vertices[triangles.indices[3*i+2]];
+		Vec3 normal = (v1 - v0) % (v2 - v0);
+		triangles.cullFlags[i] = normal * v0 >= 0;
+	}
+
+	for (auto& v : triangles.vertices)
+	{
+		spaceTransformer.Transform(v);
+	}
+
+	for (size_t i = 0, end = triangles.indices.size() / 3; i < end; i++)
+	{
+		if (triangles.cullFlags[i]) continue;
+		gfx.DrawTriangle(triangles.vertices[triangles.indices[i * 3]],
+			triangles.vertices[triangles.indices[i * 3 + 1]],
+			triangles.vertices[triangles.indices[i * 3 + 2]],
+			colors[i/2]);
+	}
+
+
+	/*auto lines = cube.GetLines();
 
 	for (auto& v : lines.vertices)
 	{
@@ -98,8 +150,8 @@ void Game::ComposeFrame()
 		spaceTransformer.Transform(v);
 	}
 
-	for (auto i = lines.indeces.cbegin(), end = lines.indeces.cend(); i != end; std::advance(i, 2))
+	for (auto i = lines.indices.cbegin(), end = lines.indices.cend(); i != end; std::advance(i, 2))
 	{
-		gfx.DrawLine(lines.vertices[*i], lines.vertices[*std::next(i)], Colors::Green);
-	}
+		gfx.DrawLine(lines.vertices[*i], lines.vertices[*std::next(i)], Colors::Black);
+	}*/
 }

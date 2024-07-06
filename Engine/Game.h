@@ -45,7 +45,7 @@ private:
 	/********************************/
 	WorldSpaceTransformer spaceTransformer;
 	Cube cube{0.5f};
-	float dTheta = 0.4f;
+	float dTheta = 0.7f;
 	float theta_x = 0.0f;
 	float theta_y = 0.0f;
 	float theta_z = 0.0f;
