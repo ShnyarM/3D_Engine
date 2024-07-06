@@ -7,7 +7,7 @@ struct TexVertex
 	TexVertex(const Vec3& pos, const Vec2& tPos) 
 		:
 		pos(pos),
-		tPos()
+		tPos(tPos)
 	{}
 	TexVertex& operator=(const TexVertex& rhs)
 	{

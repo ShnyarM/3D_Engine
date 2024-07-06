@@ -11,7 +11,7 @@ public:
 		yFactor( float(Graphics::ScreenWidth) / 2.0f )
 	{}
 
-	Vec3& Transform(Vec3& v)
+	Vec3& Transform(Vec3& v) const
 	{
 		const float zInverse = screenDistance / v.z;
 		v.x = (v.x*zInverse + 1) * xFactor;
@@ -19,7 +19,7 @@ public:
 		return v;
 	}
 
-	Vec3 GetTransformed(const Vec3& v)
+	Vec3 GetTransformed(const Vec3& v) const
 	{
 		return Transform( Vec3( v ) );
 	}

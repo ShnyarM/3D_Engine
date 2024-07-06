@@ -22,7 +22,8 @@
 
 #include "Graphics.h"
 #include "WorldSpaceTransformer.h"
-#include "Cube.h"
+#include "Scene.h"
+#include <memory>
 
 class Game
 {
@@ -43,13 +44,6 @@ private:
 	/********************************/
 	/*  User Variables              */
 	/********************************/
-	WorldSpaceTransformer spaceTransformer;
-	Cube cube{0.5f};
-	float dTheta = 0.7f;
-	float theta_x = 0.0f;
-	float theta_y = 0.0f;
-	float theta_z = 0.0f;
-
-	float moveSpeed = 0.01f;
-	Vec3 cubeOffset = { 0.0f, 0.0f, 2.0f };
+	std::vector<std::unique_ptr<Scene>> scenes;
+	std::vector<std::unique_ptr<Scene>>::iterator curScene;
 };

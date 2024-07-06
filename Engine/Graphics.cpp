@@ -27,6 +27,7 @@
 #include <string>
 #include <array>
 #include <functional>
+#include <sstream>
 
 // Ignore the intellisense error "cannot open source file" for .shh files.
 // They will be created during the build sequence before the preprocessor runs.
@@ -481,7 +482,19 @@ void Graphics::DrawFlatBottomTriangle(const Vec2& v0, const Vec2& v1, const Vec2
 	}
 }
 
-void Graphics::DrawTriangleTex(const TexVertex& v0, const TexVertex& v1, const TexVertex& v2, const Surface& surface)
+void Graphics::DrawTriangleTex(const TexVertex& v0, const TexVertex& v1, const TexVertex& v2, const Surface& texture)
+{
+	//Start without wrap
+	StartDrawTriangleTex(v0, v1, v2, texture, false);
+}
+
+void Graphics::DrawTriangleTexWrap(const TexVertex& v0, const TexVertex& v1, const TexVertex& v2, const Surface& texture)
+{
+	//Start with wrap
+	StartDrawTriangleTex(v0, v1, v2, texture, true);
+}
+
+void Graphics::StartDrawTriangleTex(const TexVertex& v0, const TexVertex& v1, const TexVertex& v2, const Surface& texture, bool wrap)
 {
 	//use pointers wo we can sort them
 	const TexVertex* pv0 = &v0;
@@ -497,7 +510,7 @@ void Graphics::DrawTriangleTex(const TexVertex& v0, const TexVertex& v1, const T
 	if (pv0->pos.y == pv1->pos.y)
 	{
 		if (pv0->pos.x > pv1->pos.x) std::swap(pv0, pv1); //Sort so pv0 is left
-		DrawFlatTopTriangleTex(*pv0, *pv1, *pv2, surface);
+		DrawFlatTopTriangleTex(*pv0, *pv1, *pv2, texture, wrap);
 		return;
 	}
 
@@ -505,7 +518,7 @@ void Graphics::DrawTriangleTex(const TexVertex& v0, const TexVertex& v1, const T
 	if (pv1->pos.y == pv2->pos.y)
 	{
 		if (pv2->pos.x < pv1->pos.x) std::swap(pv1, pv2); //Sort so pv1 is left
-		DrawFlatBottomTriangleTex(*pv0, *pv1, *pv2, surface);
+		DrawFlatBottomTriangleTex(*pv0, *pv1, *pv2, texture, wrap);
 		return;
 	}
 
@@ -515,17 +528,17 @@ void Graphics::DrawTriangleTex(const TexVertex& v0, const TexVertex& v1, const T
 
 	if (vi.pos.x > pv1->pos.x) //major right
 	{
-		DrawFlatBottomTriangleTex(*pv0, *pv1, vi, surface);
-		DrawFlatTopTriangleTex(*pv1, vi, *pv2, surface);
+		DrawFlatBottomTriangleTex(*pv0, *pv1, vi, texture, wrap);
+		DrawFlatTopTriangleTex(*pv1, vi, *pv2, texture, wrap);
 	}
 	else //Major left
 	{
-		DrawFlatBottomTriangleTex(*pv0, vi, *pv1, surface);
-		DrawFlatTopTriangleTex(vi, *pv1, *pv2, surface);
+		DrawFlatBottomTriangleTex(*pv0, vi, *pv1, texture, wrap);
+		DrawFlatTopTriangleTex(vi, *pv1, *pv2, texture, wrap);
 	}
 }
 
-void Graphics::DrawFlatTopTriangleTex(const TexVertex& v0, const TexVertex& v1, const TexVertex& v2, const Surface& surface)
+void Graphics::DrawFlatTopTriangleTex(const TexVertex& v0, const TexVertex& v1, const TexVertex& v2, const Surface& texture, bool wrap)
 {
 	//Calculate slopes
 	TexVertex tDelta0 = (v2 - v0) / (v2.pos.y - v0.pos.y);
@@ -535,27 +548,68 @@ void Graphics::DrawFlatTopTriangleTex(const TexVertex& v0, const TexVertex& v1, 
 	int startY = ceil(v0.pos.y - 0.5f);
 	int endY = ceil(v2.pos.y - 0.5f); // the scanline AFTER the last line drawn
 
+	//Start function with given information
+	DrawFlatTriangleTex(startY, endY, tDelta0, tDelta1, v0, v1, texture, wrap);
+}
+
+void Graphics::DrawFlatBottomTriangleTex(const TexVertex& v0, const TexVertex& v1, const TexVertex& v2, const Surface& texture, bool wrap)
+{
+	//Calculate slopes
+	TexVertex tDelta0 = (v1 - v0) / (v1.pos.y - v0.pos.y);
+	TexVertex tDelta1 = (v2 - v0) / (v2.pos.y - v0.pos.y);
+
+	// calculate start and end scanlines
+	int startY = ceil(v0.pos.y - 0.5f);
+	int endY = ceil(v1.pos.y - 0.5f); // the scanline AFTER the last line drawn
+
+	DrawFlatTriangleTex(startY, endY, tDelta0, tDelta1, v0, v0, texture, wrap);
+}
+
+// Draw triangle Flat triangle with texture, that is Flat Bottom or Flat Top
+// int startY and endY are screen coordinates where the triangle should be drawn, startY included and endY excluded
+// TexVertex tDelta says how much TexVertex changes per Y step, 0 for left side and 1 for right side
+// TexVertex v0 and v1 define the two top points for the triangle, for Flatbottom we have v0 == v1 
+void Graphics::DrawFlatTriangleTex(int startY, int endY, const TexVertex tDelta0, const TexVertex tDelta1, 
+	const TexVertex v0, const TexVertex v1,  const Surface& texture, bool wrap)
+{
 	//stores current position on the lines of the triangle (moves with increasing y)
 	TexVertex tCurrentY0 = v0 + tDelta0 * ((startY + 0.5f) - (v0.pos.y));
-	TexVertex tCurrentY1 = v1 + tDelta1 * ((startY + 0.5f) - (v1.pos.y));
+	TexVertex tCurrentY1 = v1 + tDelta1 * ((startY + 0.5f) - (v0.pos.y));
 
-	/*for (int y = startY; y < endY; y++, tCurrentY0 += tDelta0, tCurrentY1 += tDelta1)
+	for (int y = startY; y < endY; y++, tCurrentY0 += tDelta0, tCurrentY1 += tDelta1)
 	{
 		//Find start and end points
 		int startX = ceil(tCurrentY0.pos.x - 0.5f);
-		int endX = ceil(tCurrentY0.pos.x - 0.5f);
+		int endX = ceil(tCurrentY1.pos.x - 0.5f);
 
-		//Find right end point (not included)
-		float deltaXRight = m1 * deltaY;
-		int endX = ceil((v1.x + deltaXRight) - 0.5f);
+		//Get delta per x step and calculate start position for texture map only
+		Vec2 tDeltaX = (tCurrentY1.tPos - tCurrentY0.tPos) / (tCurrentY1.pos.x - tCurrentY0.pos.x);
+		Vec2 tCurrentX = tCurrentY0.tPos + tDeltaX * ((startX + 0.5f) - (tCurrentY0.pos.x));
 
-		for (int x = startX; x < endX; x++)
+		//Helper variables
+		const float tWidth = texture.GetWidth();
+		const float tHeight = texture.GetHeight();
+		const float tWidthMax = tWidth - 1.0f;
+		const float tHeightMax = tHeight - 1.0f;
+
+		for (int x = startX; x < endX; x++, tCurrentX += tDeltaX)
 		{
-			PutPixel(x, y, c);
-		}
-	}*/
-}
+			float tx = 0.0f, ty = 0.0f;
 
-void Graphics::DrawFlatBottomTriangleTex(const TexVertex& v0, const TexVertex& v1, const TexVertex& v2, const Surface& surface)
-{
+			if (!wrap) //clamp when not wrapped
+			{
+				const float topClampedX = std::min(tCurrentX.x * tWidth, tWidthMax);
+				const float topClampedY = std::min(tCurrentX.y * tHeight, tHeightMax);
+				tx = std::max(0.0f, topClampedX);
+				ty = std::max(0.0f, topClampedY);
+			}
+			else //modulus when wrapped
+			{
+				tx = std::fmod(tCurrentX.x * tWidth, tWidthMax);
+				ty = std::fmod(tCurrentX.y * tHeight, tHeightMax);
+			}
+
+			PutPixel(x, y, texture.GetPixel(tx, ty));
+		}
+	}
 }
