@@ -7,20 +7,27 @@
 #include "Mat3.h"
 #include "ChiliMath.h"
 #include "Pipeline.h"
-#include "TextureEffect.h"
+#include "VertexColorEffect.h"
 
-class TextureCubeScene : public Scene
+class VertexColorScene : public Scene
 {
 public:
-	typedef Pipeline<TextureEffect> Pipeline;
+	typedef Pipeline<VertexColorEffect> Pipeline;
 	typedef Pipeline::Vertex Vertex;
 public:
-	TextureCubeScene(Graphics& gfx, const std::wstring& filename)
+	VertexColorScene(Graphics& gfx)
 		:
 		pipeline(gfx),
-		itList(Cube::GetSkinned<Vertex>(1.0f))
+		itList(Cube::GetPlain<Vertex>(1.0f))
 	{
-		pipeline.effect.ps.BindTexture(filename);
+		itList.vertices[0].color = Vec3(Colors::Red);
+		itList.vertices[1].color = Vec3(Colors::Blue);
+		itList.vertices[2].color = Vec3(Colors::White);
+		itList.vertices[3].color = Vec3(Colors::Green);
+		itList.vertices[4].color = Vec3(Colors::Magenta);
+		itList.vertices[5].color = Vec3(Colors::Cyan);
+		itList.vertices[6].color = Vec3(Colors::Gray);
+		itList.vertices[7].color = Vec3(Colors::Black);
 	}
 
 	void UpdateModel(Keyboard& kbd, Mouse& mouse, float dt) override

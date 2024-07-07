@@ -25,6 +25,9 @@
     <Filter Include="Header Files\_ChiliFramework">
       <UniqueIdentifier>{c9963765-c98b-4d70-8c13-d4f252ffce64}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Effects">
+      <UniqueIdentifier>{8b48b607-942d-420f-8854-0e16c84ac9b8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Colors.h">
@@ -66,7 +69,7 @@
     <ClInclude Include="TextureCubeScene.h">
       <Filter>Header Files\Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="Cubes.h">
+    <ClInclude Include="Cube.h">
       <Filter>Header Files\Models</Filter>
     </ClInclude>
     <ClInclude Include="ChiliMath.h">
@@ -104,6 +107,21 @@
     </ClInclude>
     <ClInclude Include="ScreenTransformer.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureEffect.h">
+      <Filter>Header Files\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexColorEffect.h">
+      <Filter>Header Files\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexColorScene.h">
+      <Filter>Header Files\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="SolidColorEffect.h">
+      <Filter>Header Files\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="SolidColorScene.h">
+      <Filter>Header Files\Scenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

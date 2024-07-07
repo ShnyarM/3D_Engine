@@ -21,6 +21,8 @@
 #include "MainWindow.h"
 #include "Game.h"
 #include "TextureCubeScene.h"
+#include "VertexColorScene.h"
+#include "SolidColorScene.h"
 
 Game::Game( MainWindow& wnd )
 	:
@@ -28,6 +30,8 @@ Game::Game( MainWindow& wnd )
 	gfx( wnd )
 {
 	scenes.emplace_back(std::make_unique<TextureCubeScene>(gfx, L"Images\\dice_skin.png"));
+	scenes.emplace_back(std::make_unique<VertexColorScene>(gfx));
+	scenes.emplace_back(std::make_unique<SolidColorScene>(gfx));
 	curScene = scenes.begin();
 }
 

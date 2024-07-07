@@ -8,69 +8,11 @@
 #include "ChiliMath.h"
 #include <algorithm>
 
+template <class Effect>
 class Pipeline
 {
 public:
-	class Vertex
-	{
-	public:
-		Vertex() = default;
-		Vertex(const Vec3& pos, const Vec2& tPos)
-			:
-			pos(pos),
-			t(tPos)
-		{
-		}
-		Vertex& operator=(const Vertex& rhs)
-		{
-			pos = rhs.pos;
-			t = rhs.t;
-			return *this;
-		}
-		Vertex& operator+=(const Vertex& rhs)
-		{
-			pos += rhs.pos;
-			t += rhs.t;
-			return *this;
-		}
-		Vertex& operator-=(const Vertex& rhs)
-		{
-			pos -= rhs.pos;
-			t -= rhs.t;
-			return *this;
-		}
-		Vertex operator+(const Vertex& rhs) const
-		{
-			return Vertex(*this) += rhs;
-		}
-		Vertex operator-(const Vertex& rhs) const
-		{
-			return Vertex(*this) -= rhs;
-		}
-		Vertex& operator*=(const float rhs)
-		{
-			pos *= rhs;
-			t *= rhs;
-			return *this;
-		}
-		Vertex operator*(const float rhs) const
-		{
-			return Vertex(*this) *= rhs;
-		}
-		Vertex& operator/=(const float rhs)
-		{
-			pos /= rhs;
-			t /= rhs;
-			return *this;
-		}
-		Vertex operator/(const float rhs) const
-		{
-			return Vertex(*this) /= rhs;
-		}
-
-		Vec3 pos;
-		Vec2 t;
-	};
+	typedef typename Effect::Vertex Vertex;
 
 public:
 	Pipeline(Graphics& gfx) 
@@ -91,10 +33,6 @@ public:
 	{
 		translation = translation_in;
 	}
-	void BindTexture(const std::wstring& filename)
-	{
-		pTexture = std::make_unique<Surface>(Surface::FromFile(filename));
-	}
 
 private:
 	// Apply World Space rotation and translation to each vertex
@@ -105,7 +43,7 @@ private:
 
 		for (auto& vertex : vertices)
 		{
-			outputVertexStream.emplace_back((vertex.pos * rotation) + translation, vertex.t);
+			outputVertexStream.emplace_back((vertex.pos * rotation) + translation, vertex);
 		}
 
 		AssembleTriangles(outputVertexStream, indices);
@@ -234,12 +172,6 @@ private:
 		Vertex vCurrentY0 = v0 + vDelta0 * ((startY + 0.5f) - (v0.pos.y));
 		Vertex vCurrentY1 = v1 + vDelta1 * ((startY + 0.5f) - (v0.pos.y));
 
-		//Helper variables for clamping
-		const float tWidth = pTexture->GetWidth();
-		const float tHeight = pTexture->GetHeight();
-		const float tWidthMax = tWidth - 1.0f;
-		const float tHeightMax = tHeight - 1.0f;
-
 		for (int y = startY; y < endY; y++, vCurrentY0 += vDelta0, vCurrentY1 += vDelta1)
 		{
 			//Find start and end points
@@ -252,17 +184,16 @@ private:
 
 			for (int x = startX; x < endX; x++, vCurrentX += vDeltaX)
 			{
-				gfx.PutPixel(x, y, pTexture->GetPixel(
-					(unsigned int)std::min(vCurrentX.t.x * tWidth, tWidthMax),
-					(unsigned int)std::min(vCurrentX.t.y * tHeight, tHeightMax)));
+				gfx.PutPixel(x, y, effect.ps(vCurrentX));
 			}
 		}
 	}
+public:
+	Effect effect;
 
 private:
 	Graphics& gfx;
 	ScreenTransformer screenTransformer;
 	Vec3 translation;
 	Mat3 rotation = Mat3::Identity();
-	std::unique_ptr<Surface> pTexture;
 };
