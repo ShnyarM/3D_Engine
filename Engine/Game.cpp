@@ -29,7 +29,7 @@ Game::Game( MainWindow& wnd )
 	wnd( wnd ),
 	gfx( wnd )
 {
-	scenes.emplace_back(std::make_unique<TextureCubeScene>(gfx, L"Images\\dice_skin.png"));
+	scenes.emplace_back(std::make_unique<TextureCubeScene>(gfx, L"Images\\cool_skin.png"));
 	scenes.emplace_back(std::make_unique<VertexColorScene>(gfx));
 	scenes.emplace_back(std::make_unique<SolidColorScene>(gfx));
 	curScene = scenes.begin();

@@ -79,9 +79,9 @@ private:
 	// Apply Screen transformation to triangle and draw triangle
 	void PostProcessTriangleVertices(Triangle<Vertex>& triangle)
 	{
-		screenTransformer.Transform(triangle.v0.pos);
-		screenTransformer.Transform(triangle.v1.pos);
-		screenTransformer.Transform(triangle.v2.pos);
+		screenTransformer.Transform(triangle.v0);
+		screenTransformer.Transform(triangle.v1);
+		screenTransformer.Transform(triangle.v2);
 
 		DrawTriangle(triangle);
 	}
@@ -184,7 +184,13 @@ private:
 
 			for (int x = startX; x < endX; x++, vCurrentX += vDeltaX)
 			{
-				gfx.PutPixel(x, y, effect.ps(vCurrentX));
+				//Recover original zCoordinate again, as pos.z contains 1/z
+				float zCoordinate = 1.0f / vCurrentX.pos.z;
+
+				//Get back correct uv coordinates by multiplying them with z
+				const Vertex uvCords = vCurrentX * zCoordinate;
+
+				gfx.PutPixel(x, y, effect.ps(uvCords));
 			}
 		}
 	}
