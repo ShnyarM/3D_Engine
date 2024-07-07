@@ -139,10 +139,8 @@
     <ClInclude Include="ChiliException.h" />
     <ClInclude Include="ChiliMath.h" />
     <ClInclude Include="ChiliWin.h" />
-    <ClInclude Include="ColorCubeScene.h" />
     <ClInclude Include="Colors.h" />
     <ClInclude Include="Cubes.h" />
-    <ClInclude Include="FullTextureCubeScene.h" />
     <ClInclude Include="DXErr.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GDIPlusManager.h" />
@@ -154,16 +152,17 @@
     <ClInclude Include="Mat2.h" />
     <ClInclude Include="Mat3.h" />
     <ClInclude Include="Mouse.h" />
+    <ClInclude Include="Pipeline.h" />
     <ClInclude Include="Rect.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Surface.h" />
     <ClInclude Include="TextureCubeScene.h" />
     <ClInclude Include="TexVertex.h" />
+    <ClInclude Include="Triangle.h" />
     <ClInclude Include="Vec2.h" />
     <ClInclude Include="Vec3.h" />
-    <ClInclude Include="WireframeCubeScene.h" />
-    <ClInclude Include="WorldSpaceTransformer.h" />
+    <ClInclude Include="ScreenTransformer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DXErr.cpp" />

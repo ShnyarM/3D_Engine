@@ -60,14 +60,8 @@
     <ClInclude Include="IndexedTriangleList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="WorldSpaceTransformer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="TexVertex.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ColorCubeScene.h">
-      <Filter>Header Files\Scenes</Filter>
     </ClInclude>
     <ClInclude Include="Scene.h">
       <Filter>Header Files</Filter>
@@ -75,14 +69,8 @@
     <ClInclude Include="TextureCubeScene.h">
       <Filter>Header Files\Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="FullTextureCubeScene.h">
-      <Filter>Header Files\Scenes</Filter>
-    </ClInclude>
     <ClInclude Include="Cubes.h">
       <Filter>Header Files\Models</Filter>
-    </ClInclude>
-    <ClInclude Include="WireframeCubeScene.h">
-      <Filter>Header Files\Scenes</Filter>
     </ClInclude>
     <ClInclude Include="ChiliMath.h">
       <Filter>Header Files\_ChiliFramework</Filter>
@@ -110,6 +98,15 @@
     </ClInclude>
     <ClInclude Include="Resource.h">
       <Filter>Header Files\_ChiliFramework</Filter>
+    </ClInclude>
+    <ClInclude Include="Pipeline.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Triangle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ScreenTransformer.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

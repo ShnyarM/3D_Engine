@@ -10,6 +10,61 @@
 class Cube
 {
 public:
+	template<class V>
+	static IndexedTriangleList<V> GetSkinned(float size = 1.0f)
+	{
+		float side = 0.5f * size;
+		const auto ConvertCords = [](const float x, const float y) {
+			return Vec2(x / 3.0f, y / 4.0f);
+		}; 
+
+		std::vector<V> verts(14);
+
+		verts[0].pos = Vec3(-side, side, -side);	// 0
+		verts[1].pos = Vec3(side, side, -side);		// 1
+		verts[2].pos = Vec3(-side, -side, -side);	// 2
+		verts[3].pos = Vec3(side, -side, -side);	// 3
+		verts[4].pos = Vec3(-side, -side, side);	// 4
+		verts[5].pos = Vec3(side, -side, side);		// 5
+		verts[6].pos = Vec3(-side, side, side);		// 6
+		verts[7].pos = Vec3(side, side, side);		// 7
+		verts[8].pos = Vec3(-side, side, side);		// 8
+		verts[9].pos = Vec3(-side, side, -side);	// 9
+		verts[10].pos = Vec3(side, side, side);		// 10
+		verts[11].pos = Vec3(side, side, -side);	// 11
+		verts[12].pos = Vec3(-side, side, side);	// 12
+		verts[13].pos = Vec3(-side, side, -side);	// 13
+
+		verts[0].t = ConvertCords(0.0f, 1.0f);	// 0
+		verts[1].t = ConvertCords(0.0f, 2.0f);	// 1
+		verts[2].t = ConvertCords(1.0f, 1.0f);	// 2
+		verts[3].t = ConvertCords(1.0f, 2.0f);	// 3
+		verts[4].t = ConvertCords(2.0f, 1.0f);	// 4
+		verts[5].t = ConvertCords(2.0f, 2.0f);	// 5
+		verts[6].t = ConvertCords(3.0f, 1.0f);	// 6
+		verts[7].t = ConvertCords(3.0f, 2.0f);	// 7
+		verts[8].t = ConvertCords(2.0f, 0.0f);	// 8
+		verts[9].t = ConvertCords(1.0f, 0.0f);	// 9
+		verts[10].t = ConvertCords(2.0f, 3.0f); // 10
+		verts[11].t = ConvertCords(1.0f, 3.0f); // 11
+		verts[12].t = ConvertCords(2.0f, 4.0f); // 12
+		verts[13].t = ConvertCords(1.0f, 4.0f); // 13
+
+		return{
+			std::move(verts),
+			{ 2,0,3, 1,3,0,
+			 2,3,4, 5,4,3,
+			 4,5,6, 7,6,5,
+			 4,8,2, 9,2,8,
+			 3,11,5, 10,5,11,
+			 11,13,10, 12,10,13 }
+		};
+	}
+};
+
+/*class Cube
+{
+public:
 	Cube(float size)
 	{
 		float side = 0.5f * size;
@@ -280,4 +335,4 @@ public:
 private:
 	std::vector<Vec3> vertices;
 	std::vector<Vec2> tCords;
-};
+};*/

@@ -20,20 +20,14 @@
 ******************************************************************************************/
 #include "MainWindow.h"
 #include "Game.h"
-#include "ColorCubeScene.h"
 #include "TextureCubeScene.h"
-#include "FullTextureCubeScene.h"
-#include "WireframeCubeScene.h"
 
 Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
 	gfx( wnd )
 {
-	scenes.emplace_back(std::make_unique<WireframeCubeScene>());
-	scenes.emplace_back(std::make_unique<ColorCubeScene>());
-	scenes.emplace_back(std::make_unique<TextureCubeScene>());
-	scenes.emplace_back(std::make_unique<FullTextureCubeScene>());
+	scenes.emplace_back(std::make_unique<TextureCubeScene>(gfx, L"Images\\dice_skin.png"));
 	curScene = scenes.begin();
 }
 
@@ -64,5 +58,5 @@ void Game::UpdateModel()
 
 void Game::ComposeFrame()
 {
-	(*curScene)->ComposeFrame(gfx);
+	(*curScene)->ComposeFrame();
 }

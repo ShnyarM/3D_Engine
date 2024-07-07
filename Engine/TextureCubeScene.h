@@ -1,31 +1,44 @@
 #pragma once
 #include "Scene.h"
 #include "Cubes.h"
-#include "WorldSpaceTransformer.h"
+#include "ScreenTransformer.h"
 #include "Mouse.h"
 #include "Keyboard.h"
 #include "Mat3.h"
+#include "ChiliMath.h"
+#include "Pipeline.h"
 
 class TextureCubeScene : public Scene
 {
+public:
+	typedef Pipeline::Vertex Vertex;
+public:
+	TextureCubeScene(Graphics& gfx, const std::wstring& filename)
+		:
+		pipeline(gfx),
+		itList(Cube::GetSkinned<Vertex>(1.0f))
+	{
+		pipeline.BindTexture(filename);
+	}
+
 	void UpdateModel(Keyboard& kbd, Mouse& mouse, float dt) override
 	{
 		//Rotation
 		if (kbd.KeyIsPressed('W')) //up
 		{
-			theta_z += dTheta * dt;
+			theta_z += wrap_angle(dTheta * dt);
 		}
 		if (kbd.KeyIsPressed('S')) //down
 		{
-			theta_z -= dTheta * dt;
+			theta_z -= wrap_angle(dTheta * dt);
 		}
 		if (kbd.KeyIsPressed('D')) //right
 		{
-			theta_y -= dTheta * dt;
+			theta_y -= wrap_angle(dTheta * dt);
 		}
 		if (kbd.KeyIsPressed('A')) //left
 		{
-			theta_y += dTheta * dt;
+			theta_y += wrap_angle(dTheta * dt);
 		}
 
 		//Cube Movement
@@ -47,44 +60,17 @@ class TextureCubeScene : public Scene
 		}
 	}
 
-	void ComposeFrame(Graphics& gfx) const override
+	void ComposeFrame() override
 	{
 		Mat3 rot = Mat3::RotationX(theta_x) * Mat3::RotationY(theta_y) * Mat3::RotationZ(theta_z);
-		auto triangles = cube.GetTrianglesTex();
-
-		for (auto& v : triangles.vertices)
-		{
-			v.pos *= rot;
-			v.pos += cubeOffset;
-		}
-
-		for (size_t i = 0, end = triangles.indices.size() / 3; i < end; i++)
-		{
-			const Vec3& v0 = triangles.vertices[triangles.indices[3 * i]].pos;
-			const Vec3& v1 = triangles.vertices[triangles.indices[3 * i + 1]].pos;
-			const Vec3& v2 = triangles.vertices[triangles.indices[3 * i + 2]].pos;
-			Vec3 normal = (v1 - v0) % (v2 - v0);
-			triangles.cullFlags[i] = normal * v0 >= 0;
-		}
-
-		for (auto& v : triangles.vertices)
-		{
-			spaceTransformer.Transform(v.pos);
-		}
-
-		for (size_t i = 0, end = triangles.indices.size() / 3; i < end; i++)
-		{
-			if (triangles.cullFlags[i]) continue;
-			gfx.DrawTriangleTexWrap(triangles.vertices[triangles.indices[i * 3]],
-				triangles.vertices[triangles.indices[i * 3 + 1]],
-				triangles.vertices[triangles.indices[i * 3 + 2]],
-				texture);
-		}
+		pipeline.BindRotation(rot);
+		pipeline.BindTranslation(cubeOffset);
+		pipeline.Draw(itList);
 	}
 
 private:
-	WorldSpaceTransformer spaceTransformer;
-	SkinnedCube cube{ 0.5f };
+	Pipeline pipeline;
+	IndexedTriangleList<Vertex> itList;
 	float dTheta = 0.7f;
 	float theta_x = 0.0f;
 	float theta_y = 0.0f;
@@ -92,5 +78,4 @@ private:
 
 	float moveSpeed = 0.01f;
 	Vec3 cubeOffset = { 0.0f, 0.0f, 2.0f };
-	Surface texture = Surface::FromFile(L"Images\\dice_skin.png");
 };
