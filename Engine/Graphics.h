@@ -57,9 +57,6 @@ public:
 	Graphics& operator=( const Graphics& ) = delete;
 	void EndFrame();
 	void BeginFrame();
-	void DrawTriangle(const Vec2& v0, const Vec2& v1, const Vec2& v2, Color c);
-	void DrawTriangleTex(const TexVertex& v0, const TexVertex& v1, const TexVertex& v2, const Surface& texture);
-	void DrawTriangleTexWrap(const TexVertex& v0, const TexVertex& v1, const TexVertex& v2, const Surface& texture);
 	void DrawLine( const Vec2& p1,const Vec2& p2,Color c )
 	{
 		DrawLine( p1.x,p1.y,p2.x,p2.y,c );
@@ -75,14 +72,6 @@ public:
 		sysBuffer.PutPixel( x,y,c );
 	}
 	~Graphics();
-private:
-	void DrawFlatTopTriangle(const Vec2& v0, const Vec2& v1, const Vec2& v2, Color c);
-	void DrawFlatBottomTriangle(const Vec2& v0, const Vec2& v1, const Vec2& v2, Color c);
-	void StartDrawTriangleTex(const TexVertex& v0, const TexVertex& v1, const TexVertex& v2, const Surface& texture, bool wrap);
-	void DrawFlatTopTriangleTex(const TexVertex& v0, const TexVertex& v1, const TexVertex& v2, const Surface& texture, bool wrap);
-	void DrawFlatBottomTriangleTex(const TexVertex& v0, const TexVertex& v1, const TexVertex& v2, const Surface& texture, bool wrap);
-	void Graphics::DrawFlatTriangleTex(int startY, int endY, const TexVertex tDelta0, const TexVertex tDelta1,
-		const TexVertex v0, const TexVertex v1, const Surface& texture, bool wrap);
 
 private:
 	GDIPlusManager										gdipMan;
