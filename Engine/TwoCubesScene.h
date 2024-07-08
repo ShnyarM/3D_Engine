@@ -7,20 +7,26 @@
 #include "Mat3.h"
 #include "ChiliMath.h"
 #include "Pipeline.h"
-#include "TextureEffect.h"
+#include "SolidColorEffect.h"
 
-class TextureCubeScene : public Scene
+class TwoCubesScene : public Scene
 {
 public:
-	typedef Pipeline<TextureEffect> Pipeline;
+	typedef Pipeline<SolidColorEffect> Pipeline;
 	typedef Pipeline::Vertex Vertex;
 public:
-	TextureCubeScene(Graphics& gfx, const std::wstring& filename)
+	TwoCubesScene(Graphics& gfx)
 		:
 		pipeline(gfx),
-		itList(Cube::GetSkinned<Vertex>(1.0f))
+		itList1(Cube::GetPlainIndependentFaces<Vertex>(1.0f)),
+		itList2(Cube::GetPlainIndependentFaces<Vertex>(1.0f))
 	{
-		pipeline.effect.ps.BindTexture(filename);
+		const Color colors[] = { Colors::Red, Colors::Blue, Colors::White, Colors::Green, Colors::Cyan, Colors::Magenta };
+		for (size_t i = 0; i < itList1.vertices.size(); i++)
+		{
+			itList1.vertices[i].color = colors[i / 4];
+			itList2.vertices[i].color = colors[i / 4];
+		}
 	}
 
 	void UpdateModel(Keyboard& kbd, Mouse& mouse, float dt) override
@@ -65,15 +71,23 @@ public:
 	void ComposeFrame() override
 	{
 		pipeline.BeginFrame();
+		//Draw first cube with fixed offset
 		Mat3 rot = Mat3::RotationX(theta_x) * Mat3::RotationY(theta_y) * Mat3::RotationZ(theta_z);
 		pipeline.BindRotation(rot);
+		pipeline.BindTranslation({ 0.0f, 0.0f, 2.0f });
+		pipeline.Draw(itList1);
+
+		//Draw second cube with different rotation and fixed offset
+		rot = Mat3::RotationX(-theta_x) * Mat3::RotationY(-theta_y) * Mat3::RotationZ(-theta_z);
+		pipeline.BindRotation(rot);
 		pipeline.BindTranslation(cubeOffset);
-		pipeline.Draw(itList);
+		pipeline.Draw(itList2);
 	}
 
 private:
 	Pipeline pipeline;
-	IndexedTriangleList<Vertex> itList;
+	IndexedTriangleList<Vertex> itList1;
+	IndexedTriangleList<Vertex> itList2;
 	float dTheta = 0.7f;
 	float theta_x = 0.0f;
 	float theta_y = 0.0f;

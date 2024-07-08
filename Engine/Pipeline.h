@@ -1,11 +1,11 @@
 #pragma once
-#include "Vec2.h"
 #include "Vec3.h"
 #include "Mat3.h"
 #include "IndexedTriangleList.h"
 #include "Triangle.h"
 #include "ScreenTransformer.h"
 #include "ChiliMath.h"
+#include "ZBuffer.h"
 #include <algorithm>
 
 template <class Effect>
@@ -17,8 +17,15 @@ public:
 public:
 	Pipeline(Graphics& gfx) 
 		:
-		gfx(gfx)
+		gfx(gfx),
+		zBuffer(gfx.ScreenWidth, gfx.ScreenHeight)
 	{}
+
+	//Clears ZBuffer so new frame can be drawn
+	void BeginFrame()
+	{
+		zBuffer.Clear();
+	}
 
 	// public interface function to start pipeline process for indexedtrianglelist
 	void Draw(const IndexedTriangleList<Vertex>& triList)
@@ -174,6 +181,8 @@ private:
 
 		for (int y = startY; y < endY; y++, vCurrentY0 += vDelta0, vCurrentY1 += vDelta1)
 		{
+			//Skip if y is not on screen
+			if (y < 0 || y >= gfx.ScreenHeight) continue;
 			//Find start and end points
 			int startX = ceil(vCurrentY0.pos.x - 0.5f);
 			int endX = ceil(vCurrentY1.pos.x - 0.5f);
@@ -184,13 +193,19 @@ private:
 
 			for (int x = startX; x < endX; x++, vCurrentX += vDeltaX)
 			{
+				//Skip if x is not on screen
+				if (x < 0 || x >= gfx.ScreenWidth) continue;
 				//Recover original zCoordinate again, as pos.z contains 1/z
 				float zCoordinate = 1.0f / vCurrentX.pos.z;
+				
+				// Only draw Pixel if it passes zBuffer test, i.e. no pixel in front
+				if (zBuffer.TestAndSet(x, y, zCoordinate))
+				{
+					//Get back correct uv coordinates by multiplying them with z
+					const Vertex uvCords = vCurrentX * zCoordinate;
 
-				//Get back correct uv coordinates by multiplying them with z
-				const Vertex uvCords = vCurrentX * zCoordinate;
-
-				gfx.PutPixel(x, y, effect.ps(uvCords));
+					gfx.PutPixel(x, y, effect.ps(uvCords));
+				}
 			}
 		}
 	}
@@ -199,6 +214,7 @@ public:
 
 private:
 	Graphics& gfx;
+	ZBuffer zBuffer;
 	ScreenTransformer screenTransformer;
 	Vec3 translation;
 	Mat3 rotation = Mat3::Identity();

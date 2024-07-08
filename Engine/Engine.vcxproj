@@ -162,11 +162,13 @@
     <ClInclude Include="TextureCubeScene.h" />
     <ClInclude Include="TextureEffect.h" />
     <ClInclude Include="Triangle.h" />
+    <ClInclude Include="TwoCubesScene.h" />
     <ClInclude Include="Vec2.h" />
     <ClInclude Include="Vec3.h" />
     <ClInclude Include="ScreenTransformer.h" />
     <ClInclude Include="VertexColorEffect.h" />
     <ClInclude Include="VertexColorScene.h" />
+    <ClInclude Include="ZBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DXErr.cpp" />
