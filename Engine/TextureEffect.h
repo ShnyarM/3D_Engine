@@ -4,10 +4,12 @@
 #include "Colors.h"
 #include <memory>
 #include "Surface.h"
+#include "DefaultVertexShader.h"
 
 class TextureEffect
 {
 public:
+	//input vertex
 	class Vertex
 	{
 	public:
@@ -72,14 +74,15 @@ public:
 		Vec3 pos;
 		Vec2 t;
 	};
+	
+	//Define VertexShader
+	typedef DefaultVertexShader<Vertex> VertexShader;
 
 	class PixelShader
 	{
 	public:
-		// Input class is Vertex
 		// Get Color based of vertex and current loaded texture
-		template <class Input>
-		Color operator()(const Input& in)
+		Color operator()(const Vertex& in)
 		{
 			assert(textureLoaded);
 			return pTexture->GetPixel(
@@ -108,5 +111,6 @@ public:
 	};
 
 public:
+	VertexShader vs;
 	PixelShader ps;
 };

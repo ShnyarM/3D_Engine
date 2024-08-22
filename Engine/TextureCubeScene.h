@@ -66,8 +66,8 @@ public:
 	{
 		pipeline.BeginFrame();
 		Mat3 rot = Mat3::RotationX(theta_x) * Mat3::RotationY(theta_y) * Mat3::RotationZ(theta_z);
-		pipeline.BindRotation(rot);
-		pipeline.BindTranslation(cubeOffset);
+		pipeline.effect.vs.BindRotation(rot);
+		pipeline.effect.vs.BindTranslation(cubeOffset);
 		pipeline.Draw(itList);
 	}
 

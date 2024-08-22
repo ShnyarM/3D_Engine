@@ -141,6 +141,7 @@
     <ClInclude Include="ChiliWin.h" />
     <ClInclude Include="Colors.h" />
     <ClInclude Include="Cube.h" />
+    <ClInclude Include="DefaultVertexShader.h" />
     <ClInclude Include="DXErr.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GDIPlusManager.h" />
@@ -168,6 +169,8 @@
     <ClInclude Include="ScreenTransformer.h" />
     <ClInclude Include="VertexColorEffect.h" />
     <ClInclude Include="VertexColorScene.h" />
+    <ClInclude Include="WaveScene.h" />
+    <ClInclude Include="WaveTextureEffect.h" />
     <ClInclude Include="ZBuffer.h" />
   </ItemGroup>
   <ItemGroup>

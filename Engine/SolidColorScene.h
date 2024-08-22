@@ -20,7 +20,7 @@ public:
 		pipeline(gfx),
 		itList(Cube::GetPlainIndependentFaces<Vertex>(1.0f))
 	{
-		const Color colors[] = { Colors::Red, Colors::Blue, Colors::White, Colors::Green, Colors::Cyan, Colors::Magenta };
+		const Color colors[] = {Colors::Red, Colors::Blue, Colors::White, Colors::Green, Colors::Cyan, Colors::Magenta};
 		for (size_t i = 0; i < itList.vertices.size(); i++)
 		{
 			itList.vertices[i].color = colors[i/4];
@@ -70,8 +70,8 @@ public:
 	{
 		pipeline.BeginFrame();
 		Mat3 rot = Mat3::RotationX(theta_x) * Mat3::RotationY(theta_y) * Mat3::RotationZ(theta_z);
-		pipeline.BindRotation(rot);
-		pipeline.BindTranslation(cubeOffset);
+		pipeline.effect.vs.BindRotation(rot);
+		pipeline.effect.vs.BindTranslation(cubeOffset);
 		pipeline.Draw(itList);
 	}
 

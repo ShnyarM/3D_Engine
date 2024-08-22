@@ -24,12 +24,14 @@
 #include "VertexColorScene.h"
 #include "SolidColorScene.h"
 #include "TwoCubesScene.h"
+#include "WaveScene.h"
 
 Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
 	gfx( wnd )
 {
+	scenes.emplace_back(std::make_unique<WaveScene>(gfx, L"Images\\cool_skin.png"));
 	scenes.emplace_back(std::make_unique<TwoCubesScene>(gfx));
 	scenes.emplace_back(std::make_unique<TextureCubeScene>(gfx, L"Images\\cool_skin.png"));
 	scenes.emplace_back(std::make_unique<VertexColorScene>(gfx));

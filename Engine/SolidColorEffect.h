@@ -4,6 +4,7 @@
 #include "Colors.h"
 #include <memory>
 #include "Surface.h"
+#include "DefaultVertexShader.h"
 
 class SolidColorEffect
 {
@@ -71,6 +72,9 @@ public:
 		Color color;
 	};
 
+	//Define VertexShader
+	typedef DefaultVertexShader<Vertex> VertexShader;
+
 	class PixelShader
 	{
 	public:
@@ -84,5 +88,6 @@ public:
 	};
 
 public:
+	VertexShader vs;
 	PixelShader ps;
 };

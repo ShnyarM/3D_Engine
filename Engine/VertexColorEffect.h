@@ -4,6 +4,7 @@
 #include "Colors.h"
 #include <memory>
 #include "Surface.h"
+#include "DefaultVertexShader.h"
 
 class VertexColorEffect
 {
@@ -75,18 +76,21 @@ public:
 		Vec3 color;
 	};
 
+	//Define VertexShader
+	typedef DefaultVertexShader<Vertex> VertexShader;
+
 	class PixelShader
 	{
 	public:
 		// Input class is Vertex
 		// Get Color based of vertex
-		template <class Input>
-		Color operator()(const Input& in)
+		Color operator()(const Vertex& in)
 		{
 			return Color(in.color);
 		}
 	};
 
 public:
+	VertexShader vs;
 	PixelShader ps;
 };
