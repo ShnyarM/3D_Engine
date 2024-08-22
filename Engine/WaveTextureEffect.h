@@ -36,7 +36,7 @@ public:
 		Output operator()(const Vertex& input)
 		{
 			Vec3 newPos = input.pos;
-			float sinValue = sin(newPos.x + time * speed) * amplitude;
+			float sinValue = sin(newPos.x * scale + time * speed) * amplitude;
 			newPos.y += sinValue;
 			newPos = (newPos * rotation) + translation;
 			return { newPos, input };
@@ -47,6 +47,7 @@ public:
 		float time = 0.0f;
 		const float amplitude = 0.1f;
 		const float speed = 4.0f;
+		const float scale = 10.0f;
 	};
 
 	//Use textureeffect pixelshader as pixelshader

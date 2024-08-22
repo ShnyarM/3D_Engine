@@ -1,6 +1,6 @@
 #pragma once
 #include "Scene.h"
-#include "Cube.h"
+#include "Plane.h"
 #include "ScreenTransformer.h"
 #include "Mouse.h"
 #include "Keyboard.h"
@@ -18,7 +18,7 @@ public:
 	WaveScene(Graphics& gfx, const std::wstring& filename)
 		:
 		pipeline(gfx),
-		itList(Cube::GetSkinned<Vertex>(1.0f))
+		itList(Plane::GetSliced<Vertex>(2.0f, 20))
 	{
 		pipeline.effect.ps.BindTexture(filename);
 	}
