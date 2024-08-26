@@ -16,6 +16,8 @@ public:
 	typedef typename Effect::Vertex Vertex;
 	//type of vertices after VertexShader gets applied
 	typedef typename Effect::VertexShader::Output VSOut;
+	//type of vertices after GeometryShader gets applied
+	typedef typename Effect::GeometryShader::Output GSOut;
 public:
 	Pipeline(Graphics& gfx) 
 		:
@@ -61,22 +63,23 @@ private:
 			// Check for backface culling
 			if ((v1.pos - v0.pos) % (v2.pos - v0.pos) * v0.pos <= 0.0f)
 			{
-				ProcessTriangle(v0, v1, v2);
+				ProcessTriangle(v0, v1, v2, i);
 			}
 		}
 	}
 
 	// Starting point to process a triangle
+	// applies geometry shader
 	// Takes 3 vertices to generate triangle on screen
-	void ProcessTriangle(const VSOut& v0, const VSOut& v1, const VSOut& v2)
+	void ProcessTriangle(const VSOut& v0, const VSOut& v1, const VSOut& v2, size_t index)
 	{
 		// generate triangle from 3 vertices using gs
 		// and send to post-processing
-		PostProcessTriangleVertices(Triangle<VSOut>{ v0, v1, v2 });
+		PostProcessTriangleVertices(effect.gs( v0, v1, v2, index ));
 	}
 
 	// Apply Screen transformation to triangle and draw triangle
-	void PostProcessTriangleVertices(Triangle<VSOut>& triangle)
+	void PostProcessTriangleVertices(Triangle<GSOut>& triangle)
 	{
 		screenTransformer.Transform(triangle.v0);
 		screenTransformer.Transform(triangle.v1);
@@ -89,12 +92,12 @@ private:
 	//
 	// entry point for tri rasterization
 	// sorts vertices, determines case, splits to flat tris, dispatches to flat tri funcs
-	void DrawTriangle(const Triangle<VSOut>& triangle)
+	void DrawTriangle(const Triangle<GSOut>& triangle)
 	{
 		//use pointers wo we can sort them
-		const VSOut* pv0 = &triangle.v0;
-		const VSOut* pv1 = &triangle.v1;
-		const VSOut* pv2 = &triangle.v2;
+		const GSOut* pv0 = &triangle.v0;
+		const GSOut* pv1 = &triangle.v1;
+		const GSOut* pv2 = &triangle.v2;
 
 		//Sort so pv0 is at the top
 		if (pv1->pos.y < pv0->pos.y) std::swap(pv0, pv1);
@@ -119,7 +122,7 @@ private:
 
 		//Split into flat top and flat bottom triangle
 		float alpha = (pv1->pos.y - pv0->pos.y) / (pv2->pos.y - pv0->pos.y);
-		VSOut vi = interpolate(*pv0, *pv2, alpha);
+		GSOut vi = interpolate(*pv0, *pv2, alpha);
 
 		if (vi.pos.x > pv1->pos.x) //major right
 		{
@@ -133,11 +136,11 @@ private:
 		}
 	}
 
-	void DrawFlatTopTriangle(const VSOut& v0, const VSOut& v1, const VSOut& v2)
+	void DrawFlatTopTriangle(const GSOut& v0, const GSOut& v1, const GSOut& v2)
 	{
 		//Calculate slopes
-		VSOut tDelta0 = (v2 - v0) / (v2.pos.y - v0.pos.y);
-		VSOut tDelta1 = (v2 - v1) / (v2.pos.y - v1.pos.y);
+		GSOut tDelta0 = (v2 - v0) / (v2.pos.y - v0.pos.y);
+		GSOut tDelta1 = (v2 - v1) / (v2.pos.y - v1.pos.y);
 
 		// calculate start and end scanlines
 		int startY = ceil(v0.pos.y - 0.5f);
@@ -147,11 +150,11 @@ private:
 		DrawFlatTriangle(startY, endY, tDelta0, tDelta1, v0, v1);
 	}
 
-	void DrawFlatBottomTriangle(const VSOut& v0, const VSOut& v1, const VSOut& v2)
+	void DrawFlatBottomTriangle(const GSOut& v0, const GSOut& v1, const GSOut& v2)
 	{
 		//Calculate slopes
-		VSOut tDelta0 = (v1 - v0) / (v1.pos.y - v0.pos.y);
-		VSOut tDelta1 = (v2 - v0) / (v2.pos.y - v0.pos.y);
+		GSOut tDelta0 = (v1 - v0) / (v1.pos.y - v0.pos.y);
+		GSOut tDelta1 = (v2 - v0) / (v2.pos.y - v0.pos.y);
 
 		// calculate start and end scanlines
 		int startY = ceil(v0.pos.y - 0.5f);
@@ -164,12 +167,12 @@ private:
 	// int startY and endY are screen coordinates where the triangle should be drawn, startY included and endY excluded
 	// Vertex tDelta says how much Vertex changes per Y step, 0 for left side and 1 for right side
 	// Vertex v0 and v1 define the two top points for the triangle, for Flatbottom we have v0 == v1 
-	void DrawFlatTriangle(int startY, int endY, const VSOut vDelta0, const VSOut vDelta1,
-		const VSOut v0, const VSOut v1)
+	void DrawFlatTriangle(int startY, int endY, const GSOut vDelta0, const GSOut vDelta1,
+		const GSOut v0, const GSOut v1)
 	{
 		//stores current position on the lines of the triangle (moves with increasing y)
-		VSOut vCurrentY0 = v0 + vDelta0 * ((startY + 0.5f) - (v0.pos.y));
-		VSOut vCurrentY1 = v1 + vDelta1 * ((startY + 0.5f) - (v0.pos.y));
+		GSOut vCurrentY0 = v0 + vDelta0 * ((startY + 0.5f) - (v0.pos.y));
+		GSOut vCurrentY1 = v1 + vDelta1 * ((startY + 0.5f) - (v0.pos.y));
 
 		for (int y = startY; y < endY; y++, vCurrentY0 += vDelta0, vCurrentY1 += vDelta1)
 		{
@@ -180,8 +183,8 @@ private:
 			int endX = ceil(vCurrentY1.pos.x - 0.5f);
 
 			//Get delta per x step and calculate start position for texture map only
-			VSOut vDeltaX = (vCurrentY1 - vCurrentY0) / (vCurrentY1.pos.x - vCurrentY0.pos.x);
-			VSOut vCurrentX = vCurrentY0 + vDeltaX * ((startX + 0.5f) - (vCurrentY0.pos.x));
+			GSOut vDeltaX = (vCurrentY1 - vCurrentY0) / (vCurrentY1.pos.x - vCurrentY0.pos.x);
+			GSOut vCurrentX = vCurrentY0 + vDeltaX * ((startX + 0.5f) - (vCurrentY0.pos.x));
 
 			for (int x = startX; x < endX; x++, vCurrentX += vDeltaX)
 			{
@@ -194,7 +197,7 @@ private:
 				if (zBuffer.TestAndSet(x, y, zCoordinate))
 				{
 					//Get back correct uv coordinates by multiplying them with z
-					VSOut recoveredCords = vCurrentX * zCoordinate;
+					GSOut recoveredCords = vCurrentX * zCoordinate;
 					recoveredCords.pos.z = zCoordinate; //Put z value back into vertex
 
 					gfx.PutPixel(x, y, effect.ps(recoveredCords));

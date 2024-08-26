@@ -5,6 +5,7 @@
 #include <memory>
 #include "Surface.h"
 #include "DefaultVertexShader.h"
+#include "DefaultGeometryShader.h"
 
 class VertexColorEffect
 {
@@ -79,12 +80,15 @@ public:
 	//Define VertexShader
 	typedef DefaultVertexShader<Vertex> VertexShader;
 
+	//Define GeometryShader
+	typedef DefaultGeometryShader<Vertex> GeometryShader;
+
 	class PixelShader
 	{
 	public:
 		// Input class is Vertex
 		// Get Color based of vertex
-		Color operator()(const Vertex& in)
+		Color operator()(const VertexShader::Output& in)
 		{
 			return Color(in.color);
 		}
@@ -92,5 +96,6 @@ public:
 
 public:
 	VertexShader vs;
+	GeometryShader gs;
 	PixelShader ps;
 };

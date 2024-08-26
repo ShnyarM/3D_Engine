@@ -28,6 +28,9 @@
     <Filter Include="Header Files\Effects">
       <UniqueIdentifier>{8b48b607-942d-420f-8854-0e16c84ac9b8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Effects\Defaults">
+      <UniqueIdentifier>{9cba1632-cd46-4d2e-ba39-2c5b748da39a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Colors.h">
@@ -129,14 +132,20 @@
     <ClInclude Include="TwoCubesScene.h">
       <Filter>Header Files\Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="DefaultVertexShader.h">
-      <Filter>Header Files\Effects</Filter>
-    </ClInclude>
     <ClInclude Include="WaveTextureEffect.h">
       <Filter>Header Files\Effects</Filter>
     </ClInclude>
     <ClInclude Include="WaveScene.h">
       <Filter>Header Files\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Plane.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DefaultVertexShader.h">
+      <Filter>Header Files\Effects\Defaults</Filter>
+    </ClInclude>
+    <ClInclude Include="DefaultGeometryShader.h">
+      <Filter>Header Files\Effects\Defaults</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -5,6 +5,7 @@
 #include <memory>
 #include "Surface.h"
 #include "DefaultVertexShader.h"
+#include "DefaultGeometryShader.h"
 
 class TextureEffect
 {
@@ -78,6 +79,9 @@ public:
 	//Define VertexShader
 	typedef DefaultVertexShader<Vertex> VertexShader;
 
+	//Define GeometryShader
+	typedef DefaultGeometryShader<Vertex> GeometryShader;
+
 	class PixelShader
 	{
 	public:
@@ -112,5 +116,6 @@ public:
 
 public:
 	VertexShader vs;
+	GeometryShader gs;
 	PixelShader ps;
 };
