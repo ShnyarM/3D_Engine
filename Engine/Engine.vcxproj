@@ -156,6 +156,8 @@
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="Pipeline.h" />
     <ClInclude Include="Plane.h" />
+    <ClInclude Include="PopOutEffect.h" />
+    <ClInclude Include="PopOutScene.h" />
     <ClInclude Include="Rect.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Scene.h" />

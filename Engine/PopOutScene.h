@@ -1,24 +1,24 @@
 #pragma once
 #include "Scene.h"
-#include "Plane.h"
+#include "Cube.h"
 #include "ScreenTransformer.h"
 #include "Mouse.h"
 #include "Keyboard.h"
 #include "Mat3.h"
 #include "ChiliMath.h"
 #include "Pipeline.h"
-#include "WaveTextureEffect.h"
+#include "PopOutEffect.h"
 
-class WaveScene : public Scene
+class PopOutScene : public Scene
 {
 public:
-	typedef Pipeline<WaveTextureEffect> Pipeline;
+	typedef Pipeline<PopOutEffect> Pipeline;
 	typedef Pipeline::Vertex Vertex;
 public:
-	WaveScene(Graphics& gfx, const std::wstring& filename)
+	PopOutScene(Graphics& gfx, const std::wstring& filename)
 		:
 		pipeline(gfx),
-		itList(Plane::GetSkinned<Vertex>(2.0f, 20))
+		itList(Cube::GetSkinned<Vertex>(1.0f))
 	{
 		pipeline.effect.ps.BindTexture(filename);
 	}
@@ -26,7 +26,7 @@ public:
 	void UpdateModel(Keyboard& kbd, Mouse& mouse, float dt) override
 	{
 		time += dt;
-		pipeline.effect.vs.SetTime(time);
+		pipeline.effect.gs.SetTime(time);
 		//Rotation
 		if (kbd.KeyIsPressed('W')) //up
 		{
@@ -80,8 +80,8 @@ private:
 	float theta_x = 0.0f;
 	float theta_y = 0.0f;
 	float theta_z = 0.0f;
-	float time = 0.0f;
 
+	float time = 0.0f;
 	float moveSpeed = 0.01f;
 	Vec3 cubeOffset = { 0.0f, 0.0f, 2.0f };
 };
