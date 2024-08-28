@@ -74,11 +74,11 @@ public:
 private:
 	Pipeline pipeline;
 	IndexedTriangleList<Vertex> itList;
-	float dTheta = 0.7f;
+	float dTheta = 1.4f;
 	float theta_x = 0.0f;
 	float theta_y = 0.0f;
 	float theta_z = 0.0f;
 
-	float moveSpeed = 0.01f;
+	float moveSpeed = 0.02f;
 	Vec3 cubeOffset = { 0.0f, 0.0f, 2.0f };
 };

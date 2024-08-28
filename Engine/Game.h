@@ -24,6 +24,7 @@
 #include "ScreenTransformer.h"
 #include "Scene.h"
 #include <memory>
+#include "FrameTimer.h"
 
 class Game
 {
@@ -41,6 +42,7 @@ private:
 private:
 	MainWindow& wnd;
 	Graphics gfx;
+	FrameTimer ft;
 	/********************************/
 	/*  User Variables              */
 	/********************************/

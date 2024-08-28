@@ -159,6 +159,18 @@
     <ClInclude Include="Plane.h">
       <Filter>Header Files\Models</Filter>
     </ClInclude>
+    <ClInclude Include="FrameTimer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FlatShadingEffect.h">
+      <Filter>Header Files\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadingScene.h">
+      <Filter>Header Files\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="WaveShadingTextureEffect.h">
+      <Filter>Header Files\Effects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DXErr.cpp">
@@ -186,6 +198,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GDIPlusManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FrameTimer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
