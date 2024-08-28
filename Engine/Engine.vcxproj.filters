@@ -138,9 +138,6 @@
     <ClInclude Include="WaveScene.h">
       <Filter>Header Files\Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="Plane.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="DefaultVertexShader.h">
       <Filter>Header Files\Effects\Defaults</Filter>
     </ClInclude>
@@ -152,6 +149,15 @@
     </ClInclude>
     <ClInclude Include="PopOutScene.h">
       <Filter>Header Files\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="GeometryColorEffect.h">
+      <Filter>Header Files\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="DefaultVertex.h">
+      <Filter>Header Files\Effects\Defaults</Filter>
+    </ClInclude>
+    <ClInclude Include="Plane.h">
+      <Filter>Header Files\Models</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

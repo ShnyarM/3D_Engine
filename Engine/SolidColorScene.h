@@ -7,24 +7,21 @@
 #include "Mat3.h"
 #include "ChiliMath.h"
 #include "Pipeline.h"
-#include "SolidColorEffect.h"
+#include "GeometryColorEffect.h"
 
 class SolidColorScene : public Scene
 {
 public:
-	typedef Pipeline<SolidColorEffect> Pipeline;
+	typedef Pipeline<GeometryColorEffect> Pipeline;
 	typedef Pipeline::Vertex Vertex;
 public:
 	SolidColorScene(Graphics& gfx)
 		:
 		pipeline(gfx),
-		itList(Cube::GetPlainIndependentFaces<Vertex>(1.0f))
+		itList(Cube::GetPlain<Vertex>(1.0f))
 	{
-		const Color colors[] = {Colors::Red, Colors::Blue, Colors::White, Colors::Green, Colors::Cyan, Colors::Magenta};
-		for (size_t i = 0; i < itList.vertices.size(); i++)
-		{
-			itList.vertices[i].color = colors[i/4];
-		}
+		std::vector<Color> colors = {Colors::Red, Colors::Blue, Colors::White, Colors::Green, Colors::Cyan, Colors::Magenta};
+		pipeline.effect.gs.BindColors(std::move(colors));
 	}
 
 	void UpdateModel(Keyboard& kbd, Mouse& mouse, float dt) override

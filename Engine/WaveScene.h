@@ -18,7 +18,7 @@ public:
 	WaveScene(Graphics& gfx, const std::wstring& filename)
 		:
 		pipeline(gfx),
-		itList(Plane::GetSkinned<Vertex>(2.0f, 20))
+		itList(Plane::GetSkinned<Vertex>(2.0f, 10))
 	{
 		pipeline.effect.ps.BindTexture(filename);
 	}
