@@ -105,7 +105,7 @@ public:
 
 		Triangle<Output> operator()(const Vertex& v0, const Vertex& v1, const Vertex& v2, const size_t index)
 		{
-			Vec3 normal = (v1.pos - v0.pos) % (v2.pos - v0.pos).GetNormalized();
+			Vec3 normal = ((v1.pos - v0.pos) % (v2.pos - v0.pos)).GetNormalized();
 			Vec3 strength = diffuse * std::max(0.0f, -(normal * lightDir)); //Strength which hits surface
 			Vec3 cVec = color.GetHadamard(strength + ambient).Saturate() * 255.0f; // strength + ambient is light which hits surface in total
 			Color c(cVec);
