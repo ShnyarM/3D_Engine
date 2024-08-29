@@ -33,7 +33,7 @@ Game::Game( MainWindow& wnd )
 	wnd( wnd ),
 	gfx( wnd )
 {
-	scenes.emplace_back(std::make_unique<ShadingScene>(gfx));
+	scenes.emplace_back(std::make_unique<ShadingScene>(gfx, L"models\\suzanne.obj"));
 	scenes.emplace_back(std::make_unique<WaveScene>(gfx, L"Images\\sauron-bhole.png"));
 	scenes.emplace_back(std::make_unique<PopOutScene>(gfx, L"Images\\dice_skin.png"));
 	scenes.emplace_back(std::make_unique<TwoCubesScene>(gfx));

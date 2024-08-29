@@ -8,6 +8,7 @@
 #include "ChiliMath.h"
 #include "Pipeline.h"
 #include "FlatShadingEffect.h"
+#include "ObjectLoader.h"
 
 class ShadingScene : public Scene
 {
@@ -15,10 +16,11 @@ public:
 	typedef Pipeline<FlatShadingEffect> Pipeline;
 	typedef Pipeline::Vertex Vertex;
 public:
-	ShadingScene(Graphics& gfx)
+	ShadingScene(Graphics& gfx, const std::wstring& filename)
 		:
 		pipeline(gfx),
-		itList(Cube::GetPlain<Vertex>(1.0f))
+		//itList(Cube::GetPlain<Vertex>(1.0f))
+		itList(ObjectLoader::LoadObject<Vertex>(filename))
 	{
 		pipeline.effect.gs.SetSurfaceColor(Colors::White);
 		pipeline.effect.gs.SetLightColor(Colors::Magenta);
