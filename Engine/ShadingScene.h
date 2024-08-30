@@ -50,19 +50,19 @@ public:
 		//Cube Movement
 		if (kbd.KeyIsPressed('L'))
 		{
-			cubeOffset.x += moveSpeed;
-		}
-		if (kbd.KeyIsPressed('J'))
-		{
-			cubeOffset.x -= moveSpeed;
-		}
-		if (kbd.KeyIsPressed('I'))
-		{
-			cubeOffset.z += moveSpeed;
-		}
-		if (kbd.KeyIsPressed('K'))
-		{
-			cubeOffset.z -= moveSpeed;
+			cubeOffset.x += moveSpeed * dt;
+		}							 
+		if (kbd.KeyIsPressed('J'))	 
+		{							 
+			cubeOffset.x -= moveSpeed * dt;
+		}							 
+		if (kbd.KeyIsPressed('I'))	 
+		{							 
+			cubeOffset.z += moveSpeed * dt;
+		}							 
+		if (kbd.KeyIsPressed('K'))	 
+		{							 
+			cubeOffset.z -= moveSpeed * dt;
 		}
 
 		//Light Movement
@@ -93,7 +93,6 @@ public:
 		pipeline.effect.vs.BindTranslation(cubeOffset);
 		pipeline.effect.gs.SetLightDir(lightDir * rotLight);
 		pipeline.Draw(itList);
-		gfx.DrawSprite(bitmap, 0, 0);
 	}
 
 private:
@@ -110,8 +109,6 @@ private:
 	float theta_light_y = 0.0f;
 	float theta_light_z = 0.0f;
 
-	float moveSpeed = 0.02f;
+	float moveSpeed = 1.5f;
 	Vec3 cubeOffset = { 0.0f, 0.0f, 2.0f };
-
-	Surface bitmap = Surface::FromFile(L"Images/Fixedsys16x28.bmp");
 };

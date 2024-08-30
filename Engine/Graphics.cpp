@@ -23,7 +23,7 @@
 #include "DXErr.h"
 #include "ChiliException.h"
 #include "TexVertex.h"
-#include "RectI.h"
+#include "Rect.h"
 #include <assert.h>
 #include <string>
 #include <array>
@@ -43,9 +43,10 @@ namespace FramebufferShaders
 
 using Microsoft::WRL::ComPtr;
 
-Graphics::Graphics( HWNDKey& key )
+Graphics::Graphics(HWNDKey& key)
 	:
-	sysBuffer( ScreenWidth,ScreenHeight )
+	sysBuffer(ScreenWidth, ScreenHeight),
+	font(L"Images/Fixedsys16x28.bmp", 32, 3)
 {
 	assert( key.hWnd != nullptr );
 
@@ -290,6 +291,11 @@ void Graphics::BeginFrame()
 	sysBuffer.Clear( Colors::Red );
 }
 
+void Graphics::LoadNewFont(const std::wstring& filename, int nColumns, int nRows)
+{
+	font = Font(filename, nColumns, nRows);
+}
+
 //////////////////////////////////////////////////
 //           Graphics Exception
 Graphics::Exception::Exception( HRESULT hr,const std::wstring& note,const wchar_t* file,unsigned int line )
@@ -387,11 +393,35 @@ void Graphics::DrawLine( float x1,float y1,float x2,float y2,Color c )
 
 void Graphics::DrawSprite(const Surface& sprite, int xStart, int yStart, const RectI& spriteSection)
 {
-	for (int x = spriteSection.x; x < spriteSection.x + spriteSection.width; x++)
+	for (int x = 0; x < spriteSection.width; x++)
 	{
-		for (int y = spriteSection.y; y < spriteSection.y + spriteSection.height; y++)
+		for (int y = 0; y < spriteSection.height; y++)
 		{
 			PutPixel(x + xStart, y + yStart, sprite.GetPixel(x+spriteSection.x, y+spriteSection.y));
 		}
+	}
+}
+
+void Graphics::DrawSpritePlain(const Surface& sprite, int xStart, int yStart, const Color& color, const Color& chroma, const RectI& spriteSection)
+{
+	for (int x = 0; x < spriteSection.width; x++)
+	{
+		for (int y = 0; y < spriteSection.height; y++)
+		{
+			Color c = sprite.GetPixel(x + spriteSection.x, y + spriteSection.y);
+			if (c == chroma) continue;
+			PutPixel(x + xStart, y + yStart, color);
+		}
+	}
+}
+
+void Graphics::DrawText(const char* text, int xStart, int yStart)
+{
+	int x = xStart;
+	int y = yStart;
+	for (auto p = text; *p != 0; p++)
+	{
+		DrawSpritePlain(font.GetSprite(), x, y, font.GetColor(), font.GetChroma(), font.CharToRect(*p));
+		x += font.GetCWidth();
 	}
 }

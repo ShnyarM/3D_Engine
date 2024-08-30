@@ -53,7 +53,7 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
-	const float dt = ft.Mark();
+	lastDeltaTime = ft.Mark();
 
 	while (!wnd.kbd.KeyIsEmpty())
 	{
@@ -65,10 +65,13 @@ void Game::UpdateModel()
 		}
 	}
 
-	(*curScene)->UpdateModel(wnd.kbd, wnd.mouse, dt);
+	(*curScene)->UpdateModel(wnd.kbd, wnd.mouse, lastDeltaTime);
 }
 
 void Game::ComposeFrame()
 {
 	(*curScene)->ComposeFrame();
+
+	int fps = (int)(1.0f / lastDeltaTime);
+	gfx.DrawText("FPS: " + std::to_string(fps), 0, 0);
 }

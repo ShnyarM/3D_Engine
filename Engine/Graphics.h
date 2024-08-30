@@ -24,10 +24,11 @@
 #include "GDIPlusManager.h"
 #include "ChiliException.h"
 #include "Surface.h"
-#include "RectI.h"
+#include "Rect.h"
 #include "Colors.h"
 #include "Vec2.h"
 #include "TexVertex.h"
+#include "Font.h"
 
 #define CHILI_GFX_EXCEPTION( hr,note ) Graphics::Exception( hr,note,_CRT_WIDE(__FILE__),__LINE__ )
 
@@ -58,11 +59,14 @@ public:
 	Graphics& operator=( const Graphics& ) = delete;
 	void EndFrame();
 	void BeginFrame();
+	void LoadNewFont(const std::wstring& filename, int nColumns, int nRows);
+
 	void DrawLine( const Vec2& p1,const Vec2& p2,Color c )
 	{
 		DrawLine( p1.x,p1.y,p2.x,p2.y,c );
 	}
 	void DrawLine( float x1,float y1,float x2,float y2,Color c );
+
 	void PutPixel( int x,int y,int r,int g,int b )
 	{
 		PutPixel( x,y,{ unsigned char( r ),unsigned char( g ),unsigned char( b ) } );
@@ -72,11 +76,24 @@ public:
 		if (x < 0 || y < 0 || x >= ScreenWidth || y >= ScreenHeight) return;
 		sysBuffer.PutPixel( x,y,c );
 	}
+
 	void DrawSprite(const Surface& sprite, int xStart, int yStart)
 	{
 		DrawSprite(sprite, xStart, yStart, RectI( sprite ));
 	}
 	void DrawSprite(const Surface& sprite, int xStart, int yStart, const RectI& spriteSection);
+
+	void DrawSpritePlain(const Surface& sprite, int xStart, int yStart, const Color& color, const Color& chroma)
+	{
+		DrawSpritePlain(sprite, xStart, yStart, color, chroma, RectI(sprite));
+	}
+	void DrawSpritePlain(const Surface& sprite, int xStart, int yStart, const Color& color, const Color& chroma, const RectI& spriteSection);
+
+	void DrawText(const std::string& text, int xStart, int yStart)
+	{
+		DrawText(text.c_str(), xStart, yStart);
+	}
+	void DrawText(const char* text, int xStart, int yStart);
 	~Graphics();
 
 private:
@@ -94,6 +111,8 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11SamplerState>			pSamplerState;
 	D3D11_MAPPED_SUBRESOURCE							mappedSysBufferTexture;
 	Surface												sysBuffer;
+
+	Font font;
 public:
 	static constexpr unsigned int ScreenWidth = 640u;
 	static constexpr unsigned int ScreenHeight = 640u;

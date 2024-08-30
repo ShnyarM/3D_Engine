@@ -48,4 +48,5 @@ private:
 	/********************************/
 	std::vector<std::unique_ptr<Scene>> scenes;
 	std::vector<std::unique_ptr<Scene>>::iterator curScene;
+	float lastDeltaTime;
 };

@@ -46,19 +46,19 @@ public:
 		//Cube Movement
 		if (kbd.KeyIsPressed('L'))
 		{
-			cubeOffset.x += moveSpeed;
+			cubeOffset.x += moveSpeed * dt;
 		}
 		if (kbd.KeyIsPressed('J'))
 		{
-			cubeOffset.x -= moveSpeed;
+			cubeOffset.x -= moveSpeed * dt;
 		}
 		if (kbd.KeyIsPressed('I'))
 		{
-			cubeOffset.z += moveSpeed;
+			cubeOffset.z += moveSpeed * dt;
 		}
 		if (kbd.KeyIsPressed('K'))
 		{
-			cubeOffset.z -= moveSpeed;
+			cubeOffset.z -= moveSpeed * dt;
 		}
 
 		//Light Movement
@@ -104,6 +104,6 @@ private:
 	float theta_light_y = 0.0f;
 	float theta_light_z = 0.0f;
 
-	float moveSpeed = 0.02f;
+	float moveSpeed = 1.5f;
 	Vec3 cubeOffset = { 0.0f, 0.0f, 2.0f };
 };
