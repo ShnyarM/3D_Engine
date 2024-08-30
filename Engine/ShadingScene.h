@@ -18,6 +18,7 @@ public:
 public:
 	ShadingScene(Graphics& gfx, const std::wstring& filename)
 		:
+		gfx(gfx),
 		pipeline(gfx),
 		//itList(Cube::GetPlain<Vertex>(1.0f))
 		itList(ObjectLoader::LoadObject<Vertex>(filename))
@@ -92,9 +93,11 @@ public:
 		pipeline.effect.vs.BindTranslation(cubeOffset);
 		pipeline.effect.gs.SetLightDir(lightDir * rotLight);
 		pipeline.Draw(itList);
+		gfx.DrawSprite(bitmap, 0, 0);
 	}
 
 private:
+	Graphics& gfx;
 	Pipeline pipeline;
 	IndexedTriangleList<Vertex> itList;
 	float dTheta = 1.4f;
@@ -109,4 +112,6 @@ private:
 
 	float moveSpeed = 0.02f;
 	Vec3 cubeOffset = { 0.0f, 0.0f, 2.0f };
+
+	Surface bitmap = Surface::FromFile(L"Images/Fixedsys16x28.bmp");
 };

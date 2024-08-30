@@ -24,6 +24,7 @@
 #include "GDIPlusManager.h"
 #include "ChiliException.h"
 #include "Surface.h"
+#include "RectI.h"
 #include "Colors.h"
 #include "Vec2.h"
 #include "TexVertex.h"
@@ -71,6 +72,11 @@ public:
 		if (x < 0 || y < 0 || x >= ScreenWidth || y >= ScreenHeight) return;
 		sysBuffer.PutPixel( x,y,c );
 	}
+	void DrawSprite(const Surface& sprite, int xStart, int yStart)
+	{
+		DrawSprite(sprite, xStart, yStart, RectI( sprite ));
+	}
+	void DrawSprite(const Surface& sprite, int xStart, int yStart, const RectI& spriteSection);
 	~Graphics();
 
 private:

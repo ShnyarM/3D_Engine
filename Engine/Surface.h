@@ -21,7 +21,6 @@
 #pragma once
 #include "ChiliWin.h"
 #include "Colors.h"
-#include "Rect.h"
 #include "ChiliException.h"
 #include <string>
 #include <assert.h>

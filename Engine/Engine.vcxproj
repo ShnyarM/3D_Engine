@@ -163,12 +163,13 @@
     <ClInclude Include="Plane.h" />
     <ClInclude Include="PopOutEffect.h" />
     <ClInclude Include="PopOutScene.h" />
-    <ClInclude Include="Rect.h" />
+    <ClInclude Include="RectI.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="ShadingScene.h" />
+    <ClInclude Include="ShadingTextureEffect.h" />
     <ClInclude Include="SolidColorEffect.h" />
-    <ClInclude Include="SolidColorScene.h" />
+    <ClInclude Include="TextureShadingScene.h" />
     <ClInclude Include="Surface.h" />
     <ClInclude Include="TextureCubeScene.h" />
     <ClInclude Include="TextureEffect.h" />

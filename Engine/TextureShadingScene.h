@@ -7,15 +7,15 @@
 #include "Mat3.h"
 #include "ChiliMath.h"
 #include "Pipeline.h"
-#include "TextureEffect.h"
+#include "ShadingTextureEffect.h"
 
-class SolidColorScene : public Scene
+class TextureShadingScene : public Scene
 {
 public:
-	typedef Pipeline<TextureEffect> Pipeline;
+	typedef Pipeline<ShadingTextureEffect> Pipeline;
 	typedef Pipeline::Vertex Vertex;
 public:
-	SolidColorScene(Graphics& gfx, const std::wstring& filename)
+	TextureShadingScene(Graphics& gfx, const std::wstring& filename)
 		:
 		pipeline(gfx),
 		itList(ObjectLoader::LoadObjectTextured<Vertex>(L"models/cube.obj"))
@@ -60,14 +60,34 @@ public:
 		{
 			cubeOffset.z -= moveSpeed;
 		}
+
+		//Light Movement
+		if (kbd.KeyIsPressed('F'))
+		{
+			theta_light_y -= wrap_angle(dTheta * dt);
+		}
+		if (kbd.KeyIsPressed('H'))
+		{
+			theta_light_y += wrap_angle(dTheta * dt);
+		}
+		if (kbd.KeyIsPressed('T'))
+		{
+			theta_light_z += wrap_angle(dTheta * dt);
+		}
+		if (kbd.KeyIsPressed('G'))
+		{
+			theta_light_z -= wrap_angle(dTheta * dt);
+		}
 	}
 
 	void ComposeFrame() override
 	{
 		pipeline.BeginFrame();
 		Mat3 rot = Mat3::RotationX(theta_x) * Mat3::RotationY(theta_y) * Mat3::RotationZ(theta_z);
+		Mat3 rotLight = Mat3::RotationX(theta_light_x) * Mat3::RotationY(theta_light_y) * Mat3::RotationZ(theta_light_z);
 		pipeline.effect.vs.BindRotation(rot);
 		pipeline.effect.vs.BindTranslation(cubeOffset);
+		pipeline.effect.gs.SetLightDir(lightDir * rotLight);
 		pipeline.Draw(itList);
 	}
 
@@ -78,6 +98,11 @@ private:
 	float theta_x = 0.0f;
 	float theta_y = 0.0f;
 	float theta_z = 0.0f;
+
+	Vec3 lightDir = { 0.0f, 0.0f, 1.0f };
+	float theta_light_x = 0.0f;
+	float theta_light_y = 0.0f;
+	float theta_light_z = 0.0f;
 
 	float moveSpeed = 0.02f;
 	Vec3 cubeOffset = { 0.0f, 0.0f, 2.0f };

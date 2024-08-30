@@ -23,6 +23,7 @@
 #include "DXErr.h"
 #include "ChiliException.h"
 #include "TexVertex.h"
+#include "RectI.h"
 #include <assert.h>
 #include <string>
 #include <array>
@@ -380,6 +381,17 @@ void Graphics::DrawLine( float x1,float y1,float x2,float y2,Color c )
 		if( int( x2 ) > lastIntX )
 		{
 			PutPixel( int( x2 ),int( y2 ),c );
+		}
+	}
+}
+
+void Graphics::DrawSprite(const Surface& sprite, int xStart, int yStart, const RectI& spriteSection)
+{
+	for (int x = spriteSection.x; x < spriteSection.x + spriteSection.width; x++)
+	{
+		for (int y = spriteSection.y; y < spriteSection.y + spriteSection.height; y++)
+		{
+			PutPixel(x + xStart, y + yStart, sprite.GetPixel(x+spriteSection.x, y+spriteSection.y));
 		}
 	}
 }
