@@ -1,27 +1,26 @@
 #pragma once
 #include "Scene.h"
-#include "Cube.h"
+#include "ObjectLoader.h"
 #include "ScreenTransformer.h"
 #include "Mouse.h"
 #include "Keyboard.h"
 #include "Mat3.h"
 #include "ChiliMath.h"
 #include "Pipeline.h"
-#include "GeometryColorEffect.h"
+#include "TextureEffect.h"
 
 class SolidColorScene : public Scene
 {
 public:
-	typedef Pipeline<GeometryColorEffect> Pipeline;
+	typedef Pipeline<TextureEffect> Pipeline;
 	typedef Pipeline::Vertex Vertex;
 public:
-	SolidColorScene(Graphics& gfx)
+	SolidColorScene(Graphics& gfx, const std::wstring& filename)
 		:
 		pipeline(gfx),
-		itList(Cube::GetPlain<Vertex>(1.0f))
+		itList(ObjectLoader::LoadObjectTextured<Vertex>(L"models/cube.obj"))
 	{
-		std::vector<Color> colors = {Colors::Red, Colors::Blue, Colors::White, Colors::Green, Colors::Cyan, Colors::Magenta};
-		pipeline.effect.gs.BindColors(std::move(colors));
+		pipeline.effect.ps.BindTexture(filename);
 	}
 
 	void UpdateModel(Keyboard& kbd, Mouse& mouse, float dt) override
