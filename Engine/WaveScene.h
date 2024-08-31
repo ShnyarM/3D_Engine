@@ -7,19 +7,19 @@
 #include "Mat3.h"
 #include "ChiliMath.h"
 #include "Pipeline.h"
-#include "WaveShadingTextureEffect.h"
+#include "WaveTexturedGouraudEffect.h"
 #include "WaveTextureEffect.h"
 
 class WaveScene : public Scene
 {
 public:
-	typedef Pipeline<WaveShadingTextureEffect> Pipeline;
+	typedef Pipeline<WaveTexturedGouraudEffect> Pipeline;
 	typedef Pipeline::Vertex Vertex;
 public:
 	WaveScene(Graphics& gfx, const std::wstring& filename)
 		:
 		pipeline(gfx),
-		itList(Plane::GetSkinned<Vertex>(2.0f, 30))
+		itList(Plane::GetSkinned<Vertex>(2.0f, 40))
 	{
 		pipeline.effect.ps.BindTexture(filename);
 	}
@@ -90,7 +90,7 @@ public:
 		Mat3 rotLight = Mat3::RotationX(theta_light_x) * Mat3::RotationY(theta_light_y) * Mat3::RotationZ(theta_light_z);
 		pipeline.effect.vs.BindRotation(rot);
 		pipeline.effect.vs.BindTranslation(cubeOffset);
-		pipeline.effect.gs.SetLightDir(lightDir * rotLight);
+		pipeline.effect.vs.SetLightDir(lightDir * rotLight);
 		pipeline.Draw(itList);
 	}
 

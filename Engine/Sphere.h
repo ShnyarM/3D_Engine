@@ -29,12 +29,15 @@ public:
 			}
 		}
 
-		// create indices
+		// add top and bottom
 		const int topIndex = vertices.size();
-		vertices.emplace_back(base);
+		vertices.emplace_back();
+		vertices.back().pos = base;
 		const int bottomIndex = topIndex + 1;
-		vertices.emplace_back(-base);
+		vertices.emplace_back();
+		vertices.back().pos = -base;
 
+		// create indices
 		// make "mantel"
 		auto getIndex = [nLatitude, nLongitude](int iLatitude, int iLongitude) {
 			return (iLatitude - 1) * nLongitude + iLongitude;
@@ -97,7 +100,7 @@ public:
 	template<class V>
 	static IndexedTriangleList<V> GetPlainNormal(float radius, int nLatitude, int nLongitude)
 	{
-		IndexedTriangleList<V> sphere = GetPlain(radius, nLatitude, nLongitude);
+		IndexedTriangleList<V> sphere = GetPlain<V>(radius, nLatitude, nLongitude);
 
 		for (int i = 0; i < sphere.vertices.size(); i++)
 		{

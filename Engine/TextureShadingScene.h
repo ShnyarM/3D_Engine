@@ -7,18 +7,18 @@
 #include "Mat3.h"
 #include "ChiliMath.h"
 #include "Pipeline.h"
-#include "ShadingTextureEffect.h"
+#include "TexturedGouraudEffect.h"
 
 class TextureShadingScene : public Scene
 {
 public:
-	typedef Pipeline<ShadingTextureEffect> Pipeline;
+	typedef Pipeline<TexturedGouraudEffect> Pipeline;
 	typedef Pipeline::Vertex Vertex;
 public:
 	TextureShadingScene(Graphics& gfx, const std::wstring& filename)
 		:
 		pipeline(gfx),
-		itList(ObjectLoader::LoadObjectTextured<Vertex>(L"models/cube.obj"))
+		itList(ObjectLoader::LoadObjectNormalTextured<Vertex>(L"models/cube.obj"))
 	{
 		pipeline.effect.ps.BindTexture(filename);
 	}
@@ -87,7 +87,7 @@ public:
 		Mat3 rotLight = Mat3::RotationX(theta_light_x) * Mat3::RotationY(theta_light_y) * Mat3::RotationZ(theta_light_z);
 		pipeline.effect.vs.BindRotation(rot);
 		pipeline.effect.vs.BindTranslation(cubeOffset);
-		pipeline.effect.gs.SetLightDir(lightDir * rotLight);
+		pipeline.effect.vs.SetLightDir(lightDir * rotLight);
 		pipeline.Draw(itList);
 	}
 

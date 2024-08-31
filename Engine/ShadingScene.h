@@ -7,13 +7,13 @@
 #include "Mat3.h"
 #include "ChiliMath.h"
 #include "Pipeline.h"
-#include "FlatShadingEffect.h"
+#include "GouraudEffect.h"
 #include "ObjectLoader.h"
 
 class ShadingScene : public Scene
 {
 public:
-	typedef Pipeline<FlatShadingEffect> Pipeline;
+	typedef Pipeline<GouraudEffect> Pipeline;
 	typedef Pipeline::Vertex Vertex;
 public:
 	ShadingScene(Graphics& gfx, const std::wstring& filename)
@@ -21,10 +21,10 @@ public:
 		gfx(gfx),
 		pipeline(gfx),
 		//itList(Cube::GetPlain<Vertex>(1.0f))
-		itList(ObjectLoader::LoadObject<Vertex>(filename))
+		itList(ObjectLoader::LoadObjectNormal<Vertex>(filename))
 	{
-		pipeline.effect.gs.SetSurfaceColor(Colors::White);
-		pipeline.effect.gs.SetLightColor(Colors::Magenta);
+		pipeline.effect.vs.SetSurfaceColor(Colors::White);
+		pipeline.effect.vs.SetLightColor(Colors::Magenta);
 	}
 
 	void UpdateModel(Keyboard& kbd, Mouse& mouse, float dt) override
@@ -91,7 +91,7 @@ public:
 		Mat3 rotLight = Mat3::RotationX(theta_light_x) * Mat3::RotationY(theta_light_y) * Mat3::RotationZ(theta_light_z);
 		pipeline.effect.vs.BindRotation(rot);
 		pipeline.effect.vs.BindTranslation(cubeOffset);
-		pipeline.effect.gs.SetLightDir(lightDir * rotLight);
+		pipeline.effect.vs.SetLightDir(lightDir * rotLight);
 		pipeline.Draw(itList);
 	}
 

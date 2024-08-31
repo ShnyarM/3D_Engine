@@ -61,8 +61,8 @@ public:
 		float triangleSize = size / slices;
 		float textureSize = 1.0f / slices;
 
-		std::vector<V> verts( (slices+1) * (slices+1) );
-		std::vector<size_t> indexing(slices*slices*2*3);
+		std::vector<V> verts((slices + 1) * (slices + 1));
+		std::vector<size_t> indexing(slices * slices * 2 * 3);
 
 		// Create vertices
 		for (int x = 0; x <= slices; x++)
@@ -70,7 +70,7 @@ public:
 			for (int z = 0; z <= slices; z++)
 			{
 				verts[x * (slices + 1) + z].pos = Vec3(-side + x * triangleSize, -0.5f, side - z * triangleSize);
-				verts[x * (slices + 1) + z].t = Vec2(x*textureSize, z*textureSize);
+				verts[x * (slices + 1) + z].t = Vec2(x * textureSize, z * textureSize);
 			}
 		}
 
@@ -96,5 +96,27 @@ public:
 			std::move(verts),
 			std::move(indexing)
 		};
+	}
+
+	template<class V>
+	static IndexedTriangleList<V> GetPlainNormal(float size = 1.0f, int slices = 1)
+	{
+		IndexedTriangleList<V> plane = GetPlain<V>(size, slices);
+
+		for (int i = 0; i < plane.vertices.size(); i++)
+		{
+			plane.vertices[i].n = { 0.0f, 1.0f, 0.0f };
+		}
+	}
+
+	template<class V>
+	static IndexedTriangleList<V> GetSkinnedNormal(float size = 1.0f, int slices = 1)
+	{
+		IndexedTriangleList<V> plane = GetSkinned<V>(size, slices);
+
+		for (int i = 0; i < plane.vertices.size(); i++)
+		{
+			plane.vertices[i].n = { 0.0f, 1.0f, 0.0f };
+		}
 	}
 };
