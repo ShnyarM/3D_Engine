@@ -136,6 +136,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BlendColorVertex.h" />
     <ClInclude Include="ChiliException.h" />
     <ClInclude Include="ChiliMath.h" />
     <ClInclude Include="ChiliWin.h" />
@@ -151,7 +152,11 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="GDIPlusManager.h" />
     <ClInclude Include="GeometryColorEffect.h" />
+    <ClInclude Include="GouraudEffect.h" />
     <ClInclude Include="Graphics.h" />
+    <ClInclude Include="NormalVertex.h" />
+    <ClInclude Include="SolidColorVertex.h" />
+    <ClInclude Include="SphereScene.h" />
     <ClInclude Include="IndexedLineList.h" />
     <ClInclude Include="IndexedTriangleList.h" />
     <ClInclude Include="Keyboard.h" />
@@ -170,10 +175,13 @@
     <ClInclude Include="ShadingScene.h" />
     <ClInclude Include="ShadingTextureEffect.h" />
     <ClInclude Include="SolidColorEffect.h" />
+    <ClInclude Include="Sphere.h" />
+    <ClInclude Include="TexturePixelShader.h" />
     <ClInclude Include="TextureShadingScene.h" />
     <ClInclude Include="Surface.h" />
     <ClInclude Include="TextureCubeScene.h" />
     <ClInclude Include="TextureEffect.h" />
+    <ClInclude Include="TextureVertex.h" />
     <ClInclude Include="Triangle.h" />
     <ClInclude Include="TwoCubesScene.h" />
     <ClInclude Include="Vec2.h" />

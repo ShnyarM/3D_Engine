@@ -1,15 +1,14 @@
 #pragma once
-#include "TextureEffect.h"
-
+#include "TextureVertex.h"
 
 class PopOutEffect
 {
 public:
 	// Set InputVertex
-	typedef TextureEffect::Vertex Vertex;
+	typedef TextureVertex Vertex;
 
 	// Set pixelshader
-	typedef TextureEffect::PixelShader PixelShader;
+	typedef TexturePixelShader<Vertex> PixelShader;
 
 	// Set VertexShader
 	typedef DefaultVertexShader<Vertex> VertexShader;

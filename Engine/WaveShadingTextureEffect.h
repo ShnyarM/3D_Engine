@@ -11,72 +11,7 @@ class WaveShadingTextureEffect
 {
 public:
 	//input vertex
-	class Vertex
-	{
-	public:
-		Vertex() = default;
-		Vertex(const Vec3& pos, const Vec2& tPos)
-			:
-			pos(pos),
-			t(tPos)
-		{
-		}
-		Vertex(const Vec3& pos, const Vertex& v)
-			:
-			pos(pos),
-			t(v.t)
-		{
-		}
-		Vertex& operator=(const Vertex& rhs)
-		{
-			pos = rhs.pos;
-			t = rhs.t;
-			return *this;
-		}
-		Vertex& operator+=(const Vertex& rhs)
-		{
-			pos += rhs.pos;
-			t += rhs.t;
-			return *this;
-		}
-		Vertex& operator-=(const Vertex& rhs)
-		{
-			pos -= rhs.pos;
-			t -= rhs.t;
-			return *this;
-		}
-		Vertex operator+(const Vertex& rhs) const
-		{
-			return Vertex(*this) += rhs;
-		}
-		Vertex operator-(const Vertex& rhs) const
-		{
-			return Vertex(*this) -= rhs;
-		}
-		Vertex& operator*=(const float rhs)
-		{
-			pos *= rhs;
-			t *= rhs;
-			return *this;
-		}
-		Vertex operator*(const float rhs) const
-		{
-			return Vertex(*this) *= rhs;
-		}
-		Vertex& operator/=(const float rhs)
-		{
-			pos /= rhs;
-			t /= rhs;
-			return *this;
-		}
-		Vertex operator/(const float rhs) const
-		{
-			return Vertex(*this) /= rhs;
-		}
-
-		Vec3 pos;
-		Vec2 t;
-	};
+	typedef TextureVertex Vertex;
 
 	//Define wave vertexShader
 	class VertexShader

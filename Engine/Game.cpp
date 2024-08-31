@@ -27,12 +27,14 @@
 #include "WaveScene.h"
 #include "PopOutScene.h"
 #include "ShadingScene.h"
+#include "SphereScene.h"
 
 Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
 	gfx( wnd )
 {
+	scenes.emplace_back(std::make_unique<SphereScene>(gfx, L"models\\suzanne.obj"));
 	scenes.emplace_back(std::make_unique<ShadingScene>(gfx, L"models\\suzanne.obj"));
 	scenes.emplace_back(std::make_unique<WaveScene>(gfx, L"Images\\sauron-bhole.png"));
 	scenes.emplace_back(std::make_unique<PopOutScene>(gfx, L"Images\\dice_skin.png"));

@@ -6,12 +6,13 @@
 #include "Mat3.h"
 #include "TextureEffect.h"
 #include "DefaultGeometryShader.h"
+#include "TexturePixelShader.h"
 
 class WaveTextureEffect
 {
 public:
 	//use textureeffect vertices as input vertices
-	typedef TextureEffect::Vertex Vertex;
+	typedef TextureVertex Vertex;
 
 	//Define GeometryShader
 	typedef DefaultGeometryShader<Vertex> GeometryShader;
@@ -55,7 +56,7 @@ public:
 	};
 
 	//Use textureeffect pixelshader as pixelshader
-	typedef TextureEffect::PixelShader PixelShader;
+	typedef TexturePixelShader<Vertex> PixelShader;
 	
 public:
 	VertexShader vs;
