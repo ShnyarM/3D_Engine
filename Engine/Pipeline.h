@@ -22,13 +22,21 @@ public:
 	Pipeline(Graphics& gfx) 
 		:
 		gfx(gfx),
-		zBuffer(gfx.ScreenWidth, gfx.ScreenHeight)
+		pZb(std::make_shared<ZBuffer>(gfx.ScreenWidth, gfx.ScreenHeight))
 	{}
+
+	Pipeline(Graphics& gfx, std::shared_ptr<ZBuffer> pZb)
+		:
+		gfx(gfx),
+		pZb(std::move(pZb))
+	{
+		assert(this->pZb->GetHeight() == gfx.ScreenHeight && this->pZb->GetWidth() == gfx.ScreenWidth);
+	}
 
 	//Clears ZBuffer so new frame can be drawn
 	void BeginFrame()
 	{
-		zBuffer.Clear();
+		pZb->Clear();
 	}
 
 	// public interface function to start pipeline process for indexedtrianglelist
@@ -194,7 +202,7 @@ private:
 				float zCoordinate = 1.0f / vCurrentX.pos.z;
 				
 				// Only draw Pixel if it passes zBuffer test, i.e. no pixel in front
-				if (zBuffer.TestAndSet(x, y, zCoordinate))
+				if (pZb->TestAndSet(x, y, zCoordinate))
 				{
 					//Get back correct uv coordinates by multiplying them with z
 					GSOut recoveredCords = vCurrentX * zCoordinate;
@@ -210,6 +218,6 @@ public:
 
 private:
 	Graphics& gfx;
-	ZBuffer zBuffer;
+	std::shared_ptr<ZBuffer> pZb;
 	ScreenTransformer screenTransformer;
 };

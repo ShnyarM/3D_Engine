@@ -23,6 +23,16 @@ public:
 
 	ZBuffer& operator=(const ZBuffer& rhs) = delete;
 
+	int GetHeight() const
+	{
+		return height;
+	}
+
+	int GetWidth() const
+	{
+		return width;
+	}
+
 	float At(const int x, const int y) const
 	{
 		assert(x >= 0);

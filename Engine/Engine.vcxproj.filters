@@ -31,6 +31,18 @@
     <Filter Include="Header Files\Effects\Defaults">
       <UniqueIdentifier>{9cba1632-cd46-4d2e-ba39-2c5b748da39a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Effects\Defaults\Vertices">
+      <UniqueIdentifier>{b7bef8f0-42e3-44af-acbb-ddb2a2bb6cc9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Effects\FlatShading">
+      <UniqueIdentifier>{99f6f8a0-f7a7-4959-a5d2-58d05d7a4d06}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Effects\Gouraud">
+      <UniqueIdentifier>{0bdcceab-5e0a-4313-b9f4-9b49f9d1ae1c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Effects\Defaults\PixelShader">
+      <UniqueIdentifier>{b535f11d-8396-4f79-bb8c-2b18885ecd67}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Colors.h">
@@ -129,9 +141,6 @@
     <ClInclude Include="TwoCubesScene.h">
       <Filter>Header Files\Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="WaveTextureEffect.h">
-      <Filter>Header Files\Effects</Filter>
-    </ClInclude>
     <ClInclude Include="WaveScene.h">
       <Filter>Header Files\Scenes</Filter>
     </ClInclude>
@@ -141,17 +150,8 @@
     <ClInclude Include="DefaultGeometryShader.h">
       <Filter>Header Files\Effects\Defaults</Filter>
     </ClInclude>
-    <ClInclude Include="PopOutEffect.h">
-      <Filter>Header Files\Effects</Filter>
-    </ClInclude>
-    <ClInclude Include="PopOutScene.h">
-      <Filter>Header Files\Scenes</Filter>
-    </ClInclude>
     <ClInclude Include="GeometryColorEffect.h">
       <Filter>Header Files\Effects</Filter>
-    </ClInclude>
-    <ClInclude Include="DefaultVertex.h">
-      <Filter>Header Files\Effects\Defaults</Filter>
     </ClInclude>
     <ClInclude Include="Plane.h">
       <Filter>Header Files\Models</Filter>
@@ -159,23 +159,74 @@
     <ClInclude Include="FrameTimer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FlatShadingEffect.h">
-      <Filter>Header Files\Effects</Filter>
-    </ClInclude>
     <ClInclude Include="ShadingScene.h">
       <Filter>Header Files\Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="WaveShadingTextureEffect.h">
-      <Filter>Header Files\Effects</Filter>
     </ClInclude>
     <ClInclude Include="ObjectLoader.h">
       <Filter>Header Files\Models</Filter>
     </ClInclude>
-    <ClInclude Include="ShadingTextureEffect.h">
-      <Filter>Header Files\Effects</Filter>
-    </ClInclude>
-    <ClInclude Include="RectI.h">
+    <ClInclude Include="Font.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjFileVertex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SphereScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Rect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NormalVertex.h">
+      <Filter>Header Files\Effects\Defaults\Vertices</Filter>
+    </ClInclude>
+    <ClInclude Include="BlendColorVertex.h">
+      <Filter>Header Files\Effects\Defaults\Vertices</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureNormalVertex.h">
+      <Filter>Header Files\Effects\Defaults\Vertices</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureVertex.h">
+      <Filter>Header Files\Effects\Defaults\Vertices</Filter>
+    </ClInclude>
+    <ClInclude Include="FlatShadingEffect.h">
+      <Filter>Header Files\Effects\FlatShading</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadingTextureEffect.h">
+      <Filter>Header Files\Effects\FlatShading</Filter>
+    </ClInclude>
+    <ClInclude Include="WaveShadingTextureEffect.h">
+      <Filter>Header Files\Effects\FlatShading</Filter>
+    </ClInclude>
+    <ClInclude Include="GouraudEffect.h">
+      <Filter>Header Files\Effects\Gouraud</Filter>
+    </ClInclude>
+    <ClInclude Include="FlatShadingScene.h">
+      <Filter>Header Files\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="SolidColorVertex.h">
+      <Filter>Header Files\Effects\Defaults\Vertices</Filter>
+    </ClInclude>
+    <ClInclude Include="Sphere.h">
+      <Filter>Header Files\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="TexturedGouraudEffect.h">
+      <Filter>Header Files\Effects\Gouraud</Filter>
+    </ClInclude>
+    <ClInclude Include="DefaultVertex.h">
+      <Filter>Header Files\Effects\Defaults\Vertices</Filter>
+    </ClInclude>
+    <ClInclude Include="TexturePixelShader.h">
+      <Filter>Header Files\Effects\Defaults\PixelShader</Filter>
+    </ClInclude>
+    <ClInclude Include="WaveTexturedGouraudEffect.h">
+      <Filter>Header Files\Effects\Gouraud</Filter>
+    </ClInclude>
+    <ClInclude Include="GouraudPointEffect.h">
+      <Filter>Header Files\Effects\Gouraud</Filter>
+    </ClInclude>
+    <ClInclude Include="PointLightScene.h">
+      <Filter>Header Files\Scenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -207,6 +258,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FrameTimer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Font.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

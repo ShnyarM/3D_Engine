@@ -28,16 +28,18 @@
 #include "FlatShadingScene.h"
 #include "ShadingScene.h"
 #include "SphereScene.h"
+#include "PointLightScene.h"
 
 Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
 	gfx( wnd )
 {
+	scenes.emplace_back(std::make_unique<PointLightScene>(gfx, L"models\\suzanne.obj"));
 	scenes.emplace_back(std::make_unique<SphereScene>(gfx, L"models\\suzanne.obj"));
 	scenes.emplace_back(std::make_unique<ShadingScene>(gfx, L"models\\suzanne.obj"));
 	scenes.emplace_back(std::make_unique<FlatShadingScene>(gfx, L"models\\suzanne.obj"));
-	scenes.emplace_back(std::make_unique<WaveScene>(gfx, L"Images\\sauron-bhole.png"));
+	scenes.emplace_back(std::make_unique<WaveScene>(gfx, L"Images\\eye.png"));
 	scenes.emplace_back(std::make_unique<TwoCubesScene>(gfx));
 	scenes.emplace_back(std::make_unique<TextureCubeScene>(gfx, L"Images\\dice_skin.png"));
 	scenes.emplace_back(std::make_unique<VertexColorScene>(gfx));
