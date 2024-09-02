@@ -164,6 +164,8 @@
     <ClInclude Include="PointLightScene.h" />
     <ClInclude Include="PointLightScenePlane.h" />
     <ClInclude Include="SolidColorVertex.h" />
+    <ClInclude Include="SpecularPixelPointEffect.h" />
+    <ClInclude Include="SpecularScene.h" />
     <ClInclude Include="SphereScene.h" />
     <ClInclude Include="IndexedLineList.h" />
     <ClInclude Include="IndexedTriangleList.h" />

@@ -240,6 +240,12 @@
     <ClInclude Include="PixelDirectionalEffect.h">
       <Filter>Header Files\Effects\PixelShading</Filter>
     </ClInclude>
+    <ClInclude Include="SpecularPixelPointEffect.h">
+      <Filter>Header Files\Effects\PixelShading</Filter>
+    </ClInclude>
+    <ClInclude Include="SpecularScene.h">
+      <Filter>Header Files\Scenes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DXErr.cpp">
