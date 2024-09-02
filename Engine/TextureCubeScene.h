@@ -15,8 +15,9 @@ public:
 	typedef Pipeline<TextureEffect> Pipeline;
 	typedef Pipeline::Vertex Vertex;
 public:
-	TextureCubeScene(Graphics& gfx, const std::wstring& filename)
+	TextureCubeScene(Graphics& gfx, const char* name, const std::wstring& filename)
 		:
+		Scene(name),
 		pipeline(gfx),
 		itList(Cube::GetSkinned<Vertex>(1.0f))
 	{

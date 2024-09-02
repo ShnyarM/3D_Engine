@@ -29,21 +29,22 @@
 #include "ShadingScene.h"
 #include "SphereScene.h"
 #include "PointLightScene.h"
+#include "PointLightScenePlane.h"
 
 Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
 	gfx( wnd )
 {
-	scenes.emplace_back(std::make_unique<PointLightScene>(gfx, L"models\\suzanne.obj"));
-	scenes.emplace_back(std::make_unique<SphereScene>(gfx, L"models\\suzanne.obj"));
-	scenes.emplace_back(std::make_unique<ShadingScene>(gfx, L"models\\suzanne.obj"));
-	scenes.emplace_back(std::make_unique<FlatShadingScene>(gfx, L"models\\suzanne.obj"));
-	scenes.emplace_back(std::make_unique<WaveScene>(gfx, L"Images\\eye.png"));
-	scenes.emplace_back(std::make_unique<TwoCubesScene>(gfx));
-	scenes.emplace_back(std::make_unique<TextureCubeScene>(gfx, L"Images\\dice_skin.png"));
-	scenes.emplace_back(std::make_unique<VertexColorScene>(gfx));
-	scenes.emplace_back(std::make_unique<TextureShadingScene>(gfx, L"Images\\default.png"));
+	scenes.emplace_back(std::make_unique<PointLightScenePlane>(gfx, "Pixel light with plane", L"models\\suzanne.obj"));
+	scenes.emplace_back(std::make_unique<PointLightScene>(gfx, "Pixel light with calculated normals", L"models\\bunny.obj"));
+	scenes.emplace_back(std::make_unique<SphereScene>(gfx, "Directional Pixel light", L"models\\suzanne.obj"));
+	scenes.emplace_back(std::make_unique<ShadingScene>(gfx, "Gouraud Shading", L"models\\suzanne.obj"));
+	scenes.emplace_back(std::make_unique<FlatShadingScene>(gfx, "Flat Shading", L"models\\suzanne.obj"));
+	scenes.emplace_back(std::make_unique<WaveScene>(gfx, "Wave effect with Gouraud", L"Images\\eye.png"));
+	scenes.emplace_back(std::make_unique<TwoCubesScene>(gfx, "Zbuffer"));
+	scenes.emplace_back(std::make_unique<TextureCubeScene>(gfx, "Texture", L"Images\\dice_skin.png"));
+	scenes.emplace_back(std::make_unique<TextureShadingScene>(gfx, "Load files with textures and normals", L"Images\\default.png"));
 	curScene = scenes.begin();
 }
 
@@ -77,5 +78,5 @@ void Game::ComposeFrame()
 	(*curScene)->ComposeFrame();
 
 	int fps = (int)(1.0f / lastDeltaTime);
-	gfx.DrawText("FPS: " + std::to_string(fps), 0, 0);
+	gfx.DrawText("FPS: " + std::to_string(fps) + '\n' + (*curScene)->GetName(), 0, 0);
 }

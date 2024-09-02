@@ -15,8 +15,9 @@ public:
 	typedef Pipeline<TexturedGouraudEffect> Pipeline;
 	typedef Pipeline::Vertex Vertex;
 public:
-	TextureShadingScene(Graphics& gfx, const std::wstring& filename)
+	TextureShadingScene(Graphics& gfx, const char* name, const std::wstring& filename)
 		:
+		Scene(name),
 		pipeline(gfx),
 		itList(ObjectLoader::LoadObjectNormalTextured<Vertex>(L"models/cube.obj"))
 	{

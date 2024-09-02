@@ -126,9 +126,6 @@
     <ClInclude Include="TextureEffect.h">
       <Filter>Header Files\Effects</Filter>
     </ClInclude>
-    <ClInclude Include="VertexColorEffect.h">
-      <Filter>Header Files\Effects</Filter>
-    </ClInclude>
     <ClInclude Include="VertexColorScene.h">
       <Filter>Header Files\Scenes</Filter>
     </ClInclude>
@@ -172,9 +169,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ObjFileVertex.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SphereScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Rect.h">
@@ -228,13 +222,22 @@
     <ClInclude Include="GouraudPointEffect.h">
       <Filter>Header Files\Effects\Gouraud</Filter>
     </ClInclude>
-    <ClInclude Include="PointLightScene.h">
+    <ClInclude Include="PointLightScenePlane.h">
       <Filter>Header Files\Scenes</Filter>
     </ClInclude>
     <ClInclude Include="BlendNormalVertex.h">
       <Filter>Header Files\Effects\Defaults\Vertices</Filter>
     </ClInclude>
     <ClInclude Include="PixelPointEffect.h">
+      <Filter>Header Files\Effects\PixelShading</Filter>
+    </ClInclude>
+    <ClInclude Include="SphereScene.h">
+      <Filter>Header Files\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="PointLightScene.h">
+      <Filter>Header Files\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="PixelDirectionalEffect.h">
       <Filter>Header Files\Effects\PixelShading</Filter>
     </ClInclude>
   </ItemGroup>

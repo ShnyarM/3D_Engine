@@ -16,8 +16,9 @@ public:
 	typedef Pipeline<GouraudEffect> Pipeline;
 	typedef Pipeline::Vertex Vertex;
 public:
-	ShadingScene(Graphics& gfx, const std::wstring& filename)
+	ShadingScene(Graphics& gfx, const char* name, const std::wstring& filename)
 		:
+		Scene(name),
 		gfx(gfx),
 		pipeline(gfx),
 		//itList(Cube::GetPlain<Vertex>(1.0f))

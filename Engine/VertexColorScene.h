@@ -15,8 +15,9 @@ public:
 	typedef Pipeline<VertexColorEffect> Pipeline;
 	typedef Pipeline::Vertex Vertex;
 public:
-	VertexColorScene(Graphics& gfx)
+	VertexColorScene(Graphics& gfx, const char* name)
 		:
+		Scene(name),
 		pipeline(gfx),
 		itList(Cube::GetPlain<Vertex>(1.0f))
 	{

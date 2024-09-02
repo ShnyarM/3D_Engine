@@ -16,8 +16,9 @@ public:
 	typedef Pipeline<WaveTexturedGouraudEffect> Pipeline;
 	typedef Pipeline::Vertex Vertex;
 public:
-	WaveScene(Graphics& gfx, const std::wstring& filename)
+	WaveScene(Graphics& gfx, const char* name, const std::wstring& filename)
 		:
+		Scene(name),
 		pipeline(gfx),
 		itList(Plane::GetSkinned<Vertex>(2.0f, 40))
 	{

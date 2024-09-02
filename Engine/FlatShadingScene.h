@@ -16,8 +16,9 @@ public:
 	typedef Pipeline<FlatShadingEffect> Pipeline;
 	typedef Pipeline::Vertex Vertex;
 public:
-	FlatShadingScene(Graphics& gfx, const std::wstring& filename)
+	FlatShadingScene(Graphics& gfx, const char* name, const std::wstring& filename)
 		:
+		Scene(name),
 		gfx(gfx),
 		pipeline(gfx),
 		//itList(Cube::GetPlain<Vertex>(1.0f))

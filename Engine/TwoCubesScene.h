@@ -15,8 +15,9 @@ public:
 	typedef Pipeline<GeometryColorEffect> Pipeline;
 	typedef Pipeline::Vertex Vertex;
 public:
-	TwoCubesScene(Graphics& gfx)
+	TwoCubesScene(Graphics& gfx, const char* name)
 		:
+		Scene(name),
 		pipeline(gfx),
 		itList1(Cube::GetPlain<Vertex>(1.0f)),
 		itList2(Cube::GetPlain<Vertex>(1.0f))

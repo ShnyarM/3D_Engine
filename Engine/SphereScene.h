@@ -7,23 +7,24 @@
 #include "Mat3.h"
 #include "ChiliMath.h"
 #include "Pipeline.h"
-#include "GouraudEffect.h"
+#include "PixelDirectionalEffect.h"
 #include "ObjectLoader.h"
 
 class SphereScene : public Scene
 {
 public:
-	typedef Pipeline<GouraudEffect> Pipeline;
+	typedef Pipeline<PixelDirectionalEffect> Pipeline;
 	typedef Pipeline::Vertex Vertex;
 public:
-	SphereScene(Graphics& gfx, const std::wstring& filename)
+	SphereScene(Graphics& gfx, const char* name, const std::wstring& filename)
 		:
+		Scene(name),
 		gfx(gfx),
 		pipeline(gfx),
 		itList(Sphere::GetPlainNormal<Vertex>(1.0f, 32, 32))
 	{
-		pipeline.effect.vs.SetSurfaceColor(Colors::Cyan);
-		pipeline.effect.vs.SetLightColor(Colors::White);
+		pipeline.effect.ps.SetSurfaceColor(Colors::Cyan);
+		pipeline.effect.ps.SetLightColor(Colors::White);
 	}
 
 	void UpdateModel(Keyboard& kbd, Mouse& mouse, float dt) override
@@ -90,7 +91,7 @@ public:
 		Mat3 rotLight = Mat3::RotationX(theta_light_x) * Mat3::RotationY(theta_light_y) * Mat3::RotationZ(theta_light_z);
 		pipeline.effect.vs.BindRotation(rot);
 		pipeline.effect.vs.BindTranslation(cubeOffset);
-		pipeline.effect.vs.SetLightDir(lightDir * rotLight);
+		pipeline.effect.ps.SetLightDir(lightDir * rotLight);
 		pipeline.Draw(itList);
 	}
 
@@ -104,8 +105,8 @@ private:
 	float theta_z = 0.0f;
 
 	Vec3 lightDir = { 0.0f, 0.0f, 1.0f };
-	float theta_light_x = 0.0f;
-	float theta_light_y = 0.0f;
+	float theta_light_x = 10.0f;
+	float theta_light_y = 5.0f;
 	float theta_light_z = 0.0f;
 
 	float moveSpeed = 1.5f;

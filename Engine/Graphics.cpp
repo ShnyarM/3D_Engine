@@ -421,6 +421,13 @@ void Graphics::DrawText(const char* text, int xStart, int yStart)
 	int y = yStart;
 	for (auto p = text; *p != 0; p++)
 	{
+		if (*p == '\n')
+		{
+			x = xStart;
+			y += font.GetCHeight();
+			continue;
+		}
+
 		DrawSpritePlain(font.GetSprite(), x, y, font.GetColor(), font.GetChroma(), font.CharToRect(*p));
 		x += font.GetCWidth();
 	}

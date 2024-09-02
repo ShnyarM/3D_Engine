@@ -1,6 +1,6 @@
 #pragma once
 #include "Scene.h"
-#include "Cube.h"
+#include "Plane.h"
 #include "ScreenTransformer.h"
 #include "Mouse.h"
 #include "Keyboard.h"
@@ -11,17 +11,17 @@
 #include "SolidColorEffect.h"
 #include "ObjectLoader.h"
 
-class PointLightScene : public Scene
+class PointLightScenePlane : public Scene
 {
 public:
-	PointLightScene(Graphics& gfx, const char* name, const std::wstring& filename)
+	PointLightScenePlane(Graphics& gfx, const char* name, const std::wstring& filename)
 		:
 		Scene(name),
 		gfx(gfx),
-		pZb(std::make_unique<ZBuffer>(gfx.ScreenWidth, gfx.ScreenHeight)),
+		pZb(std::make_shared<ZBuffer>(gfx.ScreenWidth, gfx.ScreenHeight)),
 		pipeline(gfx, pZb),
 		solidColorPipeline(gfx, pZb),
-		monke(ObjectLoader::LoadObjectCalculateNormals<BlendNormalVertex>(filename)),
+		monke(Plane::GetPlainNormal<BlendNormalVertex>(1.0f)),
 		lightSphere(Sphere::GetPlain<SolidColorVertex>(0.05f, 32, 32))
 	{
 		Color c = Colors::White;
@@ -120,5 +120,5 @@ private:
 	Vec3 lightPos = { 0.0f, 0.0f, 0.5f };
 
 	float moveSpeed = 1.5f;
-	Vec3 cubeOffset = { 0.0f, -0.1f, 0.5f };
+	Vec3 cubeOffset = { 0.0f, 0.0f, 2.0f };
 };
