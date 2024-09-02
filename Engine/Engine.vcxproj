@@ -137,6 +137,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="BlendColorVertex.h" />
+    <ClInclude Include="BlendNormalVertex.h" />
     <ClInclude Include="ChiliException.h" />
     <ClInclude Include="ChiliMath.h" />
     <ClInclude Include="ChiliWin.h" />
@@ -158,6 +159,7 @@
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="NormalVertex.h" />
     <ClInclude Include="ObjFileVertex.h" />
+    <ClInclude Include="PixelPointEffect.h" />
     <ClInclude Include="PointLightScene.h" />
     <ClInclude Include="SolidColorVertex.h" />
     <ClInclude Include="SphereScene.h" />

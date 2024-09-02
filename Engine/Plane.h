@@ -107,6 +107,8 @@ public:
 		{
 			plane.vertices[i].n = { 0.0f, 1.0f, 0.0f };
 		}
+
+		return plane;
 	}
 
 	template<class V>
@@ -118,5 +120,7 @@ public:
 		{
 			plane.vertices[i].n = { 0.0f, 1.0f, 0.0f };
 		}
+
+		return plane;
 	}
 };

@@ -43,6 +43,9 @@
     <Filter Include="Header Files\Effects\Defaults\PixelShader">
       <UniqueIdentifier>{b535f11d-8396-4f79-bb8c-2b18885ecd67}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Effects\PixelShading">
+      <UniqueIdentifier>{a3b084f8-016f-4d5d-ad65-c6f7e5dbca53}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Colors.h">
@@ -227,6 +230,12 @@
     </ClInclude>
     <ClInclude Include="PointLightScene.h">
       <Filter>Header Files\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="BlendNormalVertex.h">
+      <Filter>Header Files\Effects\Defaults\Vertices</Filter>
+    </ClInclude>
+    <ClInclude Include="PixelPointEffect.h">
+      <Filter>Header Files\Effects\PixelShading</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -7,7 +7,7 @@
 #include "Mat3.h"
 #include "ChiliMath.h"
 #include "Pipeline.h"
-#include "GouraudPointEffect.h"
+#include "PixelPointEffect.h"
 #include "SolidColorEffect.h"
 #include "ObjectLoader.h"
 
@@ -20,12 +20,12 @@ public:
 		pZb(std::make_unique<ZBuffer>(gfx.ScreenWidth, gfx.ScreenHeight)),
 		pipeline(gfx, pZb),
 		solidColorPipeline(gfx, pZb),
-		monke(ObjectLoader::LoadObjectNormal<NormalVertex>(filename)),
+		monke(Plane::GetPlainNormal<BlendNormalVertex>(1.0f)),
 		lightSphere(Sphere::GetPlain<SolidColorVertex>(0.05f, 32, 32))
 	{
-		Color c(120, 169, 255);
-		pipeline.effect.vs.SetSurfaceColor(Colors::White);
-		pipeline.effect.vs.SetLightColor(c);
+		Color c = Colors::Red;
+		pipeline.effect.ps.SetSurfaceColor(Colors::White);
+		pipeline.effect.ps.SetLightColor(c);
 
 		for (auto i = lightSphere.vertices.begin(); i != lightSphere.vertices.end(); i++)
 		{
@@ -96,7 +96,7 @@ public:
 		Mat3 rot = Mat3::RotationX(theta_x) * Mat3::RotationY(theta_y) * Mat3::RotationZ(theta_z);
 		pipeline.effect.vs.BindRotation(rot);
 		pipeline.effect.vs.BindTranslation(cubeOffset);
-		pipeline.effect.vs.SetLightPos(lightPos);
+		pipeline.effect.ps.SetLightPos(lightPos);
 		pipeline.Draw(monke);
 
 		solidColorPipeline.effect.vs.BindTranslation(lightPos);
@@ -106,10 +106,10 @@ public:
 private:
 	Graphics& gfx;
 	std::shared_ptr<ZBuffer> pZb;
-	Pipeline<GouraudPointEffect> pipeline;
+	Pipeline<PixelPointEffect> pipeline;
 	Pipeline<SolidColorEffect> solidColorPipeline;
 
-	IndexedTriangleList<NormalVertex> monke;
+	IndexedTriangleList<BlendNormalVertex> monke;
 	IndexedTriangleList<SolidColorVertex> lightSphere;
 	float dTheta = 1.4f;
 	float theta_x = 0.0f;

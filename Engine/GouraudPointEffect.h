@@ -67,7 +67,7 @@ public:
 		}
 
 	private:
-		Vec3 lightPos = { 0.0f, 0.0f, 0.5f }; //position of the light
+		Vec3 lightPos = { 0.0f, 0.0f, 1.0f }; //position of the light
 		Vec3 diffuse = { 1.0f, 1.0f, 1.0f }; //color of the light
 		Vec3 ambient = { 0.05f, 0.05f, 0.05f }; //ambient light of the scene
 		Vec3 color = { 0.8f, 0.8f, 0.9f }; //Color of the triangles
