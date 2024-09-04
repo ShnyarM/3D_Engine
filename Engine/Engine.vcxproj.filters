@@ -120,7 +120,7 @@
     <ClInclude Include="Triangle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ScreenTransformer.h">
+    <ClInclude Include="NDCScreenTransformer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TextureEffect.h">

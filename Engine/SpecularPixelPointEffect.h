@@ -24,7 +24,7 @@ public:
 		{
 		public:
 			Output() = default;
-			Output(const Vec3& pos, const Vec3& normal, const Vec3& worldPos)
+			Output(const Vec4& pos, const Vec3& normal, const Vec3& worldPos)
 				:
 				pos(pos),
 				n(normal),
@@ -90,29 +90,33 @@ public:
 				return Output(*this) /= rhs;
 			}
 
-			Vec3 pos;
+			Vec4 pos;
 			Vec3 n;
 			Vec3 worldPos;
 		};
 
 	public:
-		void BindRotation(const Mat3& rotation_in)
+		void BindWorldTransformation(const Mat4& transform)
 		{
-			rotation = rotation_in;
+			worldTransform = transform;
 		}
-		void BindTranslation(const Vec3& translation_in)
+		void BindProjection(const Mat4& projection)
 		{
-			translation = translation_in;
+			worldProjection = projection;
+		}
+		const Mat4 GetProj() const
+		{
+			return worldProjection;
 		}
 		Output operator()(const Vertex& input)
 		{
-			Vec3 newPos = (input.pos * rotation) + translation;
-			return { newPos, input.n * rotation, newPos };
+			Vec4 newPos = Vec4(input.pos) * worldTransform;
+			return { newPos*worldProjection, Vec4(input.n, 0.0f) * worldTransform, newPos };
 		}
 
 	private:
-		Vec3 translation;
-		Mat3 rotation = Mat3::Identity();
+		Mat4 worldTransform = Mat4::Identity();
+		Mat4 worldProjection = Mat4::Identity();
 	};
 
 public:

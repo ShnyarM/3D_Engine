@@ -8,7 +8,7 @@ class _Vec4 : public _Vec3<T>
 {
 public:
 	_Vec4() = default;
-	_Vec4(T x, T y, T z, T w=1)
+	_Vec4(T x, T y, T z, T w = (T)1.0 )
 		:
 		_Vec3<T>(x, y, z),
 		w(w)
@@ -19,7 +19,7 @@ public:
 		_Vec4(vect.x, vect.y, vect.z, vect.w)
 	{
 	}
-	_Vec4(const _Vec3& vect, T w=1)
+	_Vec4(const _Vec3& vect, T w = (T)1.0 )
 		:
 		_Vec4(vect.x, vect.y, vect.z, w)
 	{

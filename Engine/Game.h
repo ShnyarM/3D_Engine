@@ -21,7 +21,6 @@
 #pragma once
 
 #include "Graphics.h"
-#include "ScreenTransformer.h"
 #include "Scene.h"
 #include <memory>
 #include "FrameTimer.h"

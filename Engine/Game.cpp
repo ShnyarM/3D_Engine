@@ -20,16 +20,16 @@
 ******************************************************************************************/
 #include "MainWindow.h"
 #include "Game.h"
-#include "TextureCubeScene.h"
-#include "VertexColorScene.h"
-#include "TextureShadingScene.h"
-#include "TwoCubesScene.h"
-#include "WaveScene.h"
-#include "FlatShadingScene.h"
-#include "ShadingScene.h"
-#include "SphereScene.h"
-#include "PointLightScene.h"
-#include "PointLightScenePlane.h"
+//#include "TextureCubeScene.h"
+//#include "VertexColorScene.h"
+//#include "TextureShadingScene.h"
+//#include "TwoCubesScene.h"
+//#include "WaveScene.h"
+//#include "FlatShadingScene.h"
+//#include "ShadingScene.h"
+//#include "SphereScene.h"
+//#include "PointLightScene.h"
+//#include "PointLightScenePlane.h"
 #include "SpecularScene.h"
 
 Game::Game( MainWindow& wnd )
@@ -38,7 +38,7 @@ Game::Game( MainWindow& wnd )
 	gfx( wnd )
 {
 	scenes.emplace_back(std::make_unique<SpecularScene>(gfx, "Specular lighting", L"models\\suzanne.obj"));
-	scenes.emplace_back(std::make_unique<PointLightScenePlane>(gfx, "Pixel light with plane", L"models\\suzanne.obj"));
+	/*scenes.emplace_back(std::make_unique<PointLightScenePlane>(gfx, "Pixel light with plane", L"models\\suzanne.obj"));
 	scenes.emplace_back(std::make_unique<PointLightScene>(gfx, "Pixel light with calculated normals", L"models\\bunny.obj"));
 	scenes.emplace_back(std::make_unique<SphereScene>(gfx, "Directional Pixel light", L"models\\suzanne.obj"));
 	scenes.emplace_back(std::make_unique<ShadingScene>(gfx, "Gouraud Shading", L"models\\suzanne.obj"));
@@ -46,7 +46,7 @@ Game::Game( MainWindow& wnd )
 	scenes.emplace_back(std::make_unique<WaveScene>(gfx, "Wave effect with Gouraud", L"Images\\eye.png"));
 	scenes.emplace_back(std::make_unique<TwoCubesScene>(gfx, "Zbuffer"));
 	scenes.emplace_back(std::make_unique<TextureCubeScene>(gfx, "Texture", L"Images\\dice_skin.png"));
-	scenes.emplace_back(std::make_unique<TextureShadingScene>(gfx, "Load files with textures and normals", L"Images\\default.png"));
+	scenes.emplace_back(std::make_unique<TextureShadingScene>(gfx, "Load files with textures and normals", L"Images\\default.png"));*/
 	curScene = scenes.begin();
 }
 

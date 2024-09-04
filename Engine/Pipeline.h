@@ -3,7 +3,7 @@
 #include "Mat.h"
 #include "IndexedTriangleList.h"
 #include "Triangle.h"
-#include "ScreenTransformer.h"
+#include "NDCScreenTransformer.h"
 #include "ChiliMath.h"
 #include "ZBuffer.h"
 #include <algorithm>
@@ -39,6 +39,12 @@ public:
 		pZb->Clear();
 	}
 
+	void BindProjection(const Mat4& projection)
+	{
+		effect.vs.BindProjection(projection);
+
+	}
+
 	// public interface function to start pipeline process for indexedtrianglelist
 	void Draw(const IndexedTriangleList<Vertex>& triList)
 	{
@@ -62,6 +68,8 @@ private:
 	// Backface Culling gets applied here
 	void AssembleTriangles(const std::vector<VSOut>& vertices, const std::vector<size_t>& indices)
 	{
+		Vec4 eyePos = Vec4(0.0f, 0.0f, 0.0f, 1.0f) * effect.vs.GetProj();
+
 		for (size_t i = 0; i < indices.size() / 3; i++)
 		{
 			const VSOut& v0 = vertices[indices[i * 3]];
@@ -69,7 +77,7 @@ private:
 			const VSOut& v2 = vertices[indices[i * 3 + 2]];
 
 			// Check for backface culling
-			if ((v1.pos - v0.pos) % (v2.pos - v0.pos) * v0.pos <= 0.0f)
+			if ((v1.pos - v0.pos) % (v2.pos - v0.pos) * (v0.pos - eyePos) <= 0.0f)
 			{
 				ProcessTriangle(v0, v1, v2, i);
 			}
@@ -198,15 +206,16 @@ private:
 			{
 				//Skip if x is not on screen
 				if (x < 0 || x >= gfx.ScreenWidth) continue;
-				//Recover original zCoordinate again, as pos.z contains 1/z
-				float zCoordinate = 1.0f / vCurrentX.pos.z;
 				
 				// Only draw Pixel if it passes zBuffer test, i.e. no pixel in front
-				if (pZb->TestAndSet(x, y, zCoordinate))
+				if (pZb->TestAndSet(x, y, vCurrentX.pos.z))
 				{
+					//Recover original zCoordinate again, as pos.w contains 1/z
+					const float wCoordinate = 1.0f / vCurrentX.pos.w;
+
 					//Get back correct uv coordinates by multiplying them with z
-					GSOut recoveredCords = vCurrentX * zCoordinate;
-					recoveredCords.pos.z = zCoordinate; //Put z value back into vertex
+					GSOut recoveredCords = vCurrentX * wCoordinate;
+					// wCoordinate is z coordinate if needed
 
 					gfx.PutPixel(x, y, effect.ps(recoveredCords));
 				}
@@ -219,5 +228,5 @@ public:
 private:
 	Graphics& gfx;
 	std::shared_ptr<ZBuffer> pZb;
-	ScreenTransformer screenTransformer;
+	NDCScreenTransformer screenTransformer;
 };

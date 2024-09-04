@@ -2,6 +2,7 @@
 #include "IndexedTriangleList.h"
 #include <string>
 #include <fstream>
+#include <sstream>
 #include <debugapi.h>
 
 struct ObjFileVertex

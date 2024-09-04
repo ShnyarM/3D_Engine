@@ -1,7 +1,6 @@
 #pragma once
 #include "Scene.h"
 #include "Sphere.h"
-#include "ScreenTransformer.h"
 #include "Mouse.h"
 #include "Keyboard.h"
 #include "Mat.h"
@@ -27,6 +26,12 @@ public:
 		Color c = Colors::White;
 		pipeline.effect.ps.SetSurfaceColor(Colors::White);
 		pipeline.effect.ps.SetLightColor(c);
+
+		const Mat4 projection = Mat4::ProjectionFOV(90.0f, (float)Graphics::ScreenWidth/(float)Graphics::ScreenHeight, 1.0f, 10.0f);
+
+		pipeline.effect.vs.BindProjection(projection);
+
+		solidColorPipeline.effect.vs.BindProjection(projection);
 
 		for (auto i = lightSphere.vertices.begin(); i != lightSphere.vertices.end(); i++)
 		{
@@ -94,13 +99,12 @@ public:
 	void ComposeFrame() override
 	{
 		pipeline.BeginFrame();
-		Mat3 rot = Mat3::RotationX(theta_x) * Mat3::RotationY(theta_y) * Mat3::RotationZ(theta_z);
-		pipeline.effect.vs.BindRotation(rot);
-		pipeline.effect.vs.BindTranslation(cubeOffset);
+		Mat4 transform = Mat4::RotationX(theta_x) * Mat4::RotationY(theta_y) * Mat4::RotationZ(theta_z) * Mat4::Translation(cubeOffset);
+		pipeline.effect.vs.BindWorldTransformation(transform);
 		pipeline.effect.ps.SetLightPos(lightPos);
 		pipeline.Draw(monke);
 
-		solidColorPipeline.effect.vs.BindTranslation(lightPos);
+		solidColorPipeline.effect.vs.BindWorldTransformation(Mat4::Translation(lightPos));
 		solidColorPipeline.Draw(lightSphere);
 	}
 
@@ -117,8 +121,8 @@ private:
 	float theta_y = 0.0f;
 	float theta_z = 0.0f;
 
-	Vec3 lightPos = { 0.0f, 0.0f, 0.5f };
+	Vec3 lightPos = { -1.0f, 0.0f, 1.0f };
 
 	float moveSpeed = 1.5f;
-	Vec3 cubeOffset = { 0.0f, 0.0f, 2.0f };
+	Vec3 cubeOffset = { 0.0f, 0.0f, 3.0f };
 };

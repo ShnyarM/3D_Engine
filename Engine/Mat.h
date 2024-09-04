@@ -173,7 +173,7 @@ public:
 			return{
 				(T)1.0, (T)0.0,	   (T)0.0,  (T)0.0,
 				(T)0.0, cosTheta,  sinTheta,(T)0.0,
-				(T)0.0,	-sinTheta, cosTheta (T)0.0,
+				(T)0.0,	-sinTheta, cosTheta, (T)0.0,
 				(T)0.0, (T)0.0,    (T)0.0,  (T)1.0
 			};
 		}
@@ -192,15 +192,51 @@ public:
 		if constexpr (S == 4)
 		{
 			return{
-				(T)0.0, (T)0.0,	(T)0.0, (T)0.0,
-				(T)0.0, (T)0.0, (T)0.0, (T)0.0,
-				(T)0.0,	(T)0.0, (T)0.0, (T)0.0,
-				x,      y,      z,      (T)0.0
+				(T)1.0, (T)0.0,	(T)0.0, (T)0.0,
+				(T)0.0, (T)1.0, (T)0.0, (T)0.0,
+				(T)0.0,	(T)0.0, (T)1.0, (T)0.0,
+				x,      y,      z,      (T)1.0
 			};
 		}
 		else
 		{
 			static_assert(false, "Bad Dimenstion for Translation Matrix");
+		}
+	}
+	static _Mat Projection(T w, T h, T n, T f)
+	{
+		if constexpr (S == 4)
+		{
+			return{
+				(2*n)/w, (T)0.0,  (T)0.0,       (T)0.0,
+				(T)0.0,  (2*n)/h, (T)0.0,       (T)0.0,
+				(T)0.0,	 (T)0.0,  f/(f-n),      (T)1.0,
+				(T)0.0,  (T)0.0,   (-n*f)/(f-n), (T)0.0
+			};
+		}
+		else
+		{
+			static_assert(false, "Bad dimenstion for Projection Matrix");
+		}
+	}
+	static _Mat ProjectionFOV(T fov, T ar, T n, T f)
+	{
+		if constexpr (S == 4)
+		{
+			const T fov_rad = fov * (T)PI / (T)180.0;
+			const T w = (T)1.0f / std::tan(fov_rad / (T)2.0);
+			const T h = w * ar;
+
+			return{
+				w,       (T)0.0,  (T)0.0,             (T)0.0,
+				(T)0.0,  h,       (T)0.0,             (T)0.0,
+				(T)0.0,	 (T)0.0,  f / (f - n),        (T)1.0,
+				(T)0.0,  (T)0.0,  (-n * f) / (f - n), (T)0.0
+			};
+		}
+		else
+		{
+			static_assert(false, "Bad dimenstion for Projection Matrix");
 		}
 	}
 public:

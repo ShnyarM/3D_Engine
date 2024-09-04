@@ -114,6 +114,6 @@ private:
 
 	Font font;
 public:
-	static constexpr unsigned int ScreenWidth = 640u;
+	static constexpr unsigned int ScreenWidth = 1138u;
 	static constexpr unsigned int ScreenHeight = 640u;
 };

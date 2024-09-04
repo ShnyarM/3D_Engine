@@ -1,7 +1,6 @@
 #pragma once
 #include "Scene.h"
 #include "ObjectLoader.h"
-#include "ScreenTransformer.h"
 #include "Mouse.h"
 #include "Keyboard.h"
 #include "Mat.h"

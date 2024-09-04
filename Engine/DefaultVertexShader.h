@@ -2,27 +2,87 @@
 
 //Default vertex shader which applies rotation and translation
 //Templated on input vertex type of effect, so it can be used with any effect
-template <typename Vertex>
 class DefaultVertexShader
 {
 public:
 	//Set vertex class as input class
-	typedef Vertex Output;
+	class Output
+	{
+	public:
+		Output() = default;
+		Output(const Vec4& pos)
+			:
+			pos(pos)
+		{
+		}
+		Output(const Vec4& pos, const Output& v)
+			:
+			pos(pos)
+		{
+		}
+		Output& operator=(const Output& rhs)
+		{
+			pos = rhs.pos;
+			return *this;
+		}
+		Output& operator+=(const Output& rhs)
+		{
+			pos += rhs.pos;
+			return *this;
+		}
+		Output& operator-=(const Output& rhs)
+		{
+			pos -= rhs.pos;
+			return *this;
+		}
+		Output operator+(const Output& rhs) const
+		{
+			return Output(*this) += rhs;
+		}
+		Output operator-(const Output& rhs) const
+		{
+			return Output(*this) -= rhs;
+		}
+		Output& operator*=(const float rhs)
+		{
+			pos *= rhs;
+			return *this;
+		}
+		Output operator*(const float rhs) const
+		{
+			return Output(*this) *= rhs;
+		}
+		Output& operator/=(const float rhs)
+		{
+			pos /= rhs;
+			return *this;
+		}
+		Output operator/(const float rhs) const
+		{
+			return Output(*this) /= rhs;
+		}
+		Vec4 pos;
+	};
 public:
-	void BindRotation(const Mat3& rotation_in)
+	void BindWorldTransformation(const Mat4& transform)
 	{
-		rotation = rotation_in;
+		worldTransform = transform;
 	}
-	void BindTranslation(const Vec3& translation_in)
+	void BindProjection(const Mat4& projection)
 	{
-		translation = translation_in;
+		worldProjection = projection;
 	}
-	Output operator()(const Vertex& input)
+	const Mat4 GetProj() const
 	{
-		return Vertex{ (input.pos * rotation) + translation, input };
+		return worldProjection;
+	}
+	template<class V>
+	Output operator()(const V& input)
+	{
+		return Vertex{ Vec4(input.pos) * worldTransform * worldProjection };
 	}
 
 private:
-	Vec3 translation;
-	Mat3 rotation = Mat3::Identity();
+	Mat4 worldTransform = Mat4::Identity();
+	Mat4 worldProjection = Mat4::Identity();
 };
