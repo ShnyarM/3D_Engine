@@ -5,7 +5,7 @@
 #include "Triangle.h"
 #include <utility>
 #include "BlendColorVertex.h"
-#include "Mat3.h"
+#include "Mat.h"
 
 class GouraudEffect
 {

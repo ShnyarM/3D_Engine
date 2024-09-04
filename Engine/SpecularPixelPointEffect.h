@@ -6,7 +6,7 @@
 #include <utility>
 #include <cmath>
 #include "BlendColorVertex.h"
-#include "Mat3.h"
+#include "Mat.h"
 #include "DefaultVertexShader.h"
 
 class SpecularPixelPointEffect

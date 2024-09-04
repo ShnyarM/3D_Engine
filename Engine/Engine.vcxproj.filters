@@ -63,13 +63,13 @@
     <ClInclude Include="Vec2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Mat2.h">
+    <ClInclude Include="Mat2old.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Vec3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Mat3.h">
+    <ClInclude Include="Mat3old.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="IndexedLineList.h">
@@ -245,6 +245,12 @@
     </ClInclude>
     <ClInclude Include="SpecularScene.h">
       <Filter>Header Files\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Mat.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Vec4.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
