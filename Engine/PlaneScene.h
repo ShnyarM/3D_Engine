@@ -8,26 +8,26 @@
 #include "Pipeline.h"
 #include "SpecularPixelPointEffect.h"
 #include "SolidColorEffect.h"
-#include "ObjectLoader.h"
+#include "Plane.h"
 
-class SpecularScene : public Scene
+class PlaneScene : public Scene
 {
 public:
-	SpecularScene(Graphics& gfx, const char* name, const std::wstring& filename)
+	PlaneScene(Graphics& gfx, const char* name, const std::wstring& filename)
 		:
 		Scene(name),
 		gfx(gfx),
 		pZb(std::make_unique<ZBuffer>(gfx.ScreenWidth, gfx.ScreenHeight)),
 		pipeline(gfx, pZb),
 		solidColorPipeline(gfx, pZb),
-		monke(ObjectLoader::LoadObjectNormal<BlendNormalVertex>(filename)),
+		monke(Plane::GetPlainNormal<BlendNormalVertex>(1.0f, 1)),
 		lightSphere(Sphere::GetPlain<SolidColorVertex>(0.05f, 32, 32))
 	{
 		Color c = Colors::White;
 		pipeline.effect.ps.SetSurfaceColor(Colors::White);
 		pipeline.effect.ps.SetLightColor(c);
 
-		const Mat4 projection = Mat4::ProjectionFOV(90.0f, (float)Graphics::ScreenWidth/(float)Graphics::ScreenHeight, 0.25f, 10.0f);
+		const Mat4 projection = Mat4::ProjectionFOV(90.0f, (float)Graphics::ScreenWidth / (float)Graphics::ScreenHeight, 0.25f, 10.0f);
 
 		pipeline.effect.vs.BindProjection(projection);
 

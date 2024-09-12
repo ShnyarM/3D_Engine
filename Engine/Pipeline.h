@@ -91,7 +91,96 @@ private:
 	{
 		// generate triangle from 3 vertices using gs
 		// and send to post-processing
-		PostProcessTriangleVertices(effect.gs( v0, v1, v2, index ));
+		ClipCullTriangle(effect.gs( v0, v1, v2, index ));
+	}
+
+	// Clip and Cull the triangle
+	// Clipping will only be done on near plane, culling on all
+	// Raster clipping will be done on x and y
+	void ClipCullTriangle(Triangle<GSOut>& t)
+	{
+		// cull negative x
+		if (t.v0.pos.x < -t.v0.pos.w &&
+			t.v1.pos.x < -t.v1.pos.w &&
+			t.v2.pos.x < -t.v2.pos.w) return;
+		// cull positive x
+		if (t.v0.pos.x > t.v0.pos.w &&
+			t.v1.pos.x > t.v1.pos.w &&
+			t.v2.pos.x > t.v2.pos.w) return;
+		// cull negative y
+		if (t.v0.pos.y < -t.v0.pos.w &&
+			t.v1.pos.y < -t.v1.pos.w &&
+			t.v2.pos.y < -t.v2.pos.w) return;
+		// cull positive y
+		if (t.v0.pos.y > t.v0.pos.w &&
+			t.v1.pos.y > t.v1.pos.w &&
+			t.v2.pos.y > t.v2.pos.w) return;
+		// cull far plane
+		if (t.v0.pos.z > t.v0.pos.w &&
+			t.v1.pos.z > t.v1.pos.w &&
+			t.v2.pos.z > t.v2.pos.w) return;
+		// cull near plane
+		if (t.v0.pos.z < 0.0f &&
+			t.v1.pos.z < 0.0f &&
+			t.v2.pos.z < 0.0f) return;
+
+		const auto Clip1 = [this](const GSOut& v0, const GSOut& v1, const GSOut& v2) {
+			const float alpha1 = -v0.pos.z / (v1.pos.z - v0.pos.z);
+			const float alpha2 = -v0.pos.z / (v2.pos.z - v0.pos.z);
+
+			GSOut v01 = interpolate(v0, v1, alpha1);
+			GSOut v02 = interpolate(v0, v2, alpha2);
+
+			PostProcessTriangleVertices(Triangle<GSOut>{ v01, v02, v1 });
+			PostProcessTriangleVertices(Triangle<GSOut>{ v1, v02, v2 });
+		};
+
+		const auto Clip2 = [this](const GSOut& v0, const GSOut& v1, const GSOut& v2) {
+			const float alpha0 = -v0.pos.z / (v2.pos.z - v0.pos.z);
+			const float alpha1 = -v1.pos.z / (v2.pos.z - v1.pos.z);
+
+			GSOut newV0 = interpolate(v0, v2, alpha0);
+			GSOut newV1 = interpolate(v1, v2, alpha1);
+
+			PostProcessTriangleVertices(Triangle<GSOut>{ newV0, newV1, v2 });
+		};
+
+		// clip near plane
+		if (t.v0.pos.z < 0.0f)
+		{
+			if (t.v1.pos.z < 0.0f)
+			{
+				Clip2(t.v0, t.v1, t.v2);
+			}
+			else if(t.v2.pos.z < 0.0f)
+			{
+				Clip2(t.v0, t.v2, t.v1);
+			}
+			else
+			{
+				Clip1(t.v0, t.v1, t.v2);
+			}
+		}
+		else if (t.v1.pos.z < 0.0f)
+		{
+			if (t.v2.pos.z < 0.0f)
+			{
+				Clip2(t.v1, t.v2, t.v0);
+			}
+			else
+			{
+				Clip1(t.v1, t.v0, t.v2);
+			}
+		}
+		else if (t.v2.pos.z < 0.0f)
+		{
+			Clip1(t.v2, t.v0, t.v1);
+		}
+		else
+		{
+			// No Clipping needed
+			PostProcessTriangleVertices(t);
+		}
 	}
 
 	// Apply Screen transformation to triangle and draw triangle
@@ -159,8 +248,8 @@ private:
 		GSOut tDelta1 = (v2 - v1) / (v2.pos.y - v1.pos.y);
 
 		// calculate start and end scanlines
-		int startY = ceil(v0.pos.y - 0.5f);
-		int endY = ceil(v2.pos.y - 0.5f); // the scanline AFTER the last line drawn
+		int startY = std::max((int)ceil(v0.pos.y - 0.5f), 0);
+		int endY = std::min((int)ceil(v2.pos.y - 0.5f), (int)Graphics::ScreenHeight - 1); // the scanline AFTER the last line drawn
 
 		//Start function with given information
 		DrawFlatTriangle(startY, endY, tDelta0, tDelta1, v0, v1);
@@ -173,8 +262,8 @@ private:
 		GSOut tDelta1 = (v2 - v0) / (v2.pos.y - v0.pos.y);
 
 		// calculate start and end scanlines
-		int startY = ceil(v0.pos.y - 0.5f);
-		int endY = ceil(v1.pos.y - 0.5f); // the scanline AFTER the last line drawn
+		int startY = std::max((int)ceil(v0.pos.y - 0.5f), 0);
+		int endY = std::min((int)ceil(v1.pos.y - 0.5f), (int)Graphics::ScreenHeight-1); // the scanline AFTER the last line drawn
 
 		DrawFlatTriangle(startY, endY, tDelta0, tDelta1, v0, v0);
 	}
@@ -192,11 +281,9 @@ private:
 
 		for (int y = startY; y < endY; y++, vCurrentY0 += vDelta0, vCurrentY1 += vDelta1)
 		{
-			//Skip if y is not on screen
-			if (y < 0 || y >= gfx.ScreenHeight) continue;
 			//Find start and end points
-			int startX = ceil(vCurrentY0.pos.x - 0.5f);
-			int endX = ceil(vCurrentY1.pos.x - 0.5f);
+			int startX = std::max((int)(vCurrentY0.pos.x - 0.5f), 0);
+			int endX = std::min((int)ceil(vCurrentY1.pos.x - 0.5f), (int)Graphics::ScreenWidth-1);
 
 			//Get delta per x step and calculate start position for texture map only
 			GSOut vDeltaX = (vCurrentY1 - vCurrentY0) / (vCurrentY1.pos.x - vCurrentY0.pos.x);
@@ -204,9 +291,6 @@ private:
 
 			for (int x = startX; x < endX; x++, vCurrentX += vDeltaX)
 			{
-				//Skip if x is not on screen
-				if (x < 0 || x >= gfx.ScreenWidth) continue;
-				
 				// Only draw Pixel if it passes zBuffer test, i.e. no pixel in front
 				if (pZb->TestAndSet(x, y, vCurrentX.pos.z))
 				{
