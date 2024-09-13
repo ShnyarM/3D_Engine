@@ -67,13 +67,17 @@ public:
 
 	void ComposeFrame() override
 	{
+		Mat4 camView = camControl.cam.GetViewTransform();
 		pipeline.BeginFrame();
+
 		pipeline.effect.vs.BindWorldTransformation(Mat4::Translation(monkePos));
-		pipeline.effect.vs.BindView(camControl.cam.GetViewTransform());
+		pipeline.effect.vs.BindView(camView);
 		pipeline.effect.ps.SetLightPos(lightPos);
+		pipeline.effect.ps.SetCamView(camView);
 		pipeline.Draw(monke);
 
 		solidColorPipeline.effect.vs.BindWorldTransformation(Mat4::Translation(lightPos));
+		solidColorPipeline.effect.vs.BindView(camView);
 		solidColorPipeline.Draw(lightSphere);
 	}
 

@@ -16,7 +16,7 @@ public:
 	typedef BlendNormalVertex Vertex;
 
 	// Define VertexShader, default vertexShader but rotates normal
-	class VertexShader
+	class VertexShader : public DefaultVertexShader
 	{
 	public:
 		// normal blendNormalVertex, but add original worldposition as additional information for pixelshader
@@ -94,43 +94,11 @@ public:
 			Vec3 n;
 			Vec3 worldPos;
 		};
-
 	public:
-		void BindWorldTransformation(const Mat4& transform)
-		{
-			worldTransform = transform;
-			UpdateTransform();
-		}
-		void BindProjection(const Mat4& projection)
-		{
-			worldProjection = projection;
-			UpdateTransform();
-		}
-		void BindView(const Mat4& view)
-		{
-			worldView = view;
-			UpdateTransform();
-		}
-		const Mat4 GetProj() const
-		{
-			return worldProjection;
-		}
 		Output operator()(const Vertex& input)
 		{
-			return { Vec4(input.pos) * entireTransform, Vec4(input.n, 0.0f) * worldTransform, Vec4(input.pos) * worldTransform };
+			return { Vec4(input.pos) * entireTransform, Vec4(input.n, 0.0f) * entireWorldTransform, Vec4(input.pos) * entireWorldTransform };
 		}
-	private:
-		void UpdateTransform()
-		{
-			entireTransform = worldTransform * worldView * worldProjection;
-		}
-
-	private:
-		Mat4 worldTransform = Mat4::Identity();
-		Mat4 worldProjection = Mat4::Identity();
-		Mat4 worldView = Mat4::Identity();
-
-		Mat4 entireTransform = Mat4::Identity();
 	};
 
 public:
@@ -149,6 +117,7 @@ public:
 		void SetLightPos(const Vec3& newPos)
 		{
 			lightPos = newPos;
+			transformedLightPos = Vec4(lightPos) * camViewTransform;
 		}
 		void SetLightColor(const Color& newColor)
 		{
@@ -158,6 +127,11 @@ public:
 		{
 			ambient = newAmbient;
 		}
+		void SetCamView(const Mat4& view)
+		{
+			camViewTransform = view;
+			transformedLightPos = Vec4(lightPos) * camViewTransform;
+		}
 
 		// get Color from Vertex
 		Color operator()(const VertexShader::Output& input)
@@ -165,7 +139,7 @@ public:
 			Vec3 normal = input.n.GetNormalized();
 
 			// Get information about position relative to light
-			Vec3 diffVec = lightPos - input.worldPos;
+			Vec3 diffVec = transformedLightPos - input.worldPos;
 			float distance = diffVec.Len();
 			Vec3 diffVecN = diffVec.GetNormalized();
 
@@ -182,13 +156,13 @@ public:
 		}
 
 	private:
-		Vec3 lightPos = { 0.0f, 0.0f, 0.5f }; //position of the light
+		Vec3 lightPos = { 0.0f, 0.0f, 0.5f }; //position of the light in the world
 		Vec3 diffuse = { 1.0f, 1.0f, 1.0f }; //color of the light
 		Vec3 ambient = { 0.05f, 0.05f, 0.05f }; //ambient light of the scene
 		Vec3 color = { 0.8f, 0.8f, 0.9f }; //Color of the triangles
 
-		Vec3 translation;
-		Mat3 rotation = Mat3::Identity();
+		Mat4 camViewTransform = Mat4::Identity();
+		Vec3 transformedLightPos = lightPos; //position of the light in the world transformed by camera view
 
 		float linearAttenuation = 1.0f;
 		float quadraticAttenuation = 2.62f;
