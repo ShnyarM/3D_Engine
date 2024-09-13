@@ -99,12 +99,17 @@ public:
 		void BindWorldTransformation(const Mat4& transform)
 		{
 			worldTransform = transform;
-			entireTransform = worldTransform * worldProjection;
+			UpdateTransform();
 		}
 		void BindProjection(const Mat4& projection)
 		{
 			worldProjection = projection;
-			entireTransform = worldTransform * worldProjection;
+			UpdateTransform();
+		}
+		void BindView(const Mat4& view)
+		{
+			worldView = view;
+			UpdateTransform();
 		}
 		const Mat4 GetProj() const
 		{
@@ -112,12 +117,19 @@ public:
 		}
 		Output operator()(const Vertex& input)
 		{
-			return { Vec4(input.pos)*entireTransform, Vec4(input.n, 0.0f) * worldTransform, Vec4(input.pos)*worldTransform};
+			return { Vec4(input.pos) * entireTransform, Vec4(input.n, 0.0f) * worldTransform, Vec4(input.pos) * worldTransform };
+		}
+	private:
+		void UpdateTransform()
+		{
+			entireTransform = worldTransform * worldView * worldProjection;
 		}
 
 	private:
 		Mat4 worldTransform = Mat4::Identity();
 		Mat4 worldProjection = Mat4::Identity();
+		Mat4 worldView = Mat4::Identity();
+
 		Mat4 entireTransform = Mat4::Identity();
 	};
 

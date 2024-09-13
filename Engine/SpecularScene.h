@@ -9,11 +9,12 @@
 #include "SpecularPixelPointEffect.h"
 #include "SolidColorEffect.h"
 #include "ObjectLoader.h"
+#include "CameraController.h"
 
 class SpecularScene : public Scene
 {
 public:
-	SpecularScene(Graphics& gfx, const char* name, const std::wstring& filename)
+	SpecularScene(Graphics& gfx, MainWindow& wnd, const char* name, const std::wstring& filename)
 		:
 		Scene(name),
 		gfx(gfx),
@@ -21,17 +22,19 @@ public:
 		pipeline(gfx, pZb),
 		solidColorPipeline(gfx, pZb),
 		monke(ObjectLoader::LoadObjectNormal<BlendNormalVertex>(filename)),
-		lightSphere(Sphere::GetPlain<SolidColorVertex>(0.05f, 32, 32))
+		lightSphere(Sphere::GetPlain<SolidColorVertex>(0.05f, 32, 32)),
+		camControl(wnd.mouse, wnd.kbd)
 	{
 		Color c = Colors::White;
 		pipeline.effect.ps.SetSurfaceColor(Colors::White);
 		pipeline.effect.ps.SetLightColor(c);
 
-		const Mat4 projection = Mat4::ProjectionFOV(90.0f, (float)Graphics::ScreenWidth/(float)Graphics::ScreenHeight, 0.25f, 10.0f);
-
+		const Mat4 projection = Mat4::ProjectionFOV(fov, (float)Graphics::ScreenWidth/(float)Graphics::ScreenHeight, nearPlane, farPlane);
 		pipeline.effect.vs.BindProjection(projection);
-
 		solidColorPipeline.effect.vs.BindProjection(projection);
+
+		camControl.SetMoveSpeed(camMoveSpeed);
+		camControl.SetSensitivity(camSensitity);
 
 		for (auto i = lightSphere.vertices.begin(); i != lightSphere.vertices.end(); i++)
 		{
@@ -41,41 +44,7 @@ public:
 
 	void UpdateModel(Keyboard& kbd, Mouse& mouse, float dt) override
 	{
-		//Rotation
-		if (kbd.KeyIsPressed('W')) //up
-		{
-			theta_z += wrap_angle(dTheta * dt);
-		}
-		if (kbd.KeyIsPressed('S')) //down
-		{
-			theta_z -= wrap_angle(dTheta * dt);
-		}
-		if (kbd.KeyIsPressed('D')) //right
-		{
-			theta_y -= wrap_angle(dTheta * dt);
-		}
-		if (kbd.KeyIsPressed('A')) //left
-		{
-			theta_y += wrap_angle(dTheta * dt);
-		}
-
-		//Cube Movement
-		if (kbd.KeyIsPressed('L'))
-		{
-			cubeOffset.x += moveSpeed * dt;
-		}
-		if (kbd.KeyIsPressed('J'))
-		{
-			cubeOffset.x -= moveSpeed * dt;
-		}
-		if (kbd.KeyIsPressed('I'))
-		{
-			cubeOffset.z += moveSpeed * dt;
-		}
-		if (kbd.KeyIsPressed('K'))
-		{
-			cubeOffset.z -= moveSpeed * dt;
-		}
+		camControl.UpdateCam(dt);
 
 		//Light Movement
 		if (kbd.KeyIsPressed('F'))
@@ -99,8 +68,8 @@ public:
 	void ComposeFrame() override
 	{
 		pipeline.BeginFrame();
-		Mat4 transform = Mat4::RotationX(theta_x) * Mat4::RotationY(theta_y) * Mat4::RotationZ(theta_z) * Mat4::Translation(cubeOffset);
-		pipeline.effect.vs.BindWorldTransformation(transform);
+		pipeline.effect.vs.BindWorldTransformation(Mat4::Translation(monkePos));
+		pipeline.effect.vs.BindView(camControl.cam.GetViewTransform());
 		pipeline.effect.ps.SetLightPos(lightPos);
 		pipeline.Draw(monke);
 
@@ -114,15 +83,17 @@ private:
 	Pipeline<SpecularPixelPointEffect> pipeline;
 	Pipeline<SolidColorEffect> solidColorPipeline;
 
+	static constexpr float fov = 90.0f;
+	static constexpr float nearPlane = 0.25f;
+	static constexpr float farPlane = 10.0f;
+
 	IndexedTriangleList<BlendNormalVertex> monke;
 	IndexedTriangleList<SolidColorVertex> lightSphere;
-	float dTheta = 1.4f;
-	float theta_x = 0.0f;
-	float theta_y = 0.0f;
-	float theta_z = 0.0f;
-
 	Vec3 lightPos = { -1.0f, 0.0f, 1.0f };
-
+	Vec3 monkePos = { 0.0f, 0.0f, 2.0f };
 	float moveSpeed = 1.5f;
-	Vec3 cubeOffset = { 0.0f, 0.0f, 3.0f };
+
+	CameraController camControl;
+	Vec2 camSensitity = { 0.00002f * fov, 0.00002f * fov };
+	static constexpr float camMoveSpeed = 1.5f;
 };

@@ -138,6 +138,8 @@
   <ItemGroup>
     <ClInclude Include="BlendColorVertex.h" />
     <ClInclude Include="BlendNormalVertex.h" />
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="CameraController.h" />
     <ClInclude Include="ChiliException.h" />
     <ClInclude Include="ChiliMath.h" />
     <ClInclude Include="ChiliWin.h" />
