@@ -67,3 +67,70 @@ public:
 	Vec3 pos;
 	Vec3 color;
 };
+
+class BlendColorVertex4
+{
+public:
+	BlendColorVertex4() = default;
+	BlendColorVertex4(const Vec4& pos, const Vec3& color)
+		:
+		pos(pos),
+		color(color)
+	{
+	}
+	BlendColorVertex4(const Vec3& pos, const BlendColorVertex4& v)
+		:
+		pos(pos),
+		color(v.color)
+	{
+	}
+	BlendColorVertex4& operator=(const BlendColorVertex4& rhs)
+	{
+		pos = rhs.pos;
+		color = rhs.color;
+		return *this;
+	}
+	BlendColorVertex4& operator+=(const BlendColorVertex4& rhs)
+	{
+		pos += rhs.pos;
+		color += rhs.color;
+		return *this;
+	}
+	BlendColorVertex4& operator-=(const BlendColorVertex4& rhs)
+	{
+		pos -= rhs.pos;
+		color -= rhs.color;
+		return *this;
+	}
+	BlendColorVertex4 operator+(const BlendColorVertex4& rhs) const
+	{
+		return BlendColorVertex4(*this) += rhs;
+	}
+	BlendColorVertex4 operator-(const BlendColorVertex4& rhs) const
+	{
+		return BlendColorVertex4(*this) -= rhs;
+	}
+	BlendColorVertex4& operator*=(const float rhs)
+	{
+		pos *= rhs;
+		color *= rhs;
+		return *this;
+	}
+	BlendColorVertex4 operator*(const float rhs) const
+	{
+		return BlendColorVertex4(*this) *= rhs;
+	}
+	BlendColorVertex4& operator/=(const float rhs)
+	{
+		pos /= rhs;
+		color /= rhs;
+		return *this;
+	}
+	BlendColorVertex4 operator/(const float rhs) const
+	{
+		return BlendColorVertex4(*this) /= rhs;
+	}
+
+	Vec4 pos;
+	Vec3 color;
+};

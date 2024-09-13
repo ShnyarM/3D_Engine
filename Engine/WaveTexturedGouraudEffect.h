@@ -182,10 +182,6 @@ public:
 			Vec3 pixelColor = Vec3(pTexture->GetPixel(
 				(unsigned int)std::min(in.t.x * tWidth, tWidthMax),
 				(unsigned int)std::min(in.t.y * tHeight, tHeightMax)));
-			if (in.light.x > 0.5f)
-			{
-				int x = 1;
-			}
 			pixelColor.x *= in.light.x;
 			pixelColor.y *= in.light.y;
 			pixelColor.z *= in.light.z;

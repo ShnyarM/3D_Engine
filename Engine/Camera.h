@@ -35,6 +35,10 @@ public:
 	{
 		rot += add;
 	}
+	Vec3 GetRot() const
+	{
+		return rot;
+	}
 
 	void ClampZ()
 	{

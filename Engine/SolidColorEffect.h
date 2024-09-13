@@ -4,7 +4,7 @@
 #include "Colors.h"
 #include <memory>
 #include "Surface.h"
-#include "DefaultVertexShader.h"
+#include "BaseVertexShader.h"
 #include "DefaultGeometryShader.h"
 #include "SolidColorVertex.h"
 
@@ -14,7 +14,7 @@ public:
 	typedef SolidColorVertex Vertex;
 
 	//Define VertexShader
-	class VertexShader : public DefaultVertexShader
+	class VertexShader : public BaseVertexShader
 	{
 	public:
 		typedef SolidColorVertex4 Output;
@@ -34,8 +34,7 @@ public:
 	public:
 		// Input class is Vertex
 		// Get Color based of vertex
-		template <class Input>
-		Color operator()(const Input& in)
+		Color operator()(const VertexShader::Output& in)
 		{
 			return in.color;
 		}

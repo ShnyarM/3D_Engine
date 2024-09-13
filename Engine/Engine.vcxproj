@@ -136,10 +136,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BasePointShader.h" />
+    <ClInclude Include="BaseSpecularShader.h" />
     <ClInclude Include="BlendColorVertex.h" />
     <ClInclude Include="BlendNormalVertex.h" />
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="CameraController.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="ChiliException.h" />
     <ClInclude Include="ChiliMath.h" />
     <ClInclude Include="ChiliWin.h" />
@@ -147,7 +149,7 @@
     <ClInclude Include="Cube.h" />
     <ClInclude Include="DefaultGeometryShader.h" />
     <ClInclude Include="DefaultVertex.h" />
-    <ClInclude Include="DefaultVertexShader.h" />
+    <ClInclude Include="BaseVertexShader.h" />
     <ClInclude Include="DXErr.h" />
     <ClInclude Include="FlatShadingEffect.h" />
     <ClInclude Include="FlatShadingScene.h" />
@@ -169,6 +171,7 @@
     <ClInclude Include="SolidColorVertex.h" />
     <ClInclude Include="SpecularPixelPointEffect.h" />
     <ClInclude Include="SpecularScene.h" />
+    <ClInclude Include="SpecularTexturedWaveEffect.h" />
     <ClInclude Include="SphereScene.h" />
     <ClInclude Include="IndexedLineList.h" />
     <ClInclude Include="IndexedTriangleList.h" />
@@ -187,7 +190,9 @@
     <ClInclude Include="ShadingTextureEffect.h" />
     <ClInclude Include="SolidColorEffect.h" />
     <ClInclude Include="Sphere.h" />
+    <ClInclude Include="TextureBlendNormalVertex.h" />
     <ClInclude Include="TexturedGouraudEffect.h" />
+    <ClInclude Include="TexturedVertexPointEffect.h" />
     <ClInclude Include="TextureNormalVertex.h" />
     <ClInclude Include="TexturePixelShader.h" />
     <ClInclude Include="TextureShadingScene.h" />

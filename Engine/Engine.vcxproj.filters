@@ -37,9 +37,6 @@
     <Filter Include="Header Files\Effects\FlatShading">
       <UniqueIdentifier>{99f6f8a0-f7a7-4959-a5d2-58d05d7a4d06}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Effects\Gouraud">
-      <UniqueIdentifier>{0bdcceab-5e0a-4313-b9f4-9b49f9d1ae1c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Effects\Defaults\PixelShader">
       <UniqueIdentifier>{b535f11d-8396-4f79-bb8c-2b18885ecd67}</UniqueIdentifier>
     </Filter>
@@ -51,6 +48,12 @@
     </Filter>
     <Filter Include="Header Files\Effects\Old">
       <UniqueIdentifier>{74c7cc15-ea8f-4656-afb9-191c7c872986}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Effects\VertexShading">
+      <UniqueIdentifier>{0bdcceab-5e0a-4313-b9f4-9b49f9d1ae1c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Effects\Defaults\LightingEffects">
+      <UniqueIdentifier>{91f166d7-6433-40cf-9573-ece183403e69}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -132,7 +135,7 @@
     <ClInclude Include="ZBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DefaultVertexShader.h">
+    <ClInclude Include="BaseVertexShader.h">
       <Filter>Header Files\Effects\Defaults</Filter>
     </ClInclude>
     <ClInclude Include="DefaultGeometryShader.h">
@@ -264,8 +267,23 @@
     <ClInclude Include="Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CameraController.h">
+    <ClInclude Include="Player.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SpecularTexturedWaveEffect.h">
+      <Filter>Header Files\Effects\PixelShading</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureBlendNormalVertex.h">
+      <Filter>Header Files\Effects\Defaults\Vertices</Filter>
+    </ClInclude>
+    <ClInclude Include="TexturedVertexPointEffect.h">
+      <Filter>Header Files\Effects\VertexShading</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseSpecularShader.h">
+      <Filter>Header Files\Effects\Defaults\LightingEffects</Filter>
+    </ClInclude>
+    <ClInclude Include="BasePointShader.h">
+      <Filter>Header Files\Effects\Defaults\LightingEffects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

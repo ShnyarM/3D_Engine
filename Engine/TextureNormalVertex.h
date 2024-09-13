@@ -71,3 +71,74 @@ public:
 	Vec2 t;
 	Vec3 n;
 };
+
+class TextureNormalVertex4
+{
+public:
+	TextureNormalVertex4() = default;
+	TextureNormalVertex4(const Vec4& pos, const Vec2& tPos, const Vec3& normal)
+		:
+		pos(pos),
+		t(tPos),
+		n(normal)
+	{
+	}
+	TextureNormalVertex4(const Vec3& pos, const TextureNormalVertex4& v)
+		:
+		pos(pos),
+		t(v.t),
+		n(v.n)
+	{
+	}
+	TextureNormalVertex4& operator=(const TextureNormalVertex4& rhs)
+	{
+		pos = rhs.pos;
+		t = rhs.t;
+		n = rhs.n;
+		return *this;
+	}
+	TextureNormalVertex4& operator+=(const TextureNormalVertex4& rhs)
+	{
+		pos += rhs.pos;
+		t += rhs.t;
+		return *this;
+	}
+	TextureNormalVertex4& operator-=(const TextureNormalVertex4& rhs)
+	{
+		pos -= rhs.pos;
+		t -= rhs.t;
+		return *this;
+	}
+	TextureNormalVertex4 operator+(const TextureNormalVertex4& rhs) const
+	{
+		return TextureNormalVertex4(*this) += rhs;
+	}
+	TextureNormalVertex4 operator-(const TextureNormalVertex4& rhs) const
+	{
+		return TextureNormalVertex4(*this) -= rhs;
+	}
+	TextureNormalVertex4& operator*=(const float rhs)
+	{
+		pos *= rhs;
+		t *= rhs;
+		return *this;
+	}
+	TextureNormalVertex4 operator*(const float rhs) const
+	{
+		return TextureNormalVertex4(*this) *= rhs;
+	}
+	TextureNormalVertex4& operator/=(const float rhs)
+	{
+		pos /= rhs;
+		t /= rhs;
+		return *this;
+	}
+	TextureNormalVertex4 operator/(const float rhs) const
+	{
+		return TextureNormalVertex4(*this) /= rhs;
+	}
+
+	Vec4 pos;
+	Vec2 t;
+	Vec3 n;
+};

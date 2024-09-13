@@ -8,33 +8,65 @@
 #include "Pipeline.h"
 #include "SpecularPixelPointEffect.h"
 #include "SolidColorEffect.h"
+#include "SpecularTexturedWaveEffect.h"
+#include "TexturedVertexPointEffect.h"
 #include "ObjectLoader.h"
-#include "CameraController.h"
+#include "Plane.h"
+#include "Player.h"
 
 class SpecularScene : public Scene
 {
+	// rename pipelines
+	typedef Pipeline<SpecularPixelPointEffect> SpecularPipeline;
+	typedef Pipeline<SolidColorEffect> SolidColorPipeline;
+	typedef Pipeline<SpecularTexturedWaveEffect> WavePipeline;
+	typedef Pipeline<TexturedVertexPointEffect> VertexLightPipeline;
+
 public:
-	SpecularScene(Graphics& gfx, MainWindow& wnd, const char* name, const std::wstring& filename)
+	SpecularScene(Graphics& gfx, MainWindow& wnd, const char* name)
 		:
 		Scene(name),
 		gfx(gfx),
 		pZb(std::make_unique<ZBuffer>(gfx.ScreenWidth, gfx.ScreenHeight)),
 		pipeline(gfx, pZb),
 		solidColorPipeline(gfx, pZb),
-		monke(ObjectLoader::LoadObjectNormal<BlendNormalVertex>(filename)),
+		wavePipeline(gfx, pZb),
+		groundPipeline(gfx, pZb),
+		wallPipeline(gfx, pZb),
+		monke(ObjectLoader::LoadObjectNormal<BlendNormalVertex>(L"models/suzanne.obj")),
 		lightSphere(Sphere::GetPlain<SolidColorVertex>(0.05f, 32, 32)),
-		camControl(wnd.mouse, wnd.kbd)
+		wavePlane(Plane::GetSkinnedNormal<TextureBlendNormalVertex>(2.0f, 30)),
+		groundPlane(Plane::GetSkinnedNormal<TextureNormalVertex>(40.0f, 30)),
+		wallPlane(Plane::GetSkinnedNormal<TextureNormalVertex>(40.0f, 30)),
+		player(wnd.mouse, wnd.kbd)
 	{
 		Color c = Colors::White;
-		pipeline.effect.ps.SetSurfaceColor(Colors::White);
+
+		pipeline.effect.ps.SetSurfaceColor(Colors::Green);
 		pipeline.effect.ps.SetLightColor(c);
+
+		wavePipeline.effect.ps.SetLightColor(c);
+		wavePipeline.effect.ps.SetAmbient({ 0.15f, 0.15f, 0.15f });
+
+		groundPipeline.effect.vs.SetAmbient({ 0.05f, 0.05f, 0.05f });
+		wallPipeline.effect.vs.SetAmbient({ 0.05f, 0.05f, 0.05f });
+
+		groundPipeline.effect.vs.SetLightColor(Colors::Yellow);
+		wallPipeline.effect.vs.SetLightColor(Colors::Yellow);
 
 		const Mat4 projection = Mat4::ProjectionFOV(fov, (float)Graphics::ScreenWidth/(float)Graphics::ScreenHeight, nearPlane, farPlane);
 		pipeline.effect.vs.BindProjection(projection);
 		solidColorPipeline.effect.vs.BindProjection(projection);
+		wavePipeline.effect.vs.BindProjection(projection);
+		groundPipeline.effect.vs.BindProjection(projection);
+		wallPipeline.effect.vs.BindProjection(projection);
 
-		camControl.SetMoveSpeed(camMoveSpeed);
-		camControl.SetSensitivity(camSensitity);
+		wavePipeline.effect.ps.BindTexture(L"Images\\eye.png");
+		groundPipeline.effect.ps.BindTexture(L"Images/groundTexture.png");
+		wallPipeline.effect.ps.BindTexture(L"Images/wallTexture.png");
+
+		player.SetMoveSpeed(playerMoveSpeed);
+		player.SetSensitivity(camSensitity);
 
 		for (auto i = lightSphere.vertices.begin(); i != lightSphere.vertices.end(); i++)
 		{
@@ -44,7 +76,7 @@ public:
 
 	void UpdateModel(Keyboard& kbd, Mouse& mouse, float dt) override
 	{
-		camControl.UpdateCam(dt);
+		player.UpdateCam(dt);
 
 		//Light Movement
 		if (kbd.KeyIsPressed('F'))
@@ -63,11 +95,14 @@ public:
 		{
 			lightPos.z -= moveSpeed * dt;
 		}
+
+		time += dt;
+		wavePipeline.effect.vs.SetTime(time);
 	}
 
 	void ComposeFrame() override
 	{
-		Mat4 camView = camControl.cam.GetViewTransform();
+		Mat4 camView = player.cam.GetViewTransform();
 		pipeline.BeginFrame();
 
 		pipeline.effect.vs.BindWorldTransformation(Mat4::Translation(monkePos));
@@ -79,25 +114,58 @@ public:
 		solidColorPipeline.effect.vs.BindWorldTransformation(Mat4::Translation(lightPos));
 		solidColorPipeline.effect.vs.BindView(camView);
 		solidColorPipeline.Draw(lightSphere);
+		
+		wavePipeline.effect.vs.BindWorldTransformation(Mat4::Translation(wavePlanePos));
+		wavePipeline.effect.vs.BindView(camView);
+		wavePipeline.effect.ps.SetLightPos(lightPos);
+		wavePipeline.effect.ps.SetCamView(camView);
+		wavePipeline.Draw(wavePlane);
+
+		groundPipeline.effect.vs.BindWorldTransformation(Mat4::Translation(groundPlanePos));
+		groundPipeline.effect.vs.BindView(camView);
+		groundPipeline.effect.vs.SetLightPos(player.GetPos());
+		groundPipeline.Draw(groundPlane);
+
+		wallPipeline.effect.vs.BindView(camView);
+		wallPipeline.effect.vs.SetLightPos(player.GetPos());
+		for (int i = 0; i < 4; i++)
+		{
+			const Mat4 wallTransform = Mat4::RotationX(wallRot[i].x) * Mat4::RotationY(wallRot[i].y) * Mat4::RotationZ(wallRot[i].z) * Mat4::Translation(wallPos[i]);
+			wallPipeline.effect.vs.BindWorldTransformation(wallTransform);
+			wallPipeline.Draw(wallPlane);
+		}
 	}
 
 private:
 	Graphics& gfx;
 	std::shared_ptr<ZBuffer> pZb;
-	Pipeline<SpecularPixelPointEffect> pipeline;
-	Pipeline<SolidColorEffect> solidColorPipeline;
+	SpecularPipeline pipeline;
+	SolidColorPipeline solidColorPipeline;
+	WavePipeline wavePipeline;
+	VertexLightPipeline groundPipeline;
+	VertexLightPipeline wallPipeline;
 
 	static constexpr float fov = 90.0f;
 	static constexpr float nearPlane = 0.25f;
-	static constexpr float farPlane = 10.0f;
+	static constexpr float farPlane = 100.0f;
 
 	IndexedTriangleList<BlendNormalVertex> monke;
 	IndexedTriangleList<SolidColorVertex> lightSphere;
-	Vec3 lightPos = { -1.0f, 0.0f, 1.0f };
-	Vec3 monkePos = { 0.0f, 0.0f, 2.0f };
+	IndexedTriangleList<TextureBlendNormalVertex> wavePlane;
+	IndexedTriangleList<TextureNormalVertex> groundPlane;
+	IndexedTriangleList<TextureNormalVertex> wallPlane;
+	Vec3 lightPos = { -1.0f, 1.0f, -16.0f };
+	Vec3 monkePos = { 0.0f, 1.0f, -18.0f };
+	Vec3 wavePlanePos = { -1.5f, 0.5f, -17.5f };
+	Vec3 groundPlanePos = { 0.0f, 0.0f, 0.0f };
 	float moveSpeed = 1.5f;
 
-	CameraController camControl;
+	Vec3 wallPos[4] = { {0.0f, -10.0f, -19.0f}, {0.0f, -10.0f, 19.0f}, {19.0f, -10.0f, 0.0f}, {-19.0f, -10.0f, 0.0f} };
+	Vec3 wallRot[4] = { {0.0f, 0.0f, PI / 2}, {0.0f, 0.0f, -PI / 2}, {PI / 2, 0.0f, PI / 2}, {-PI / 2, 0.0f, PI / 2} };
+
+	Player player;
 	Vec2 camSensitity = { 0.00002f * fov, 0.00002f * fov };
-	static constexpr float camMoveSpeed = 1.5f;
+	static constexpr float playerMoveSpeed = 10.0f;
+
+	float time = 0.0f;
 };
