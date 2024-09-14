@@ -36,6 +36,6 @@ protected:
 	Mat4 worldProjection = Mat4::Identity();
 	Mat4 worldView = Mat4::Identity();
 
-	Mat4 entireWorldTransform = Mat4::Identity();
-	Mat4 entireTransform = Mat4::Identity();
+	Mat4 entireWorldTransform = Mat4::Identity(); // transform which contains world transform and camera transform
+	Mat4 entireTransform = Mat4::Identity(); // transform which containg world transform, camera transform and projection
 };

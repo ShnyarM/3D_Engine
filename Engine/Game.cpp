@@ -38,7 +38,7 @@ Game::Game( MainWindow& wnd )
 	wnd( wnd ),
 	gfx( wnd )
 {
-	scenes.emplace_back(std::make_unique<SpecularScene>(gfx, wnd, "Specular lighting"));
+	scenes.emplace_back(std::make_unique<SpecularScene>(gfx, wnd, "Forest"));
 	scenes.emplace_back(std::make_unique<PlaneScene>(gfx, "Specular lighting", L"models\\suzanne.obj"));
 	/*scenes.emplace_back(std::make_unique<PointLightScenePlane>(gfx, "Pixel light with plane", L"models\\suzanne.obj"));
 	scenes.emplace_back(std::make_unique<PointLightScene>(gfx, "Pixel light with calculated normals", L"models\\bunny.obj"));

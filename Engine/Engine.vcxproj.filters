@@ -180,7 +180,7 @@
     <ClInclude Include="DefaultVertex.h">
       <Filter>Header Files\Effects\Defaults\Vertices</Filter>
     </ClInclude>
-    <ClInclude Include="TexturePixelShader.h">
+    <ClInclude Include="BaseTextureShader.h">
       <Filter>Header Files\Effects\Defaults\PixelShader</Filter>
     </ClInclude>
     <ClInclude Include="BlendNormalVertex.h">
@@ -284,6 +284,9 @@
     </ClInclude>
     <ClInclude Include="BasePointShader.h">
       <Filter>Header Files\Effects\Defaults\LightingEffects</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldNormalVertex.h">
+      <Filter>Header Files\Effects\Defaults\Vertices</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

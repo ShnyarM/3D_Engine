@@ -33,6 +33,7 @@ public:
 	}
 
 	// Calculates the light level which hits the object
+	// Here light is already transformed by camera view
 	template<class Input>
 	Vec3 LightLevel(const Input& input)
 	{
@@ -50,6 +51,7 @@ public:
 	}
 
 	// Gives back a color which is color of material at said pixel
+	// Here light is already transformed by camera view
 	template<class Input>
 	Color Shade(const Input& input)
 	{

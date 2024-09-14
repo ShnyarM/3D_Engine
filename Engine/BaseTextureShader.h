@@ -2,23 +2,25 @@
 #include "Vec3.h"
 #include "Colors.h"
 #include <vector>
+#include <memory>
+#include "Surface.h"
 
-template <class Vertex>
-class TexturePixelShader
+class BaseTextureShader
 {
 public:
 	// Get Color based of vertex and current loaded texture
-	Color operator()(const Vertex& in)
+	template<class Input>
+	Color GetColor(const Input& in)
 	{
 		assert(textureLoaded);
 		return pTexture->GetPixel(
-			(unsigned int)std::min(in.t.x * tWidth, tWidthMax),
-			(unsigned int)std::min(in.t.y * tHeight, tHeightMax));
+			(unsigned int)std::min(std::max(in.t.x * tWidth, 0.0f), tWidthMax),
+			(unsigned int)std::min(std::max(in.t.y * tHeight, 0.0f), tHeightMax));
 	}
 
-	void BindTexture(const std::wstring& filename)
+	void BindTexture(Surface* pNewSurface)
 	{
-		pTexture = std::make_unique<Surface>(Surface::FromFile(filename));
+		pTexture = pNewSurface;
 		tWidth = pTexture->GetWidth();
 		tHeight = pTexture->GetHeight();
 		tWidthMax = tWidth - 1.0f;
@@ -27,7 +29,7 @@ public:
 	}
 
 private:
-	std::unique_ptr<Surface> pTexture;
+	Surface* pTexture;
 	bool textureLoaded = false;
 	//Helper variables for clamping
 	float tWidth = 0.0f;

@@ -194,7 +194,7 @@
     <ClInclude Include="TexturedGouraudEffect.h" />
     <ClInclude Include="TexturedVertexPointEffect.h" />
     <ClInclude Include="TextureNormalVertex.h" />
-    <ClInclude Include="TexturePixelShader.h" />
+    <ClInclude Include="BaseTextureShader.h" />
     <ClInclude Include="TextureShadingScene.h" />
     <ClInclude Include="Surface.h" />
     <ClInclude Include="TextureCubeScene.h" />
@@ -211,6 +211,7 @@
     <ClInclude Include="WaveScene.h" />
     <ClInclude Include="WaveShadingTextureEffect.h" />
     <ClInclude Include="WaveTexturedGouraudEffect.h" />
+    <ClInclude Include="WorldNormalVertex.h" />
     <ClInclude Include="ZBuffer.h" />
   </ItemGroup>
   <ItemGroup>

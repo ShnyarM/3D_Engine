@@ -9,6 +9,7 @@
 #include "Mat.h"
 #include "BaseVertexShader.h"
 #include "BaseSpecularShader.h"
+#include "WorldNormalVertex.h"
 
 class SpecularPixelPointEffect
 {
@@ -21,80 +22,8 @@ public:
 	{
 	public:
 		// normal blendNormalVertex, but add original worldposition as additional information for pixelshader
-		class Output
-		{
-		public:
-			Output() = default;
-			Output(const Vec4& pos, const Vec3& normal, const Vec3& worldPos)
-				:
-				pos(pos),
-				n(normal),
-				worldPos(worldPos)
-			{
-			}
-			Output(const Vec3& pos, const Output& v)
-				:
-				pos(pos),
-				n(v.n),
-				worldPos(v.worldPos)
-			{
-			}
-			Output& operator=(const Output& rhs)
-			{
-				pos = rhs.pos;
-				n = rhs.n;
-				worldPos = rhs.worldPos;
-				return *this;
-			}
-			Output& operator+=(const Output& rhs)
-			{
-				pos += rhs.pos;
-				n += rhs.n;
-				worldPos += rhs.worldPos;
-				return *this;
-			}
-			Output& operator-=(const Output& rhs)
-			{
-				pos -= rhs.pos;
-				n -= rhs.n;
-				worldPos -= rhs.worldPos;
-				return *this;
-			}
-			Output operator+(const Output& rhs) const
-			{
-				return Output(*this) += rhs;
-			}
-			Output operator-(const Output& rhs) const
-			{
-				return Output(*this) -= rhs;
-			}
-			Output& operator*=(const float rhs)
-			{
-				pos *= rhs;
-				n *= rhs;
-				worldPos *= rhs;
-				return *this;
-			}
-			Output operator*(const float rhs) const
-			{
-				return Output(*this) *= rhs;
-			}
-			Output& operator/=(const float rhs)
-			{
-				pos /= rhs;
-				n /= rhs;
-				worldPos /= rhs;
-				return *this;
-			}
-			Output operator/(const float rhs) const
-			{
-				return Output(*this) /= rhs;
-			}
+		typedef WorldNormalVertex4 Output;
 
-			Vec4 pos;
-			Vec3 n;
-			Vec3 worldPos;
-		};
 	public:
 		Output operator()(const Vertex& input)
 		{

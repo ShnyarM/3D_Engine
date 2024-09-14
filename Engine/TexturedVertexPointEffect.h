@@ -21,7 +21,7 @@ public:
 	// define input vertex
 	typedef TextureNormalVertex Vertex;
 
-	class VertexShader : public BaseVertexShader
+	class VertexShader : public BaseVertexShader, public BasePointShader<PointDiffuse>
 	{
 	public:
 		class Output
@@ -103,88 +103,30 @@ public:
 			Vec3 light;
 		};
 
-	public:
-		// light functions
-		void SetSurfaceColor(const Color& newColor)
-		{
-			color = Vec3(newColor) / 255.0f;
-		}
-		void SetLightPos(const Vec3& newPos)
-		{
-			lightPos = newPos;
-		}
-		void SetLightColor(const Color& newColor)
-		{
-			lightColor = Vec3(newColor) / 255.0f;
-		}
-		void SetAmbient(const Vec3& newAmbient)
-		{
-			ambient = newAmbient;
-		}
-
 		Output operator()(const Vertex& input)
 		{
-			// Get information about position relative to light
-			Vec3 newPos = Vec4(input.pos) * worldTransform;
-			Vec3 diffVec = lightPos - newPos;
-			float distance = diffVec.Len();
-			Vec3 diffVecN = diffVec.GetNormalized();
+			// apply worldtransform and camera view to be in same space as light
+			WorldNormalVertex4 transformed = { Vec4(input.pos) * entireTransform, Vec4(input.n, 0.0f) * entireWorldTransform,  Vec4(input.pos) * entireWorldTransform};
+			Vec3 light = LightLevel(transformed);
 
-			float attenuation = diffuseValues.strength / (diffuseValues.constantAttenuation + distance * diffuseValues.linearAttenuation + sq(distance) * diffuseValues.quadraticAttenuation); //distance factor, less if further away
-			Vec3 strength = lightColor * attenuation * std::max(0.0f, (input.n * diffVecN)); //Strength which hits surface
-			Vec3 light = color.GetHadamard(strength + ambient).Saturate(); // strength + ambient is light which hits surface in total
-			return { Vec4(input.pos) * entireTransform, input.t, light };
+			return { transformed.pos, input.t, light };
 		}
-
-	private:
-		Vec3 lightPos = { 0.0f, 0.0f, 0.5f }; //position of the light in the world
-		Vec3 lightColor = { 1.0f, 1.0f, 1.0f }; //color of the light
-		Vec3 ambient = { 0.05f, 0.05f, 0.05f }; //ambient light of the scene
-		Vec3 color = { 1.0f, 1.0f, 1.0f }; //Color of the material
-
-		PointDiffusee diffuseValues;
 	};
 
 	typedef DefaultGeometryShader<VertexShader::Output> GeometryShader;
 
-	class PixelShader
+	class PixelShader : public BaseTextureShader
 	{
 	public:
 		// Get Color based of vertex and current loaded texture
 		Color operator()(const VertexShader::Output& in)
 		{
-			assert(textureLoaded);
-			Vec3 pixelColor = Vec3(pTexture->GetPixel(
-				(unsigned int)std::min(std::max(in.t.x * tWidth, 0.0f), tWidthMax),
-				(unsigned int)std::min(std::max(in.t.y * tHeight, 0.0f), tHeightMax)));
-			if (in.light.x > 0.5f)
-			{
-				int x = 1;
-			}
+			Vec3 pixelColor = Vec3(GetColor(in));
 			pixelColor.x *= in.light.x;
 			pixelColor.y *= in.light.y;
 			pixelColor.z *= in.light.z;
 			return Color(pixelColor);
 		}
-
-		void BindTexture(const std::wstring& filename)
-		{
-			pTexture = std::make_unique<Surface>(Surface::FromFile(filename));
-			tWidth = pTexture->GetWidth();
-			tHeight = pTexture->GetHeight();
-			tWidthMax = tWidth - 1.0f;
-			tHeightMax = tHeight - 1.0f;
-			textureLoaded = true;
-		}
-
-	private:
-		std::unique_ptr<Surface> pTexture;
-		bool textureLoaded = false;
-		//Helper variables for clamping
-		float tWidth = 0.0f;
-		float tHeight = 0.0f;
-		float tWidthMax = 0.0f;
-		float tHeightMax = 0.0f;
 	};
 
 public:

@@ -31,8 +31,7 @@ public:
 		pipeline(gfx, pZb),
 		solidColorPipeline(gfx, pZb),
 		wavePipeline(gfx, pZb),
-		groundPipeline(gfx, pZb),
-		wallPipeline(gfx, pZb),
+		texturePipeline(gfx, pZb),
 		monke(ObjectLoader::LoadObjectNormal<BlendNormalVertex>(L"models/suzanne.obj")),
 		lightSphere(Sphere::GetPlain<SolidColorVertex>(0.05f, 32, 32)),
 		wavePlane(Plane::GetSkinnedNormal<TextureBlendNormalVertex>(2.0f, 30)),
@@ -48,22 +47,16 @@ public:
 		wavePipeline.effect.ps.SetLightColor(c);
 		wavePipeline.effect.ps.SetAmbient({ 0.15f, 0.15f, 0.15f });
 
-		groundPipeline.effect.vs.SetAmbient({ 0.05f, 0.05f, 0.05f });
-		wallPipeline.effect.vs.SetAmbient({ 0.05f, 0.05f, 0.05f });
-
-		groundPipeline.effect.vs.SetLightColor(Colors::Yellow);
-		wallPipeline.effect.vs.SetLightColor(Colors::Yellow);
+		texturePipeline.effect.vs.SetAmbient({ 0.05f, 0.05f, 0.05f });
+		texturePipeline.effect.vs.SetLightColor(Colors::Yellow);
 
 		const Mat4 projection = Mat4::ProjectionFOV(fov, (float)Graphics::ScreenWidth/(float)Graphics::ScreenHeight, nearPlane, farPlane);
 		pipeline.effect.vs.BindProjection(projection);
 		solidColorPipeline.effect.vs.BindProjection(projection);
 		wavePipeline.effect.vs.BindProjection(projection);
-		groundPipeline.effect.vs.BindProjection(projection);
-		wallPipeline.effect.vs.BindProjection(projection);
+		texturePipeline.effect.vs.BindProjection(projection);
 
-		wavePipeline.effect.ps.BindTexture(L"Images\\eye.png");
-		groundPipeline.effect.ps.BindTexture(L"Images/groundTexture.png");
-		wallPipeline.effect.ps.BindTexture(L"Images/wallTexture.png");
+		wavePipeline.effect.ps.BindTexture(&waveTexture);
 
 		player.SetMoveSpeed(playerMoveSpeed);
 		player.SetSensitivity(camSensitity);
@@ -121,18 +114,19 @@ public:
 		wavePipeline.effect.ps.SetCamView(camView);
 		wavePipeline.Draw(wavePlane);
 
-		groundPipeline.effect.vs.BindWorldTransformation(Mat4::Translation(groundPlanePos));
-		groundPipeline.effect.vs.BindView(camView);
-		groundPipeline.effect.vs.SetLightPos(player.GetPos());
-		groundPipeline.Draw(groundPlane);
+		texturePipeline.effect.vs.BindWorldTransformation(Mat4::Translation(groundPlanePos));
+		texturePipeline.effect.vs.BindView(camView);
+		texturePipeline.effect.vs.SetCamView(camView);
+		texturePipeline.effect.vs.SetLightPos(player.GetPos());
+		texturePipeline.effect.ps.BindTexture(&groundTexture);
+		texturePipeline.Draw(groundPlane);
 
-		wallPipeline.effect.vs.BindView(camView);
-		wallPipeline.effect.vs.SetLightPos(player.GetPos());
+		texturePipeline.effect.ps.BindTexture(&wallTexture);
 		for (int i = 0; i < 4; i++)
 		{
 			const Mat4 wallTransform = Mat4::RotationX(wallRot[i].x) * Mat4::RotationY(wallRot[i].y) * Mat4::RotationZ(wallRot[i].z) * Mat4::Translation(wallPos[i]);
-			wallPipeline.effect.vs.BindWorldTransformation(wallTransform);
-			wallPipeline.Draw(wallPlane);
+			texturePipeline.effect.vs.BindWorldTransformation(wallTransform);
+			texturePipeline.Draw(wallPlane);
 		}
 	}
 
@@ -142,8 +136,7 @@ private:
 	SpecularPipeline pipeline;
 	SolidColorPipeline solidColorPipeline;
 	WavePipeline wavePipeline;
-	VertexLightPipeline groundPipeline;
-	VertexLightPipeline wallPipeline;
+	VertexLightPipeline texturePipeline;
 
 	static constexpr float fov = 90.0f;
 	static constexpr float nearPlane = 0.25f;
@@ -162,6 +155,10 @@ private:
 
 	Vec3 wallPos[4] = { {0.0f, -10.0f, -19.0f}, {0.0f, -10.0f, 19.0f}, {19.0f, -10.0f, 0.0f}, {-19.0f, -10.0f, 0.0f} };
 	Vec3 wallRot[4] = { {0.0f, 0.0f, PI / 2}, {0.0f, 0.0f, -PI / 2}, {PI / 2, 0.0f, PI / 2}, {-PI / 2, 0.0f, PI / 2} };
+
+	Surface waveTexture = Surface::FromFile(L"Images/eye.png");
+	Surface groundTexture = Surface::FromFile(L"Images/groundTexture.png");
+	Surface wallTexture = Surface::FromFile(L"Images/wallTexture.png");
 
 	Player player;
 	Vec2 camSensitity = { 0.00002f * fov, 0.00002f * fov };
