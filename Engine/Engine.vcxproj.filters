@@ -72,13 +72,7 @@
     <ClInclude Include="Vec2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Mat2old.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Vec3.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Mat3old.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="IndexedLineList.h">
@@ -151,9 +145,6 @@
       <Filter>Header Files\Models</Filter>
     </ClInclude>
     <ClInclude Include="Font.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ObjFileVertex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Rect.h">

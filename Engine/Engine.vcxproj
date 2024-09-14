@@ -163,7 +163,6 @@
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="Mat.h" />
     <ClInclude Include="NormalVertex.h" />
-    <ClInclude Include="ObjFileVertex.h" />
     <ClInclude Include="PixelDirectionalEffect.h" />
     <ClInclude Include="PixelPointEffect.h" />
     <ClInclude Include="PointLightScene.h" />
@@ -177,8 +176,6 @@
     <ClInclude Include="IndexedTriangleList.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="MainWindow.h" />
-    <ClInclude Include="Mat2old.h" />
-    <ClInclude Include="Mat3old.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="ObjectLoader.h" />
     <ClInclude Include="Pipeline.h" />
