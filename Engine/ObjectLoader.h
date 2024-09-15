@@ -52,18 +52,23 @@ struct ObjFileVertex
 	int normalIndex = 0;
 };
 
-
+// Collection of functions to load models from obj files
+// Each function extracts specific attributes
+// parameters: filename is name of obj file, scale scales the model up and down
+// model specifies which model in the obj file gets extracted, indexing starts at 0
 class ObjectLoader
 {
 public:
 	template <class V>
-	static IndexedTriangleList<V> LoadObject(const std::wstring& filename)
+	static IndexedTriangleList<V> LoadObject(const std::wstring& filename, float scale = 1.0f, int model = 0)
 	{
 		std::ifstream readStream(filename);
 		std::string line;
 		
 		std::vector<V> vertices;
 		std::vector<size_t> indices;
+
+		int currentModel = 0;
 
 		while (std::getline(readStream, line))
 		{
@@ -79,9 +84,9 @@ public:
 				lineStream >> x >> y >> z;
 				vertices.emplace_back();
 				V& newVertex = vertices.back();
-				newVertex.pos = Vec3(x, y, z);
+				newVertex.pos = Vec3(x*scale, y*scale, z*scale);
 			}
-			else if (start == "f") // Extract face
+			else if (start == "f" && currentModel == model) // Extract face
 			{
 				std::string data[3];
 
@@ -97,6 +102,10 @@ public:
 					indices.push_back(vertex.vertexIndex - 1);
 				}
 			}
+			else if (start == "o")
+			{
+				currentModel++;
+			}
 		}
 
 		readStream.close();
@@ -107,7 +116,7 @@ public:
 	// Load obj file with textures
 	// Works differently since for each face 3 new vertices have to be created (independent vertices)
 	template <class V>
-	static IndexedTriangleList<V> LoadObjectTextured(const std::wstring& filename)
+	static IndexedTriangleList<V> LoadObjectTextured(const std::wstring& filename, float scale = 1.0f, int model = 0)
 	{
 		std::ifstream readStream(filename);
 		std::string line;
@@ -117,6 +126,8 @@ public:
 
 		std::vector<V> vertices;
 		std::vector<size_t> indices;
+
+		int currentModel = 0;
 
 		while (std::getline(readStream, line))
 		{
@@ -130,9 +141,9 @@ public:
 			{
 				float x, y, z;
 				lineStream >> x >> y >> z;
-				cords.emplace_back(x, y, z);
+				cords.emplace_back(x*scale, y*scale, z*scale);
 			}
-			else if (start == "f") // Extract face
+			else if (start == "f" && currentModel == model) // Extract face
 			{
 				std::string data[3];
 
@@ -162,6 +173,10 @@ public:
 				lineStream >> x >> y;
 				textureCords.emplace_back(x, y);
 			}
+			else if (start == "o")
+			{
+				currentModel++;
+			}
 		}
 
 		readStream.close();
@@ -172,7 +187,7 @@ public:
 	// Load obj file with normals
 	// Works differently since for each face 3 new vertices have to be created (independent vertices)
 	template <class V>
-	static IndexedTriangleList<V> LoadObjectNormal(const std::wstring& filename)
+	static IndexedTriangleList<V> LoadObjectNormal(const std::wstring& filename, float scale = 1.0f, int model = 0)
 	{
 		std::ifstream readStream(filename);
 		std::string line;
@@ -182,6 +197,8 @@ public:
 
 		std::vector<V> vertices;
 		std::vector<size_t> indices;
+
+		int currentModel = 0;
 
 		while (std::getline(readStream, line))
 		{
@@ -195,9 +212,9 @@ public:
 			{
 				float x, y, z;
 				lineStream >> x >> y >> z;
-				cords.emplace_back(x, y, z);
+				cords.emplace_back(x*scale, y*scale, z*scale);
 			}
-			else if (start == "f") // Extract face
+			else if (start == "f" && currentModel == model) // Extract face
 			{
 				std::string data[3];
 
@@ -227,6 +244,10 @@ public:
 				lineStream >> x >> y >> z;
 				normals.emplace_back(x, y, z);
 			}
+			else if (start == "o")
+			{
+				currentModel++;
+			}
 		}
 
 		readStream.close();
@@ -237,7 +258,7 @@ public:
 	// Load obj file with normals and textures
 	// Works differently since for each face 3 new vertices have to be created (independent vertices)
 	template <class V>
-	static IndexedTriangleList<V> LoadObjectNormalTextured(const std::wstring& filename)
+	static IndexedTriangleList<V> LoadObjectNormalTextured(const std::wstring& filename, float scale = 1.0f, int model = 0)
 	{
 		std::ifstream readStream(filename);
 		std::string line;
@@ -248,6 +269,8 @@ public:
 
 		std::vector<V> vertices;
 		std::vector<size_t> indices;
+
+		int currentModel = 0;
 
 		while (std::getline(readStream, line))
 		{
@@ -261,9 +284,9 @@ public:
 			{
 				float x, y, z;
 				lineStream >> x >> y >> z;
-				cords.emplace_back(x, y, z);
+				cords.emplace_back(x*scale, y*scale, z*scale);
 			}
-			else if (start == "f") // Extract face
+			else if (start == "f" && currentModel == model) // Extract face
 			{
 				std::string data[3];
 
@@ -302,6 +325,10 @@ public:
 				lineStream >> x >> y;
 				textureCords.emplace_back(x, y);
 			}
+			else if (start == "o")
+			{
+				currentModel++;
+			}
 		}
 
 		readStream.close();
@@ -312,7 +339,7 @@ public:
 	// Load obj file and try to create normals by approximating them
 	// Works differently since for each face 3 new vertices have to be created (independent vertices)
 	template <class V>
-	static IndexedTriangleList<V> LoadObjectCalculateNormals(const std::wstring& filename)
+	static IndexedTriangleList<V> LoadObjectCalculateNormals(const std::wstring& filename, float scale = 1.0f, int model = 0)
 	{
 		std::ifstream readStream(filename);
 		std::string line;
@@ -320,6 +347,8 @@ public:
 		std::vector<V> vertices;
 		std::vector<Vec3> normalsSum;
 		std::vector<size_t> indices;
+
+		int currentModel = 0;
 
 		while (std::getline(readStream, line))
 		{
@@ -335,12 +364,12 @@ public:
 				lineStream >> x >> y >> z;
 				vertices.emplace_back();
 				V& newVertex = vertices.back();
-				newVertex.pos = Vec3(x, y, z);
+				newVertex.pos = Vec3(x*scale, y*scale, z*scale);
 
 				//add normal for vertex
 				normalsSum.emplace_back(0, 0, 0);
 			}
-			else if (start == "f") // Extract face
+			else if (start == "f" && currentModel == model) // Extract face
 			{
 				std::string data[3];
 
@@ -366,6 +395,10 @@ public:
 				// add normals to sum
 				Vec3 Normal = (*vectors[1] - *vectors[0]) % (*vectors[2] - *vectors[0]);
 				for (int i = 0; i < 3; i++) normalsSum[vecIndices[i]] += Normal;
+			}
+			else if (start == "o")
+			{
+				currentModel++;
 			}
 		}
 

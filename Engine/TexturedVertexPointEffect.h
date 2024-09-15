@@ -103,6 +103,14 @@ public:
 			Vec3 light;
 		};
 
+	public:
+		// Binds camera view to both base vertex shader and point light shader
+		void BindCompleteView(const Mat4& newView)
+		{
+			BindView(newView);
+			SetCamView(newView);
+		}
+
 		Output operator()(const Vertex& input)
 		{
 			// apply worldtransform and camera view to be in same space as light
@@ -122,9 +130,10 @@ public:
 		Color operator()(const VertexShader::Output& in)
 		{
 			Vec3 pixelColor = Vec3(GetColor(in));
-			pixelColor.x *= in.light.x;
-			pixelColor.y *= in.light.y;
-			pixelColor.z *= in.light.z;
+			Vec3 light = in.light.GetSaturated();
+			pixelColor.x *= light.x;
+			pixelColor.y *= light.y;
+			pixelColor.z *= light.z;
 			return Color(pixelColor);
 		}
 	};

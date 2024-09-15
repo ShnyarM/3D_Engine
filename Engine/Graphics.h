@@ -73,7 +73,6 @@ public:
 	}
 	void PutPixel( int x,int y,Color c )
 	{
-		if (x < 0 || y < 0 || x >= ScreenWidth || y >= ScreenHeight) return;
 		sysBuffer.PutPixel( x,y,c );
 	}
 

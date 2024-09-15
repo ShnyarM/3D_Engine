@@ -30,6 +30,14 @@ public:
 	{
 		sensitivity = newSens;
 	}
+	Vei2 GetMouseVelocity() const
+	{
+		return mouseVelocity;
+	}
+	Vec3 GetVelocity() const
+	{
+		return velocity;
+	}
 	Vec3 GetPos() const
 	{
 		return pos;
@@ -93,8 +101,8 @@ public:
 				if (mouseIsPressed)
 				{
 					Vei2 newMousePos = e.GetPos();
-					Vei2 mouseDelta = newMousePos - mousePos;
-					rot += { 0.0f, (float)mouseDelta.x * sensitivity.x, (float)mouseDelta.y * sensitivity.y };
+					mouseVelocity = newMousePos - mousePos;
+					rot += { 0.0f, (float)mouseVelocity.x * sensitivity.x, (float)mouseVelocity.y * sensitivity.y };
 					rot.z = std::max(-PI / 3.0f, std::min(PI / 3.0f, rot.z));
 					mousePos = newMousePos;
 				}
@@ -104,6 +112,12 @@ public:
 
 		velocity = newVelocity;
 		pos += velocity;
+
+		if (pos.x > 18.5f) pos.x = 18.5f;
+		if (pos.x < -18.5f) pos.x = -18.5f;
+		if (pos.z > 18.5f) pos.z = 18.5f;
+		if (pos.z < -18.5f) pos.z = -18.5f;
+
 		cam.SetPos(pos);
 		cam.SetRot(rot);
 	}
@@ -124,5 +138,6 @@ private:
 	float gravity = 0.3f;
 
 	Vei2 mousePos = { 0, 0 };
+	Vei2 mouseVelocity = { 0, 0 };
 	bool mouseIsPressed = false;
 };

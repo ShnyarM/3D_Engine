@@ -180,7 +180,7 @@
     <ClInclude Include="SpecularPixelPointEffect.h">
       <Filter>Header Files\Effects\PixelShading</Filter>
     </ClInclude>
-    <ClInclude Include="SpecularScene.h">
+    <ClInclude Include="ForestScene.h">
       <Filter>Header Files\Scenes</Filter>
     </ClInclude>
     <ClInclude Include="Mat.h">
