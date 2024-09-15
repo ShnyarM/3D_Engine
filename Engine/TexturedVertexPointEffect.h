@@ -9,10 +9,10 @@
 
 struct PointDiffusee
 {
-	float linearAttenuation = 1.0f;
-	float quadraticAttenuation = 2.62f;
-	float constantAttenuation = 10.0f;
-	float strength = 20.0f;
+	float linearAttenuation = 0.3f;
+	float quadraticAttenuation = 0.75f;
+	float constantAttenuation = 0.4f;
+	float range = 3.0f;
 };
 
 class TexturedVertexPointEffect
@@ -21,7 +21,7 @@ public:
 	// define input vertex
 	typedef TextureNormalVertex Vertex;
 
-	class VertexShader : public BaseVertexShader, public BasePointShader<PointDiffuse>
+	class VertexShader : public BaseVertexShader, public BasePointShader<PointDiffusee>
 	{
 	public:
 		class Output

@@ -13,6 +13,7 @@ struct PointDiffuse
 	float linearAttenuation = 0.3f;
 	float quadraticAttenuation = 0.75f;
 	float constantAttenuation = 0.4f;
+	float range = 1.0f;
 };
 
 class SpecularTexturedWaveEffect

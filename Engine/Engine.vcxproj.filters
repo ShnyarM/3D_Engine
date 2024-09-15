@@ -279,6 +279,9 @@
     <ClInclude Include="WorldNormalVertex.h">
       <Filter>Header Files\Effects\Defaults\Vertices</Filter>
     </ClInclude>
+    <ClInclude Include="TextureShader.h">
+      <Filter>Header Files\Effects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DXErr.cpp">

@@ -34,27 +34,48 @@ public:
 	{
 		return pos;
 	}
-	void UpdateCam(float dt = 1.0f)
+	void Update(float dt = 1.0f)
 	{
 		Mat4 camRot = Mat4::RotationY(cam.GetRot().y);
+		Vec3 newVelocity = { 0.0f, velocity.y, 0.0f };
 
-		//Camera Movement
+		//Movement
 		if (kbd.KeyIsPressed('W'))
 		{
-			pos += Vec4{ 0.0f, 0.0f, moveSpeed * dt } * camRot;
+			newVelocity += Vec4{ 0.0f, 0.0f, moveSpeed * dt } * camRot;
 		}
 		if (kbd.KeyIsPressed('S')) 
 		{
-			pos += Vec4{ 0.0f, 0.0f, -moveSpeed * dt } * camRot;
+			newVelocity += Vec4{ 0.0f, 0.0f, -moveSpeed * dt } * camRot;
 		}
 		if (kbd.KeyIsPressed('D'))
 		{
-			pos += Vec4{ moveSpeed * dt, 0.0f, 0.0f } * camRot;
+			newVelocity += Vec4{ moveSpeed * dt, 0.0f, 0.0f } * camRot;
 		}
 		if (kbd.KeyIsPressed('A'))
 		{
-			pos += Vec4{ -moveSpeed * dt, 0.0f, 0.0f } * camRot;
+			newVelocity += Vec4{ -moveSpeed * dt, 0.0f, 0.0f } * camRot;
 		}
+
+		//Jumping
+		if (pos.y <= playerHeight / 2.0f && !onGround)
+		{
+			onGround = true;
+			pos.y = playerHeight / 2.0f;
+			newVelocity.y = 0.0f;
+		}
+
+		if (!onGround)
+		{
+			newVelocity.y = velocity.y - gravity * dt;
+		}
+
+		if (kbd.KeyIsPressed(' ') && onGround)
+		{
+			onGround = false;
+			newVelocity.y = 0.075f;
+		}
+
 
 		while (!mouse.IsEmpty())
 		{
@@ -81,7 +102,9 @@ public:
 			}
 		}
 
-		cam.SetPos({ pos.x, playerHeight, pos.z });
+		velocity = newVelocity;
+		pos += velocity;
+		cam.SetPos(pos);
 		cam.SetRot(rot);
 	}
 public:
@@ -93,9 +116,12 @@ private:
 	static constexpr float playerHeight = 1.0f;
 	Vec3 pos = { 0.0f, playerHeight / 2.0f, 0.0f };
 	Vec3 rot = { 0.0f, 0.0f, 0.0f };
+	Vec3 velocity = { 0.0f, 0.0f, 0.0f };
 
 	float moveSpeed = 1.5f;
 	Vec2 sensitivity = { 0.005f, 0.005f };
+	bool onGround = true;
+	float gravity = 0.3f;
 
 	Vei2 mousePos = { 0, 0 };
 	bool mouseIsPressed = false;

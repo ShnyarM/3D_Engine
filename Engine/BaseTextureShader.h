@@ -8,14 +8,14 @@
 class BaseTextureShader
 {
 public:
-	// Get Color based of vertex and current loaded texture
+	// Get Color based on vertex and current loaded texture
 	template<class Input>
 	Color GetColor(const Input& in)
 	{
 		assert(textureLoaded);
 		return pTexture->GetPixel(
-			(unsigned int)std::min(std::max(in.t.x * tWidth, 0.0f), tWidthMax),
-			(unsigned int)std::min(std::max(in.t.y * tHeight, 0.0f), tHeightMax));
+			(unsigned int)(in.t.x * tWidth) % (int)tWidth,
+			(unsigned int)(in.t.y * tHeight) % (int)tHeight);
 	}
 
 	void BindTexture(Surface* pNewSurface)

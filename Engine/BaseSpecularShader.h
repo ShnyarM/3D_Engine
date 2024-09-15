@@ -8,6 +8,7 @@ struct DefaultPointDiffuse
 	float linearAttenuation = 1.0f;
 	float quadraticAttenuation = 2.62f;
 	float constantAttenuation = 0.4f;
+	float range = 1.0f;
 };
 
 struct DefaultSpecular
@@ -52,7 +53,7 @@ public:
 
 		// Get information about position relative to light
 		Vec3 diffVec = transformedLightPos - input.worldPos;
-		float distance = diffVec.Len();
+		float distance = diffVec.Len() / diffuseValues.range;
 		Vec3 diffVecN = diffVec.GetNormalized();
 
 		float attenuation = 1.0f / (diffuseValues.constantAttenuation + distance * diffuseValues.linearAttenuation + sq(distance) * diffuseValues.quadraticAttenuation); //distance factor, less if further away

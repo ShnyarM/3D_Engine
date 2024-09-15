@@ -67,3 +67,70 @@ public:
 	Vec3 pos;
 	Vec2 t;
 };
+
+class TextureVertex4
+{
+public:
+	TextureVertex4() = default;
+	TextureVertex4(const Vec4& pos, const Vec2& tPos)
+		:
+		pos(pos),
+		t(tPos)
+	{
+	}
+	TextureVertex4(const Vec3& pos, const TextureVertex4& v)
+		:
+		pos(pos),
+		t(v.t)
+	{
+	}
+	TextureVertex4& operator=(const TextureVertex4& rhs)
+	{
+		pos = rhs.pos;
+		t = rhs.t;
+		return *this;
+	}
+	TextureVertex4& operator+=(const TextureVertex4& rhs)
+	{
+		pos += rhs.pos;
+		t += rhs.t;
+		return *this;
+	}
+	TextureVertex4& operator-=(const TextureVertex4& rhs)
+	{
+		pos -= rhs.pos;
+		t -= rhs.t;
+		return *this;
+	}
+	TextureVertex4 operator+(const TextureVertex4& rhs) const
+	{
+		return TextureVertex4(*this) += rhs;
+	}
+	TextureVertex4 operator-(const TextureVertex4& rhs) const
+	{
+		return TextureVertex4(*this) -= rhs;
+	}
+	TextureVertex4& operator*=(const float rhs)
+	{
+		pos *= rhs;
+		t *= rhs;
+		return *this;
+	}
+	TextureVertex4 operator*(const float rhs) const
+	{
+		return TextureVertex4(*this) *= rhs;
+	}
+	TextureVertex4& operator/=(const float rhs)
+	{
+		pos /= rhs;
+		t /= rhs;
+		return *this;
+	}
+	TextureVertex4 operator/(const float rhs) const
+	{
+		return TextureVertex4(*this) /= rhs;
+	}
+
+	Vec4 pos;
+	Vec2 t;
+};
