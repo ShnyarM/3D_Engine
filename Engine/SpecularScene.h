@@ -74,7 +74,7 @@ public:
 		// make torch model smaller
 		for (int i = 0; i < torchBase.vertices.size(); i++)
 		{
-			torchBase.vertices[i].pos /= 30.0f;
+			torchBase.vertices[i].pos /= 2.5f;
 		}
 	}
 
@@ -140,7 +140,11 @@ public:
 			textureLightPipeline.Draw(wallPlane);
 		}
 
-		//texturePipeline.effect.vs.BindWorldTransformation(Mat4::Translation(groundPlanePos));
+		Vec3 camRot = player.cam.GetRot();
+		Vec3 torchPos = player.GetPos() + (Vec4{ 0.3f, -0.20f, 0.5f, 0.0f } * player.cam.GetRotTransform());
+		Mat4 torchTransform = Mat4::RotationZ(camRot.z + (PI/7)) * Mat4::RotationY(camRot.y) * Mat4::Translation(torchPos);
+
+		texturePipeline.effect.vs.BindWorldTransformation(torchTransform);
 		texturePipeline.effect.vs.BindView(camView);
 		texturePipeline.effect.ps.BindTexture(&torchBaseTexture);
 		texturePipeline.Draw(torchBase);

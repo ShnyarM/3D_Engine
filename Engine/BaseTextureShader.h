@@ -14,8 +14,8 @@ public:
 	{
 		assert(textureLoaded);
 		return pTexture->GetPixel(
-			(unsigned int)(in.t.x * tWidth) % (int)tWidth,
-			(unsigned int)(in.t.y * tHeight) % (int)tHeight);
+			(unsigned int)(in.t.x * tWidth) % (unsigned int)tWidth,
+			(unsigned int)(in.t.y * tHeight) % (unsigned int)tHeight);
 	}
 
 	void BindTexture(Surface* pNewSurface)

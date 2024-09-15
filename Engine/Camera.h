@@ -51,7 +51,7 @@ public:
 	}
 	Mat4 GetRotTransform() const
 	{
-		return Mat4::RotationY(rot.y) * Mat4::RotationX(rot.x) * Mat4::RotationZ(rot.z);
+		return Mat4::RotationZ(rot.z) * Mat4::RotationX(rot.x) * Mat4::RotationY(rot.y);
 	}
 private:
 	Vec3 pos = { 0.0f, 0.0f, 0.0f };
