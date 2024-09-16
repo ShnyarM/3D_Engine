@@ -2,7 +2,7 @@
 
 ## General Info
 
-3D Engine written in C++
+3D Engine written in C++.
 Is capable of loading in .obj models and displaying them in a 3D environment, complete with texturing, shadows, camera and depth.
 Light and objects have adjustable colors and act on each other accordingly.
 Has an adjustable pipeline with programmable shaders, to make different effects and looks easy to implement.
