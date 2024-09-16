@@ -253,3 +253,9 @@ ModelManifest.xml
 
 # .obj 3d model files unignore
 !Engine/models/*.obj
+
+# include download
+!Download/x64
+!Download/x86
+!Download/x64/models/*.obj
+!Download/x86/models/*.obj
