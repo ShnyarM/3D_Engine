@@ -6,7 +6,7 @@
 Is capable of loading in .obj models and displaying them in a 3D environment, complete with texturing, shadows, camera and depth.
 Light and objects have adjustable colors and act on each other accordingly.
 Has an adjustable pipeline with programmable shaders, to make different effects and looks easy to implement.
-.obj can be loaded in with their textures and normals. If no normals are present, approximation of them can be calculated.
+.obj files can be loaded in with their textures and normals. If no normals are present, approximation of them can be calculated.
 
 The version in this GitHub Repo comes with 3 different scenes, which show off some of the capabilites of the engine.
 
