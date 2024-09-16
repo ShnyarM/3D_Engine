@@ -21,6 +21,7 @@ The executable for the engine is available under the Download folder. Make sure 
 | x64  | x86 |
 | ------------- | ------------- |
 | [Download](Download/x64.zip)  | [Download](Download/x86.zip)  |
+| <a href="data:application/octet-stream,DATA" download="Download/x64.zip">TITLE</a> | dsfjas |
 
 ## Images
 
