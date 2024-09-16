@@ -127,8 +127,8 @@ private:
 
 	static constexpr float dTheta = 1.4f;
 	float theta_x = 0.0f;
-	float theta_y = 0.0f;
-	float theta_z = 0.0f;
+	float theta_y = PI / 15.0f;
+	float theta_z = -PI / 7.5f;
 	float time = 0.0f;
 
 	IndexedTriangleList<SolidColorVertex> lightSphere;
