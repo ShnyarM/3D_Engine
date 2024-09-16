@@ -34,20 +34,11 @@
     <Filter Include="Header Files\Effects\Defaults\Vertices">
       <UniqueIdentifier>{b7bef8f0-42e3-44af-acbb-ddb2a2bb6cc9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Effects\FlatShading">
-      <UniqueIdentifier>{99f6f8a0-f7a7-4959-a5d2-58d05d7a4d06}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Effects\Defaults\PixelShader">
       <UniqueIdentifier>{b535f11d-8396-4f79-bb8c-2b18885ecd67}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\Effects\PixelShading">
       <UniqueIdentifier>{a3b084f8-016f-4d5d-ad65-c6f7e5dbca53}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Scenes\Old">
-      <UniqueIdentifier>{9ac7b99e-0fe8-4945-817c-1dd88c5ca08a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Effects\Old">
-      <UniqueIdentifier>{74c7cc15-ea8f-4656-afb9-191c7c872986}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\Effects\VertexShading">
       <UniqueIdentifier>{0bdcceab-5e0a-4313-b9f4-9b49f9d1ae1c}</UniqueIdentifier>
@@ -189,72 +180,6 @@
     <ClInclude Include="Vec4.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FlatShadingScene.h">
-      <Filter>Header Files\Scenes\Old</Filter>
-    </ClInclude>
-    <ClInclude Include="PointLightScene.h">
-      <Filter>Header Files\Scenes\Old</Filter>
-    </ClInclude>
-    <ClInclude Include="PointLightScenePlane.h">
-      <Filter>Header Files\Scenes\Old</Filter>
-    </ClInclude>
-    <ClInclude Include="ShadingScene.h">
-      <Filter>Header Files\Scenes\Old</Filter>
-    </ClInclude>
-    <ClInclude Include="SphereScene.h">
-      <Filter>Header Files\Scenes\Old</Filter>
-    </ClInclude>
-    <ClInclude Include="TextureCubeScene.h">
-      <Filter>Header Files\Scenes\Old</Filter>
-    </ClInclude>
-    <ClInclude Include="TextureShadingScene.h">
-      <Filter>Header Files\Scenes\Old</Filter>
-    </ClInclude>
-    <ClInclude Include="TwoCubesScene.h">
-      <Filter>Header Files\Scenes\Old</Filter>
-    </ClInclude>
-    <ClInclude Include="VertexColorScene.h">
-      <Filter>Header Files\Scenes\Old</Filter>
-    </ClInclude>
-    <ClInclude Include="WaveScene.h">
-      <Filter>Header Files\Scenes\Old</Filter>
-    </ClInclude>
-    <ClInclude Include="PixelPointEffect.h">
-      <Filter>Header Files\Effects\Old</Filter>
-    </ClInclude>
-    <ClInclude Include="PixelDirectionalEffect.h">
-      <Filter>Header Files\Effects\Old</Filter>
-    </ClInclude>
-    <ClInclude Include="WaveTexturedGouraudEffect.h">
-      <Filter>Header Files\Effects\Old</Filter>
-    </ClInclude>
-    <ClInclude Include="TexturedGouraudEffect.h">
-      <Filter>Header Files\Effects\Old</Filter>
-    </ClInclude>
-    <ClInclude Include="GouraudPointEffect.h">
-      <Filter>Header Files\Effects\Old</Filter>
-    </ClInclude>
-    <ClInclude Include="GouraudEffect.h">
-      <Filter>Header Files\Effects\Old</Filter>
-    </ClInclude>
-    <ClInclude Include="WaveShadingTextureEffect.h">
-      <Filter>Header Files\Effects\Old</Filter>
-    </ClInclude>
-    <ClInclude Include="ShadingTextureEffect.h">
-      <Filter>Header Files\Effects\Old</Filter>
-    </ClInclude>
-    <ClInclude Include="FlatShadingEffect.h">
-      <Filter>Header Files\Effects\Old</Filter>
-    </ClInclude>
-    <ClInclude Include="GeometryColorEffect.h">
-      <Filter>Header Files\Effects\Old</Filter>
-    </ClInclude>
-    <ClInclude Include="TextureEffect.h">
-      <Filter>Header Files\Effects\Old</Filter>
-    </ClInclude>
-    <ClInclude Include="PlaneScene.h">
-      <Filter>Header Files\Scenes</Filter>
-    </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -281,6 +206,15 @@
     </ClInclude>
     <ClInclude Include="TextureShader.h">
       <Filter>Header Files\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="SpecularScene.h">
+      <Filter>Header Files\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="SpecularWaveScene.h">
+      <Filter>Header Files\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseDirectionalShader.h">
+      <Filter>Header Files\Effects\Defaults\LightingEffects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -109,7 +109,6 @@ public:
 
 		torchPos = player.GetPos() + (Vec4(torchOffset) * camRotTransform);
 		torchFlamePos = player.GetPos() + (Vec4(torchFlameOffset) * camRotTransform);
-		//Mat4 torchTransform = Mat4::RotationZ(camRot.z + (PI / 7)) * Mat4::RotationY(camRot.y) * Mat4::Translation(torchPos);
 	}
 
 	void ComposeFrame() override

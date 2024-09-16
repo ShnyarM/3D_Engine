@@ -60,6 +60,10 @@ public:
 	void EndFrame();
 	void BeginFrame();
 	void LoadNewFont(const std::wstring& filename, int nColumns, int nRows);
+	const Font& GetFont() const
+	{
+		return font;
+	}
 
 	void DrawLine( const Vec2& p1,const Vec2& p2,Color c )
 	{
