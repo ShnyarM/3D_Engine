@@ -16,6 +16,12 @@ The executable for the engine is available under the Download folder. Make sure 
 
 **Note**: This engine does not run on the GPU and also runs on only one thread. Additionally, performance was not the priority when writing it. This means the performance is not that great, but still usable. This project was merely to get familiar with and learn the logic of 3D Engines and have a first version of one.
 
+## Download
+
+| x64  | x86 |
+| ------------- | ------------- |
+| [Download](Download/x64.zip)  | [Download](Download/x86.zip)  |
+
 ## Images
 
 ![Forest scene](Images/Forest.png)
