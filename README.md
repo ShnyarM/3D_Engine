@@ -10,7 +10,7 @@ Has an adjustable pipeline with programmable shaders, to make different effects 
 
 The version in this GitHub Repo comes with 3 different scenes, which show off some of the capabilites of the engine.
 
-The engine uses the Chili Framework from http://www.planetchili.net. The engine is based off the tutorial series <a href="[https://github.com/Murad9288](https://youtu.be/uehGqieEbus?si=woLOXUblHZqOfrUq)" target="_blank"> 3D Fundamentals from ChiliTomatoNoodle on YouTube </a>, so there will be a lot of similarities. The tutorial was only a place to learn and little to none of the code was copied, so the code was still written by me.
+The engine uses the Chili Framework from http://www.planetchili.net. The engine is based off the tutorial series [3D Fundamentals from ChiliTomatoNoodle on YouTube](https://youtu.be/uehGqieEbus?si=woLOXUblHZqOfrUq) </a>, so there will be a lot of similarities. The tutorial was only a place to learn, and little to none of the code was copied, so the code was still mostly written by me.
 
 The executable for the engine is available under the Download folder. Make sure to download the entire folder if you want to run it.
 
