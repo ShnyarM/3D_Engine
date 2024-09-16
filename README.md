@@ -1,6 +1,6 @@
 # 3D Engine
 
-# General Info
+## General Info
 
 3D Engine written in C++
 Is capable of loading in .obj models and displaying them in a 3D environment, complete with texturing, shadows, camera and depth.
